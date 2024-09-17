@@ -85,6 +85,19 @@ export class TaskManager {
         this.addTask(...tasks.filter(value => addId.includes(value.jobid)));
     }
 
+    public deleteTask(...tasks: number[]): void;
+    public deleteTask(...tasks: Task[]): void;
+    public deleteTask(...tasks: Task[]|number[]): void {
+        if (tasks.length === 0) {
+            return;
+        }
+        if ( typeof tasks[0] === "number" ) {
+            tasks.forEach(value=>this.taskMap.delete(value as number));
+        } else {
+            tasks.forEach(value=>this.taskMap.delete((value as Task).jobid));
+        }
+    }
+
     public getTask(name?: string): Task[] {
         if (name === undefined) {
             return [...this.taskMap.values()];

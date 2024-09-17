@@ -21,10 +21,18 @@
         "title": "Hello World"
       },
       {
-        "command": "slurm--.showUserTasks",
-        "title": "show user tasks",
+        "command": "slurm--.refreshUserTasks",
+        "title": "refresh user tasks",
+        "shortTitle": "refresh",
         "category": "slurm--",
-        "icon": "assets/icons/task.svg"
+        "icon": "assets/icons/refresh.svg"
+      },
+      {
+        "command": "slurm--.cancelTask",
+        "title": "cancel task",
+        "shortTitle": "cancel",
+        "category": "slurm--",
+        "icon": "assets/icons/refresh.svg"
       }
     ],
     "viewsContainers": {
@@ -55,16 +63,19 @@
     "menus": {
       "view/title": [
         {
-          "command": "slurm--.showUserTasks",
+          "command": "slurm--.refreshUserTasks",
           "when": "view == slurm--_tasks_view",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "slurm--.showUserTasks",
+          "command": "slurm--.cancelTask",
           "group": "inline",
-          "when": "view == slurm--_tasks_view"
+          "when": "view == slurm--_tasks_view",
+          "arguments": [
+            
+          ]
         }
       ]
     }

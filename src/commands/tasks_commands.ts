@@ -15,18 +15,26 @@ function extractTask(taskString: string): taskModel.Task[]{
     const regex = /\S+/g;
     let taskList: taskModel.Task[] = [];
     taskString.split('\n').slice(1).forEach((value)=>{
-        console.log(value)
         let fields: string[] = value.match(regex)?.map(value => value.trim()).filter(value => value.length>0)!;
-        console.log(fields)
         taskList.push(new taskModel.Task(fields[0], fields[2], fields[3], fields[4], fields[5], fields[7]));
     });
     return taskList;
 }
 
-export async function getUserTasks() {
+export async function refreshUserTasks() {
     const [out, err] = await runBash('squeue --me');
-    vscode.window.showInformationMessage(out);
+    // vscode.window.showInformationMessage(out);
     taskModel.taskManager.updateTask(...extractTask(out));
+    // console.log(taskModel.taskManager);
+    taskView.taskViewDataProvider.refresh();
+}
+
+
+export async function cancelTask(task: taskView.TaskViewItem) {
+    console.log(task);
+    const [out, err] = await runBash(`scancel ${task.task.jobid}`);
+    taskModel.taskManager.deleteTask(task.task.jobid);
+    // vscode.window.showInformationMessage(out);
     console.log(taskModel.taskManager);
     taskView.taskViewDataProvider.refresh();
 }

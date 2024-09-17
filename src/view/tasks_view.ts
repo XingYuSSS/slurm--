@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import * as taskModel from '../model/tasks_model';
 
-class TaskViewItem extends vscode.TreeItem {
+export class TaskViewItem extends vscode.TreeItem {
     constructor(public readonly task: taskModel.Task, public readonly collapsibleState: vscode.TreeItemCollapsibleState) {
         super(task.name, collapsibleState);
         this.description = task.runing_time;
