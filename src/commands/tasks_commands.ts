@@ -24,8 +24,7 @@ function extractTask(taskString: string): taskModel.Task[]{
 }
 
 export async function getUserTasks() {
-    const [out, err] = await runBash('squeue');
-    // const [out, err] = await runBash('dir');
+    const [out, err] = await runBash('squeue --me');
     vscode.window.showInformationMessage(out);
     taskModel.taskManager.updateTask(...extractTask(out));
     console.log(taskModel.taskManager);

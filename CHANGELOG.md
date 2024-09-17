@@ -6,4 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+### Added
+
+- Add slurm View Container
+- Add tasks command
+- Add tasks tree view
+- Add tasks model
+- Add manual refresh in tasks view
+- Add runBash in `utils`
