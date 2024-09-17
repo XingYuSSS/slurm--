@@ -25,14 +25,14 @@
         "title": "refresh user tasks",
         "shortTitle": "refresh",
         "category": "slurm--",
-        "icon": "assets/icons/refresh.svg"
+        "icon": "$(extensions-refresh)"
       },
       {
         "command": "slurm--.cancelTask",
         "title": "cancel task",
         "shortTitle": "cancel",
         "category": "slurm--",
-        "icon": "assets/icons/refresh.svg"
+        "icon": "$(close)"
       }
     ],
     "viewsContainers": {

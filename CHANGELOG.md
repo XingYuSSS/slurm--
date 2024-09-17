@@ -9,8 +9,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Add slurm View Container
+- Add tasks model
 - Add tasks command
 - Add tasks tree view
-- Add tasks model
-- Add manual refresh in tasks view
+  - Add manual refresh
+  - Add cancel task
+- Add auto refresh
 - Add runBash in `utils`
