@@ -11,13 +11,63 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
   "contributes": {
     "commands": [
       {
         "command": "slurm--.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "slurm--.showUserTasks",
+        "title": "show user tasks",
+        "category": "slurm--",
+        "icon": "assets/icons/task.svg"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "slurm--_explorer",
+          "title": "slurm--",
+          "icon": "assets/icons/task.svg"
+        }
+      ]
+    },
+    "views": {
+      "slurm--_explorer": [
+        {
+          "id": "slurm--_tasks_view",
+          "name": "tasks",
+          "contextualTitle": "My Custom View Title",
+          "location": "workbench.panel"
+        },
+        {
+          "id": "slurm--_config_view",
+          "name": "config",
+          "contextualTitle": "My Custom View Title",
+          "location": "workbench.panel"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "slurm--.showUserTasks",
+          "when": "view == slurm--_tasks_view",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "slurm--.showUserTasks",
+          "group": "inline",
+          "when": "view == slurm--_tasks_view"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

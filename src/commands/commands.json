@@ -1,0 +1,4 @@
+{
+    "getUserTasks": "squeue --me",
+    "getAllTasks": "squeue"
+}
