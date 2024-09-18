@@ -25,7 +25,14 @@
         "title": "refresh user tasks",
         "shortTitle": "refresh",
         "category": "slurm--",
-        "icon": "$(extensions-refresh)"
+        "icon": "$(sync)"
+      },
+      {
+        "command": "slurm--.refreshing",
+        "title": "refreshing",
+        "shortTitle": "refreshing",
+        "category": "slurm--",
+        "icon": "$(sync~spin)"
       },
       {
         "command": "slurm--.cancelTask",
@@ -64,7 +71,12 @@
       "view/title": [
         {
           "command": "slurm--.refreshUserTasks",
-          "when": "view == slurm--_tasks_view",
+          "when": "view == slurm--_tasks_view && !refreshingUserTasks",
+          "group": "navigation"
+        },
+        {
+          "command": "slurm--.refreshing",
+          "when": "view == slurm--_tasks_view && refreshingUserTasks",
           "group": "navigation"
         }
       ],
@@ -72,10 +84,7 @@
         {
           "command": "slurm--.cancelTask",
           "group": "inline",
-          "when": "view == slurm--_tasks_view",
-          "arguments": [
-            
-          ]
+          "when": "view == slurm--_tasks_view && viewItem == taskItem"
         }
       ]
     }

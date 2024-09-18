@@ -9,11 +9,12 @@ import * as tasks from './tasks_commands';
 // }
 
 export function initCommands(context: vscode.ExtensionContext) {
+	vscode.commands.executeCommand('setContext', 'refreshUserTasksIcon', '$(sync)');
 	context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', tasks.refreshUserTasks));
 	context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', tasks.cancelTask));
 	// context.subscriptions.push(vscode.commands.registerCommand('slurm--.showAllTasks', tasks.getUserTasks));
 	
-	setInterval(() => {
-		vscode.commands.executeCommand('slurm--.refreshUserTasks');
-	}, 2000);
+	// setInterval(() => {
+	// 	vscode.commands.executeCommand('slurm--.refreshUserTasks');
+	// }, 5000);
 }

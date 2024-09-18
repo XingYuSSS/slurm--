@@ -14,5 +14,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add tasks tree view
   - Add manual refresh
   - Add cancel task
+  - Add state icon
+  - add more info
+- Add GRES
 - Add auto refresh
 - Add runBash in `utils`

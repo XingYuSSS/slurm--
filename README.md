@@ -1,6 +1,5 @@
 # slurm-- README
 
-
 ## TODO
 
 - [X] Add auto task refresh
@@ -9,7 +8,7 @@
   - [X] cancel task
   - [ ] start time
   - [ ] scripts arguments
-  - [ ] gpu and more information
+  - [X] gpu and more information
 - [ ] Add task runner
   - [ ] scripts arguments manager
   - [ ] cost computer
