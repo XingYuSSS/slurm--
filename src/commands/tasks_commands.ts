@@ -14,15 +14,16 @@ import * as taskView from '../view/tasks_view';
 function extractTask(taskString: string): taskModel.Task[]{
     const regex = /\S+/g;
     let taskList: taskModel.Task[] = [];
-    taskString.split('\n').slice(1).forEach((value)=>{
+    taskString.split('\n').forEach((value)=>{
+        // JobID,Name:255,State,NodeList,Partition,QOS,STDOUT:255,TimeLimit,TimeUsed,Command:255
         let fields: string[] = value.match(regex)?.map(value => value.trim()).filter(value => value.length>0)!;
-        taskList.push(new taskModel.Task(fields[0], fields[2], fields[3], fields[4], fields[5], fields[7]));
+        taskList.push(new taskModel.Task(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8], fields[9], fields[10], fields.slice(11).join(' ')));
     });
     return taskList;
 }
 
 export async function refreshUserTasks() {
-    const [out, err] = await runBash('squeue --me');
+    const [out, err] = await runBash('squeue --me -O JobID,Name:255,Username:20,State:20,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100');
     // vscode.window.showInformationMessage(out);
     taskModel.taskManager.updateTask(...extractTask(out));
     // console.log(taskModel.taskManager);
