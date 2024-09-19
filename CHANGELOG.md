@@ -4,7 +4,9 @@ All notable changes to the "slurm--" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [Unreleased][Unreleased]
+
+## [0.1.0][0.1.0]- 2024-09-19
 
 ### Added
 
@@ -19,3 +21,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add GRES
 - Add auto refresh
 - Add runBash in `utils`
+
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/XingYuSSS/slurm--/tree/v0.1.0
