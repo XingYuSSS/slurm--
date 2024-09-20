@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 
 import * as taskModel from '../model/tasks_model';
-import { extensionRootUri } from '../extension';
-
 
 function taskDescription(task: taskModel.Task): string {
     return task.state===taskModel.TaskState.R?task.runing_time +'/'+task.limit_time:task.reason;
@@ -42,11 +40,22 @@ export class InfoItem extends vscode.TreeItem {
     }
 }
 
+export class OpenanleFileItem extends vscode.TreeItem {
+    constructor(public readonly file: taskModel.FilePath, description?: string | boolean, tooltip?: string | vscode.MarkdownString) {
+        super(file.name, vscode.TreeItemCollapsibleState.None);
+        this.description = description;
+        this.tooltip = tooltip;
+        this.contextValue = 'openableFile';
+    }
+}
+
 function getTaskInfoItems(task: taskModel.Task): vscode.TreeItem[] {
     return [
         new InfoItem(task.jobid.toString(), 'id'),
         new InfoItem(task.gres.toString(), 'GRES'),
-        new InfoItem(task.state, 'state'),
+        new InfoItem(task.command, 'command'),
+        new OpenanleFileItem(task.out_path, 'stdout'),
+        new OpenanleFileItem(task.err_path, 'stderr'),
     ];
 }
 

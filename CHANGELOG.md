@@ -6,6 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add auto refresh switch button
+- Add open `.out` and `.err` file button
+- Add icon and title for view
+
+### Changed
+
+- Change refresh icon
+- Refactory init
+
+### Fixed
+
+- Add `readonly` to some fields
+
 ## [0.1.0][0.1.0]- 2024-09-19
 
 ### Added

@@ -10,6 +10,9 @@ import * as taskView from '../view/tasks_view';
 // console.log(extensionRootUri);
 // while (extensionRootUri !== null){}
 // const command_json = JSON.parse(fs.readFileSync(vscode.Uri.joinPath(extensionRootUri, 'src', 'commands', 'commands.json').fsPath, 'utf-8'));
+let autoRefreshTimer: NodeJS.Timeout;
+let refreshInterval: number = 3000;
+
 
 function extractTask(taskString: string, short_length: number, long_length: number): taskModel.Task[] {
     let slices = [short_length, long_length, short_length, short_length, short_length, short_length, short_length, short_length, long_length, long_length, long_length, short_length];
@@ -40,7 +43,6 @@ function extractTask(taskString: string, short_length: number, long_length: numb
 }
 
 export async function refreshUserTasks() {
-    vscode.commands.executeCommand('setContext', 'refreshingUserTasks', true);
     const short = 50;
     const long = 255;
     const [out, err] = await runBash(`squeue --me --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
@@ -48,7 +50,6 @@ export async function refreshUserTasks() {
     taskModel.taskManager.updateTask(...extractTask(out, short, long));
     console.log(taskModel.taskManager)
     taskView.taskViewDataProvider.refresh();
-    vscode.commands.executeCommand('setContext', 'refreshingUserTasks', false);
 }
 
 
@@ -61,8 +62,34 @@ export async function cancelTask(task: taskView.TaskViewItem) {
     taskView.taskViewDataProvider.refresh();
 }
 
-// export function getAllTasks() {
-//     const command = new vscode.ShellExecution('squeue');
-// }
+export async function autoRefreshTask() {
+    clearInterval(autoRefreshTimer);
+    autoRefreshTimer = autoRefreshTimer = setInterval(() => {
+        vscode.commands.executeCommand('slurm--.refreshUserTasks');
+    }, 3000);
+    vscode.commands.executeCommand('setContext', 'autoRefreshing', true);
+}
+
+export async function unautoRefreshTask() {
+    clearInterval(autoRefreshTimer);
+    vscode.commands.executeCommand('setContext', 'autoRefreshing', false);
+}
+
+export async function openFile(file: taskView.OpenanleFileItem) {
+    file.file.open();
+}
+
+
+export function initTaskCmd(context: vscode.ExtensionContext) {
+	context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
+	context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshTask', autoRefreshTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
+
+    // vscode.commands.executeCommand('setContext', 'refreshingUserTasks', false);
+    vscode.commands.executeCommand('setContext', 'autoRefreshing', false);
+    vscode.commands.executeCommand('slurm--.refreshUserTasks');
+}
 
 
