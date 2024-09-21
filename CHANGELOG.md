@@ -11,6 +11,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh switch button
 - Add open `.out` and `.err` file button
 - Add icon and title for view
+- Add Config Manager for read settings
+- Add configuration in `package.json`
 
 ### Changed
 

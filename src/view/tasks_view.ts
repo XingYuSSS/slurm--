@@ -16,7 +16,7 @@ function taskTooltip(task: taskModel.Task): vscode.MarkdownString {
 
 const iconMap: Map<taskModel.TaskState, vscode.ThemeIcon> = new Map([
     [taskModel.TaskState.R, new vscode.ThemeIcon('debug-start', new vscode.ThemeColor('gitDecoration.addedResourceForeground'))],
-    [taskModel.TaskState.PD, new vscode.ThemeIcon('watch', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground'))], //or watch
+    [taskModel.TaskState.PD, new vscode.ThemeIcon('watch', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground'))],
     // [taskModel.TaskState.PD, new vscode.ThemeIcon('warning', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'))], //感叹号
     // [taskModel.TaskState.PD, new vscode.ThemeIcon('error', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'))], //叉
     // [taskModel.TaskState.PD, new vscode.ThemeIcon('pass', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'))], //勾

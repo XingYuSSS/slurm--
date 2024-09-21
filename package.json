@@ -118,6 +118,16 @@
           "when": "view == slurm--_tasks_view && viewItem == openableFile"
         }
       ]
+    },
+    "configuration": {
+      "title": "slurm--",
+      "properties": {
+        "slurm--.autoRefresh.interval(ms)": {
+          "type": "integer",
+          "default": 2000,
+          "description": "interval of auto refresh in millisecond"
+        }
+      }
     }
   },
   "scripts": {
