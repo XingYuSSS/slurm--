@@ -7,10 +7,10 @@ export enum TaskState {
 
 
 export class Gres {
-    type: string;
-    name: string | null = null;
-    other: string | null = null;
-    num: number;
+    readonly type: string;
+    readonly name: string | null = null;
+    readonly other: string | null = null;
+    readonly num: number;
     constructor(gres: string) {
         const slicedGres = (gres.startsWith('gres:') ? gres.substring(5) : gres).split(":");
         this.type = slicedGres[0];
@@ -25,18 +25,38 @@ export class Gres {
 }
 
 
+export class FilePath {
+    readonly uri: vscode.Uri;
+    readonly name: string;
+    constructor(path: string) {
+        this.uri = vscode.Uri.file(path);
+        let uriPart = path.split('/');
+        this.name = uriPart[uriPart.length-1];
+    }
+
+    toString() {
+        return this.uri.path;
+    }
+
+    async open() {
+        const doc = await vscode.workspace.openTextDocument(this.uri);
+        vscode.window.showTextDocument(doc);
+    }
+}
+
+
 export class Task {
-    jobid: number;
-    name: string;
-    user: string;
+    readonly jobid: number;
+    readonly name: string;
+    readonly user: string;
     state: TaskState;
-    node: string;
-    gres: Gres;
-    limit_time: string;
+    readonly node: string;
+    readonly gres: Gres;
+    readonly limit_time: string;
     runing_time: string;
-    command: string;
-    out_path: string;
-    err_path: string;
+    readonly command: string;
+    readonly out_path: FilePath;
+    readonly err_path: FilePath;
     reason: string;
     //JobID,Name:255,Username:20,State:20,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100
     constructor(jobid: string, name: string, user: string, state: string, node: string, gres: string, limit_time: string, runing_time: string, command: string, out_path: string, err_path: string, reason: string)
@@ -64,8 +84,8 @@ export class Task {
         this.limit_time = limit_time;
         this.runing_time = runing_time;
         this.command = command;
-        this.out_path = out_path;
-        this.err_path = err_path;
+        this.out_path = new FilePath(out_path.replace('%j', jobid.toString()));
+        this.err_path = new FilePath(err_path.replace('%j', jobid.toString()));
         this.reason = reason === 'None' ? '' : reason;
     }
 
@@ -105,7 +125,7 @@ export class TaskManager {
         dropId.forEach(value => this.taskMap.delete(value));
         this.addTask(...tasks.filter(value => addId.includes(value.jobid)));
         tasks.filter(value => updateId.includes(value.jobid))
-            .forEach(value => this.taskMap.get(value.jobid)?.update(value));
+        .forEach(value=> this.taskMap.get(value.jobid)?.update(value));
     }
 
     public deleteTask(...tasks: number[]): void;

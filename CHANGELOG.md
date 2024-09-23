@@ -6,6 +6,26 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.1.1][0.1.1]
+
+### Added
+
+- Add auto refresh switch button
+- Add open `.out` and `.err` file button
+- Add icon and title for view
+- Add Config Manager for read settings
+- Add configuration in `package.json`
+- Add confirm dialog before cancel task
+
+### Changed
+
+- Change refresh icon
+- Refactory init
+
+### Fixed
+
+- Add `readonly` to some fields
+
 ## [0.1.0][0.1.0]- 2024-09-19
 
 ### Added
@@ -22,5 +42,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/XingYuSSS/slurm--/tree/v0.1.0
