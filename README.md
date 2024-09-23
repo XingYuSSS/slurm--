@@ -1,15 +1,32 @@
-# slurm-- README
+# slurm-- Extension
+
+A extension for slurm system user
+
+## features
+
+- show your slurm running tasks and informations
+
+## future features
+
+- record your task state, and when they finished
+- choose GRES, and run your task
 
 ## TODO
 
-- [X] Add auto task refresh
-- [ ] Add shell scripts reader
-- [ ] Add task tracker
+- [ ] Task scanner
+  - [X] Auto task refresh
   - [X] cancel task
-  - [ ] start time
+  - [X] gres
+  - [X] command
+  - [X] open log file
+  - [ ] group and count by state, command or start time
+- [ ] Task tracker
+  - [ ] save tasks
+  - [ ] start and end time
   - [ ] scripts arguments
-  - [X] gpu and more information
-- [ ] Add task runner
+- [ ] Task runner
+  - [ ] Shell scripts reader
   - [ ] scripts arguments manager
   - [ ] cost computer
   - [ ] gpu selector
+  - [ ] start srun

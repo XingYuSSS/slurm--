@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.1.1][0.1.1]
+
 ### Added
 
 - Add auto refresh switch button
@@ -13,6 +15,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add icon and title for view
 - Add Config Manager for read settings
 - Add configuration in `package.json`
+- Add confirm dialog before cancel task
 
 ### Changed
 
@@ -39,5 +42,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/XingYuSSS/slurm--/tree/v0.1.0
