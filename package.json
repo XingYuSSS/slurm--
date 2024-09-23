@@ -1,5 +1,5 @@
 {
-  "name": "slurm--",
+  "name": "slurm--extension",
   "displayName": "slurm--",
   "description": "",
   "version": "0.1.1",
@@ -14,6 +14,7 @@
   "extensionKind": [
     "workspace"
   ],
+  "publisher": "xy-sss",
   "contributes": {
     "commands": [
       {
