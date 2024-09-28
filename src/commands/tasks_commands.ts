@@ -61,7 +61,6 @@ export async function cancelTask(task: taskView.TaskViewItem) {
     if (result === 'Yes') {
         const [out, err] = await runBash(`scancel ${task.task.jobid}`);
         taskModel.taskManager.deleteTask(task.task.jobid);
-        // vscode.window.showInformationMessage(out);
         taskView.taskViewDataProvider.refresh();
     } else if (result === 'No') {
     }
@@ -80,6 +79,13 @@ export async function unautoRefreshTask() {
     vscode.commands.executeCommand('setContext', 'autoRefreshing', false);
 }
 
+export async function confirmTask(task: taskView.TaskViewItem) {
+    if (task.task.finished) {
+        taskModel.taskManager.deleteTask(task.task);
+        taskView.taskViewDataProvider.refresh();
+    }
+}
+
 export async function openFile(file: taskView.OpenanleFileItem) {
     file.file.open();
 }
@@ -90,6 +96,8 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshTask', autoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTask', confirmTask));
+
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
 
     vscode.commands.executeCommand('setContext', 'refreshingUserTasks', false);

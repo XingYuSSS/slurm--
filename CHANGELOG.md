@@ -6,6 +6,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add task storage
+- Add task confirm button
+- Add `finished` field in `task` class
+- Add some state of task
+
+### Changed
+
+- Finished task will not be removed, but marked as finished
+- Task in view will be grouped by finish state
+- Changed task tooltip, removed task name
+
 ## [0.1.1][0.1.1]
 
 ### Added

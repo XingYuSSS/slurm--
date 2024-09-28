@@ -54,6 +54,13 @@
         "icon": "$(close)"
       },
       {
+        "command": "slurm--.confirmTask",
+        "title": "confirm task",
+        "shortTitle": "confirm",
+        "category": "slurm--",
+        "icon": "$(pass)"
+      },
+      {
         "command": "slurm--.openFile",
         "title": "open",
         "shortTitle": "open",
@@ -112,6 +119,11 @@
           "command": "slurm--.cancelTask",
           "group": "inline",
           "when": "view == slurm--_tasks_view && viewItem == taskItem"
+        },
+        {
+          "command": "slurm--.confirmTask",
+          "group": "inline",
+          "when": "view == slurm--_tasks_view && viewItem == finishedTaskItem"
         },
         {
           "command": "slurm--.openFile",
