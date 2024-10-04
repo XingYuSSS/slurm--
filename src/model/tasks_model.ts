@@ -64,6 +64,7 @@ export class Task {
     finished: boolean;
     //JobID,Name:255,Username:20,State:20,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100
     constructor(jobid: string, name: string, user: string, state: string, node: string, gres: string, limit_time: string, runing_time: string, command: string, out_path: string, err_path: string, reason: string)
+    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres, limit_time: string, runing_time: string, command: string, out_path: FilePath, err_path: FilePath, reason: string, finished: boolean)
 
     constructor(
         jobid: number | string,
@@ -75,9 +76,10 @@ export class Task {
         limit_time: string,
         runing_time: string,
         command: string,
-        out_path: string,
-        err_path: string,
-        reason: string
+        out_path: string | FilePath,
+        err_path: string | FilePath,
+        reason: string,
+        finished?: boolean,
     ) {
         this.jobid = typeof jobid === "string" ? parseInt(jobid) : jobid;
         this.name = name;
@@ -88,10 +90,28 @@ export class Task {
         this.limit_time = limit_time;
         this.runing_time = runing_time;
         this.command = command;
-        this.out_path = new FilePath(out_path.replace('%j', jobid.toString()));
-        this.err_path = new FilePath(err_path.replace('%j', jobid.toString()));
+        this.out_path = typeof out_path === "string" ? new FilePath(out_path.replace('%j', jobid.toString())) : out_path;
+        this.err_path = typeof err_path === "string" ? new FilePath(err_path.replace('%j', jobid.toString())) : err_path;
         this.reason = reason === 'None' ? '' : reason;
-        this.finished = false;
+        this.finished = finished??false;
+    }
+
+    public static fromObject(obj: Task): Task {
+        return new Task(
+            obj.jobid,
+            obj.name,
+            obj.user,
+            obj.state,
+            obj.node,
+            obj.gres,
+            obj.limit_time,
+            obj.runing_time,
+            obj.command,
+            obj.out_path,
+            obj.err_path,
+            obj.reason,
+            obj.finished
+        );
     }
 
     public update(task: Task) {
@@ -108,12 +128,16 @@ export class Task {
 
 export class TaskManager {
     private storagePath;
-    private taskMap: Map<number, Task> = new Map();
+    private taskMap!: Map<number, Task>;
+    private initing: boolean = true;
 
     private static _instance: TaskManager | null = null;
     private constructor(context: vscode.ExtensionContext) {
-        this.storagePath = path.join(context.globalStorageUri.fsPath, 'slurm--', 'tasks.json');
+        this.storagePath = path.join(context.globalStorageUri.fsPath, 'tasks.json');
+        const dir = path.dirname(this.storagePath);
+        fs.mkdirSync(dir, { recursive: true });
         this.load_task();
+        // console.log(this.storagePath)
     }
 
     static getInstance(context?: vscode.ExtensionContext): TaskManager {
@@ -130,13 +154,20 @@ export class TaskManager {
         if (fs.existsSync(this.storagePath)) {
             const jsonData = fs.readFileSync(this.storagePath, 'utf8');
             const saveMap = JSON.parse(jsonData);
-            this.taskMap = saveMap;
+            this.taskMap = new Map(saveMap);
+            this.taskMap.forEach((v, k) => this.taskMap.set(k, Task.fromObject(v)));
+            // console.log(this.taskMap)
+            // console.log(typeof saveMap)
+        } else {
+            this.taskMap = new Map();
         }
     }
 
     private save_task() {
-        const jsonData = JSON.stringify(this.taskMap);
+        const arrData = Array.from(this.taskMap.entries());
+        const jsonData = JSON.stringify(arrData);
         fs.writeFile(this.storagePath, jsonData, 'utf8', () => { });
+        // console.log('save!')
     }
 
     public addTask(...tasks: Task[]) {
@@ -144,6 +175,7 @@ export class TaskManager {
     }
 
     public updateTask(...tasks: Task[]) {
+        // console.log(this.taskMap)
         const newId = tasks.map(value => value.jobid);
         const oldId = [...this.taskMap.keys()];
 
@@ -157,10 +189,7 @@ export class TaskManager {
             .forEach(value => this.taskMap.get(value.jobid)?.update(value));
         dropId.forEach(v => this.taskMap.get(v)?.finish());
 
-
-        if (updateId.length > 0 || dropId.length > 0) {
-            this.save_task();
-        }
+        this.save_task();
     }
 
     public deleteTask(...tasks: number[]): void;

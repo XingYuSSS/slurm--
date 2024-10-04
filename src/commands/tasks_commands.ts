@@ -86,6 +86,11 @@ export async function confirmTask(task: taskView.TaskViewItem) {
     }
 }
 
+export async function confirmAllTask() {
+    taskModel.taskManager.deleteTask(...taskModel.taskManager.getTask().filter(v => v.finished));
+}
+
+
 export async function openFile(file: taskView.OpenanleFileItem) {
     file.file.open();
 }
@@ -97,6 +102,7 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshTask', autoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTask', confirmTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmAllTask', confirmAllTask));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
 

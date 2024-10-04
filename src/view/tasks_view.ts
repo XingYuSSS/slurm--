@@ -43,8 +43,8 @@ export class FinishedTaskViewItem extends vscode.TreeItem {
 }
 
 export class listItem extends vscode.TreeItem {
-    constructor(public readonly title: string, public readonly children: vscode.TreeItem[], contextValue?: string) {
-        super(title, vscode.TreeItemCollapsibleState.Collapsed);
+    constructor(public readonly title: string, public readonly children: vscode.TreeItem[], contextValue?: string, isExpanded: boolean = true) {
+        super(title, isExpanded? vscode.TreeItemCollapsibleState.Expanded: vscode.TreeItemCollapsibleState.Collapsed);
         this.description = `${children.length} tasks`;
         this.contextValue = contextValue;
     }
@@ -80,11 +80,11 @@ function getTaskInfoItems(task: taskModel.Task): vscode.TreeItem[] {
 function getListItemsOfGroupedTask(tasks: taskModel.Task[]): listItem[] {
     let running = tasks.filter(v => !v.finished);
     let finished = tasks.filter(v => v.finished);
-    console.log(running)
-    console.log(finished)
+    // console.log(running)
+    // console.log(finished)
     return [
         new listItem('running', running.map((value) => { return new TaskViewItem(value); })),
-        new listItem('finished', finished.map((value) => { return new TaskViewItem(value); })),
+        new listItem('finished', finished.map((value) => { return new FinishedTaskViewItem(value); }), 'finishedTaskList'),
     ];
 }
 
@@ -114,7 +114,7 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskViewIte
         if (!element) {
             return Promise.resolve(getListItemsOfGroupedTask(taskModel.taskManager.getTask()));
         }
-        if (element instanceof TaskViewItem) {
+        if (element instanceof TaskViewItem || element instanceof FinishedTaskViewItem) {
             return Promise.resolve(getTaskInfoItems(element.task));
         } else if (element instanceof listItem) {
             return Promise.resolve(element.children);
