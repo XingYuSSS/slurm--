@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Fixed
+
+- Fixed the issue where the GRES and output path of a task fail after load from the disk.
+
 ## [0.1.2][0.1.2] - 2024-10-05
 
 ### Added

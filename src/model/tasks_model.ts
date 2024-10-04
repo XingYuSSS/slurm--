@@ -165,9 +165,18 @@ export class TaskManager {
 
     private save_task() {
         const arrData = Array.from(this.taskMap.entries());
-        const jsonData = JSON.stringify(arrData);
+        console.log('save!')
+        const jsonData = JSON.stringify(arrData, (k, v)=>{
+            if (k === 'gres') {
+                return Gres.prototype.toString.call(v);
+            }
+            if (k === 'out_path' || k === 'err_path') {
+                return FilePath.prototype.toString.call(v);
+            }
+            return v;
+        });
         fs.writeFile(this.storagePath, jsonData, 'utf8', () => { });
-        // console.log('save!')
+        
     }
 
     public addTask(...tasks: Task[]) {
@@ -175,7 +184,7 @@ export class TaskManager {
     }
 
     public updateTask(...tasks: Task[]) {
-        // console.log(this.taskMap)
+        console.log(this.taskMap)
         const newId = tasks.map(value => value.jobid);
         const oldId = [...this.taskMap.keys()];
 
