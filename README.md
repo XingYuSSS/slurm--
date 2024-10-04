@@ -4,12 +4,12 @@ A extension for slurm system user
 
 ## features
 
-- show your slurm running tasks and informations
+- show slurm running tasks and informations
 
 ## future features
 
-- record your task state, and when they finished
-- choose GRES, and run your task
+- record task state, and when they finished
+- choose GRES, and run task
 
 ## TODO
 
@@ -21,7 +21,7 @@ A extension for slurm system user
   - [X] open log file
   - [ ] group and count by state, command or start time
 - [ ] Task tracker
-  - [ ] save tasks
+  - [X] save tasks
   - [ ] start and end time
   - [ ] scripts arguments
 - [ ] Task runner

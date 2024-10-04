@@ -54,6 +54,20 @@
         "icon": "$(close)"
       },
       {
+        "command": "slurm--.confirmTask",
+        "title": "confirm task",
+        "shortTitle": "confirm",
+        "category": "slurm--",
+        "icon": "$(check)"
+      },
+      {
+        "command": "slurm--.confirmAllTask",
+        "title": "confirm all task",
+        "shortTitle": "confirm all",
+        "category": "slurm--",
+        "icon": "$(check-all)"
+      },
+      {
         "command": "slurm--.openFile",
         "title": "open",
         "shortTitle": "open",
@@ -112,6 +126,16 @@
           "command": "slurm--.cancelTask",
           "group": "inline",
           "when": "view == slurm--_tasks_view && viewItem == taskItem"
+        },
+        {
+          "command": "slurm--.confirmTask",
+          "group": "inline",
+          "when": "view == slurm--_tasks_view && viewItem == finishedTaskItem"
+        },
+        {
+          "command": "slurm--.confirmAllTask",
+          "group": "inline",
+          "when": "view == slurm--_tasks_view && viewItem == finishedTaskList"
         },
         {
           "command": "slurm--.openFile",

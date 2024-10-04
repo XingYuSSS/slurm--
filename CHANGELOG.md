@@ -6,7 +6,22 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
-## [0.1.1][0.1.1]
+## [0.1.2][0.1.2] - 2024-10-05
+
+### Added
+
+- Add task storage
+- Add task confirm button
+- Add `finished` field in `task` class
+- Add some state of task
+
+### Changed
+
+- Finished task will not be removed, but marked as finished
+- Task in view will be grouped by finish state
+- Changed task tooltip, removed task name
+
+## [0.1.1][0.1.1] - 2024-09-23
 
 ### Added
 
@@ -26,7 +41,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Add `readonly` to some fields
 
-## [0.1.0][0.1.0]- 2024-09-19
+## [0.1.0][0.1.0] - 2024-09-19
 
 ### Added
 
@@ -42,6 +57,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/XingYuSSS/slurm--/tree/v0.1.0
