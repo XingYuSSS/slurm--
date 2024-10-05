@@ -13,18 +13,17 @@ A extension for slurm system user
 
 ## TODO
 
-- [ ] Task scanner
+- [ ] Task
   - [X] Auto task refresh
   - [X] cancel task
-  - [X] gres
-  - [X] command
+  - [X] show gres and command info
   - [X] open log file
+  - [X] save tasks to disk
+  - [X] Select multiple tasks and cancel
   - [ ] group and count by state, command or start time
-- [ ] Task tracker
-  - [X] save tasks
   - [ ] start and end time
   - [ ] scripts arguments
-- [ ] Task runner
+- [ ] Launcher
   - [ ] Shell scripts reader
   - [ ] scripts arguments manager
   - [ ] cost computer

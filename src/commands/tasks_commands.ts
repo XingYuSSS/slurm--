@@ -53,14 +53,32 @@ export async function refreshUserTasks() {
 
 export async function cancelTask(task: taskView.TaskViewItem) {
     const result = await vscode.window.showWarningMessage(
-        'Are you sure you want to cancel?',
-        { modal: true },
+        `Cancel task named ${task.task.name}?`,
         'Yes',
         'No'
     );
     if (result === 'Yes') {
         const [out, err] = await runBash(`scancel ${task.task.jobid}`);
         taskModel.taskManager.deleteTask(task.task.jobid);
+        taskView.taskViewDataProvider.refresh();
+    } else if (result === 'No') {
+    }
+}
+
+export async function cancelSelectedTasks() {
+    console.log(11)
+    if (taskView.selectedTaskItems.length === 0) { return; }
+    const tasks = taskView.selectedTaskItems.map(v => v.task);
+    const result = await vscode.window.showWarningMessage(
+        `This will cancel ${tasks.length} tasks below: ` + tasks.map(v => v.name).join('; '),
+        'Yes',
+        'No'
+    );
+    if (result === 'Yes') {
+        tasks.forEach(v => {
+            runBash(`scancel ${v.jobid}`);
+            taskModel.taskManager.deleteTask(v.jobid);
+        });
         taskView.taskViewDataProvider.refresh();
     } else if (result === 'No') {
     }
@@ -99,6 +117,7 @@ export async function openFile(file: taskView.OpenanleFileItem) {
 export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelSelectedTasks', cancelSelectedTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshTask', autoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTask', confirmTask));

@@ -17,9 +17,9 @@ function taskTooltip(task: taskModel.Task): vscode.MarkdownString {
 const iconMap: Map<taskModel.TaskState, vscode.ThemeIcon> = new Map([
     [taskModel.TaskState.R, new vscode.ThemeIcon('debug-start', new vscode.ThemeColor('gitDecoration.addedResourceForeground'))],
     [taskModel.TaskState.PD, new vscode.ThemeIcon('watch', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground'))],
+    [taskModel.TaskState.CG, new vscode.ThemeIcon('pass', new vscode.ThemeColor('gitDecoration.addedResourceForeground'))],
     // [taskModel.TaskState.PD, new vscode.ThemeIcon('warning', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'))], //感叹号
     // [taskModel.TaskState.PD, new vscode.ThemeIcon('error', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'))], //叉
-    // [taskModel.TaskState.PD, new vscode.ThemeIcon('pass', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'))], //勾
 ]);
 
 const finishedIcon = new vscode.ThemeIcon('pass', new vscode.ThemeColor('gitDecoration.addedResourceForeground'));
@@ -42,9 +42,9 @@ export class FinishedTaskViewItem extends vscode.TreeItem {
     }
 }
 
-export class listItem extends vscode.TreeItem {
+export class ListItem extends vscode.TreeItem {
     constructor(public readonly title: string, public readonly children: vscode.TreeItem[], contextValue?: string, isExpanded: boolean = true) {
-        super(title, isExpanded? vscode.TreeItemCollapsibleState.Expanded: vscode.TreeItemCollapsibleState.Collapsed);
+        super(title, isExpanded ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed);
         this.description = `${children.length} tasks`;
         this.contextValue = contextValue;
     }
@@ -77,18 +77,18 @@ function getTaskInfoItems(task: taskModel.Task): vscode.TreeItem[] {
     ];
 }
 
-function getListItemsOfGroupedTask(tasks: taskModel.Task[]): listItem[] {
+function getListItemsOfGroupedTask(tasks: taskModel.Task[]): ListItem[] {
     let running = tasks.filter(v => !v.finished);
     let finished = tasks.filter(v => v.finished);
     // console.log(running)
     // console.log(finished)
     return [
-        new listItem('running', running.map((value) => { return new TaskViewItem(value); })),
-        new listItem('finished', finished.map((value) => { return new FinishedTaskViewItem(value); }), 'finishedTaskList'),
+        new ListItem('running', running.map((value) => { return new TaskViewItem(value); })),
+        new ListItem('finished', finished.map((value) => { return new FinishedTaskViewItem(value); }), 'finishedTaskList'),
     ];
 }
 
-export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskViewItem | InfoItem> {
+export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskViewItem | InfoItem | ListItem | OpenanleFileItem | FinishedTaskViewItem> {
     private static _instance: TaskViewDataProvider | null = null;
     private constructor() { }
 
@@ -106,21 +106,38 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskViewIte
         this._onDidChangeTreeData.fire();
     }
 
-    getTreeItem(element: TaskViewItem | InfoItem): vscode.TreeItem {
+    getTreeItem(element: TaskViewItem | InfoItem | ListItem | OpenanleFileItem | FinishedTaskViewItem): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: TaskViewItem | InfoItem): Thenable<TaskViewItem[] | InfoItem[]> {
+    getChildren(element?: TaskViewItem | FinishedTaskViewItem | ListItem): Thenable<ListItem[] | TaskViewItem[] | FinishedTaskViewItem[] | InfoItem[] | OpenanleFileItem[]> {
         if (!element) {
             return Promise.resolve(getListItemsOfGroupedTask(taskModel.taskManager.getTask()));
         }
         if (element instanceof TaskViewItem || element instanceof FinishedTaskViewItem) {
             return Promise.resolve(getTaskInfoItems(element.task));
-        } else if (element instanceof listItem) {
+        } else if (element instanceof ListItem) {
             return Promise.resolve(element.children);
         }
         return Promise.resolve([]);
     }
+
+    getParent(element: TaskViewItem | InfoItem | ListItem | OpenanleFileItem | FinishedTaskViewItem): vscode.ProviderResult<TaskViewItem | InfoItem | ListItem | OpenanleFileItem | FinishedTaskViewItem> {
+        return element;
+    }
 }
 
 export const taskViewDataProvider = TaskViewDataProvider.getInstance();
+export let selectedTaskItems: TaskViewItem[] = [];
+
+export function initTasksView(context: vscode.ExtensionContext) {
+    const treeView = vscode.window.createTreeView('slurm--_tasks_view', { treeDataProvider: taskViewDataProvider, canSelectMany: true });
+    const disposable = treeView.onDidChangeSelection(e => {
+        if (e.selection && e.selection.length > 0) {
+            selectedTaskItems = e.selection.filter(v => v instanceof TaskViewItem);
+        }
+    });
+
+    context.subscriptions.push(disposable);
+
+}

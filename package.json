@@ -54,6 +54,13 @@
         "icon": "$(close)"
       },
       {
+        "command": "slurm--.cancelSelectedTasks",
+        "title": "cancel selected tasks",
+        "shortTitle": "cancel selected",
+        "category": "slurm--",
+        "icon": "$(close-all)"
+      },
+      {
         "command": "slurm--.confirmTask",
         "title": "confirm task",
         "shortTitle": "confirm",
@@ -153,7 +160,14 @@
           "description": "interval of auto refresh in millisecond"
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "command": "slurm--.cancelSelectedTasks",
+        "key": "delete",
+        "when": "focusedView == slurm--_tasks_view"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

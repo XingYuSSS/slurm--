@@ -6,6 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add select multiple tasks
+- Add cancel all selected tasks
+- Add keybindings in `package.json`
+- Add icon for more task states
+
 ### Fixed
 
 - Fixed the issue where the GRES and output path of a task fail after load from the disk.
@@ -17,7 +24,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add task storage
 - Add task confirm button
 - Add `finished` field in `task` class
-- Add some state of task
+- Add some states of task
 
 ### Changed
 
