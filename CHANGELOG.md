@@ -16,6 +16,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - Change scripts view to launcher view
+- Refactor the code into a more hierarchical structure.
 
 ### Fixed
 
