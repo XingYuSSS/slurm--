@@ -5,11 +5,12 @@ A extension for slurm system user
 ## features
 
 - show slurm running tasks and informations
+- record task state, and when they finished
 
 ## future features
 
-- record task state, and when they finished
-- choose GRES, and run task
+- slrum script config syntax highlight
+- launch task with chosen GRES and timelimit
 
 ## TODO
 
@@ -23,6 +24,8 @@ A extension for slurm system user
   - [ ] group and count by state, command or start time
   - [ ] start and end time
   - [ ] scripts arguments
+- [ ] Script Syntax
+  - [ ] syntax highlight
 - [ ] Launcher
   - [ ] Shell scripts reader
   - [ ] scripts arguments manager

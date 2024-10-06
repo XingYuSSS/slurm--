@@ -13,6 +13,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add keybindings in `package.json`
 - Add icon for more task states
 
+### Changed
+
+- Change scripts view to launcher view
+
 ### Fixed
 
 - Fixed the issue where the GRES and output path of a task fail after load from the disk.

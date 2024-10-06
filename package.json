@@ -99,8 +99,8 @@
           "icon": "assets/icons/task.svg"
         },
         {
-          "id": "slurm--_scripts_view",
-          "name": "scripts",
+          "id": "slurm--_launcher_view",
+          "name": "launcher",
           "icon": "assets/icons/task.svg"
         }
       ]

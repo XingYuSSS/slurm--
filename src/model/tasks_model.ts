@@ -137,7 +137,6 @@ export class TaskManager {
         const dir = path.dirname(this.storagePath);
         fs.mkdirSync(dir, { recursive: true });
         this.load_task();
-        // console.log(this.storagePath)
     }
 
     static getInstance(context?: vscode.ExtensionContext): TaskManager {
@@ -156,8 +155,6 @@ export class TaskManager {
             const saveMap = JSON.parse(jsonData);
             this.taskMap = new Map(saveMap);
             this.taskMap.forEach((v, k) => this.taskMap.set(k, Task.fromObject(v)));
-            // console.log(this.taskMap)
-            // console.log(typeof saveMap)
         } else {
             this.taskMap = new Map();
         }
@@ -165,7 +162,6 @@ export class TaskManager {
 
     private save_task() {
         const arrData = Array.from(this.taskMap.entries());
-        console.log('save!')
         const jsonData = JSON.stringify(arrData, (k, v)=>{
             if (k === 'gres') {
                 return Gres.prototype.toString.call(v);
@@ -184,7 +180,6 @@ export class TaskManager {
     }
 
     public updateTask(...tasks: Task[]) {
-        console.log(this.taskMap)
         const newId = tasks.map(value => value.jobid);
         const oldId = [...this.taskMap.keys()];
 
