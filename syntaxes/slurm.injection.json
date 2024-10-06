@@ -1,0 +1,37 @@
+{
+  "scopeName": "slurm.injection.shell",
+  "injectionSelector": "L:source.shell",
+  "patterns": [
+    {
+      "begin": "^#SBATCH\\s+",
+      "end": "\\n",
+      "name": "meta.slurm.injection",
+      "patterns": [
+        {
+          "include": "#option-long"
+        },
+        {
+          "include": "#option-short"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "option-long": {
+      "match": "--[a-zA-Z0-9_-]+\\s+[^#\\s]+",
+      "name": "keyword.option.long.slurm.injection"
+    },
+    "option-short": {
+      "match": "-[a-zA-Z0-9]\\s+[^#\\s]+",
+      "name": "keyword.option.short.slurm.injection"
+    },
+    "comment": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.slurm.injection"
+    }
+  }
+}
+  

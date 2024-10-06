@@ -25,7 +25,7 @@ A extension for slurm system user
   - [ ] start and end time
   - [ ] scripts arguments
 - [ ] Script Syntax
-  - [ ] syntax highlight
+  - [X] syntax highlight
 - [ ] Launcher
   - [ ] Shell scripts reader
   - [ ] scripts arguments manager
