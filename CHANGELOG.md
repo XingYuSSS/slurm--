@@ -12,6 +12,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add cancel all selected tasks
 - Add keybindings in `package.json`
 - Add icon for more task states
+- Inject slurm syntax highlight into shell
 
 ### Changed
 

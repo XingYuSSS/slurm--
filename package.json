@@ -167,6 +167,13 @@
         "key": "delete",
         "when": "focusedView == slurm--_tasks_view"
       }
+    ],
+    "grammars": [
+      {
+        "path": "./syntaxes/slurm.injection.json",
+        "scopeName": "slurm.injection.shell",
+        "injectTo": ["source.shell"]
+      }
     ]
   },
   "scripts": {
