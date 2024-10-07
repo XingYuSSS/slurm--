@@ -98,11 +98,11 @@
       }
     },
     "time-value": {
-      "match": "(?:\\d-)?\\d+:[0-5]?\\d:[0-5]?\\d",
-      "name": "constant.other.time.slurm.injection"
+      "match": "(?:\\d-)?\\d+:[0-5]?\\d:[0-5]?\\d(?=\\s)",
+      "name": "variable.other.constant.time.slurm.injection"
     },
     "numeric-value": {
-      "match": "\\d+",
+      "match": "\\d+(?=\\s)",
       "name": "constant.numeric.slurm.injection"
     },
     "unquoted-string-value": {
