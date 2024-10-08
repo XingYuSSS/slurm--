@@ -1,0 +1,113 @@
+{
+  "scopeName": "slurm.injection.shell",
+  "injectionSelector": "L:source.shell",
+  "patterns": [
+    {
+      "begin": "^#SBATCH\\s+",
+      "end": "\\n",
+      "name": "meta.slurm.injection",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.slurm"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#option-long"
+        },
+        {
+          "include": "#option-short"
+        },
+        {
+          "include": "#comment"
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "option-long": {
+      "begin": "(--[a-zA-Z0-9_-]+)(?:(=)|(\\s+))",
+      "end": "(?=\\s+(--|-|#|\\n|$))",
+      "name": "meta.option.long.slurm.injection",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.option.long.slurm.injection"
+        },
+        "2": {
+          "name": "punctuation.separator.equals.slurm.injection"
+        },
+        "3": {
+          "name": "punctuation.separator.spaces.slurm.injection"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#string-value"
+        },
+        {
+          "include": "#time-value"
+        },
+        {
+          "include": "#numeric-value"
+        },
+        {
+          "include": "#unquoted-string-value"
+        }
+      ]
+    },
+    "option-short": {
+      "begin": "(-[a-zA-Z])(\\s+)",
+      "end": "(?=\\s+(--|-|#|\\n|$))",
+      "name": "meta.option.short.slurm.injection",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.option.short.slurm.injection"
+        },
+        "2": {
+          "name": "punctuation.separator.spaces.slurm.injection"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#string-value"
+        },
+        {
+          "include": "#time-value"
+        },
+        {
+          "include": "#numeric-value"
+        },
+        {
+          "include": "#unquoted-string-value"
+        }
+      ]
+    },
+    "comment": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.slurm.injection"
+    },
+    "string-value": {
+      "match": "(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")|('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')",
+      "captures": {
+        "1": {
+          "name": "string.quoted.double.slurm.injection"
+        },
+        "2": {
+          "name": "string.quoted.single.slurm.injection"
+        }
+      }
+    },
+    "time-value": {
+      "match": "(?:\\d-)?\\d+:[0-5]?\\d:[0-5]?\\d(?=\\s)",
+      "name": "variable.other.constant.time.slurm.injection"
+    },
+    "numeric-value": {
+      "match": "\\d+(?=\\s)",
+      "name": "constant.numeric.slurm.injection"
+    },
+    "unquoted-string-value": {
+      "match": "\\S+",
+      "name": "string.unquoted.option.value.long.slurm.injection"
+    }
+  }
+}

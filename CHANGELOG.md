@@ -6,6 +6,24 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add select multiple tasks
+- Add cancel all selected tasks
+- Add keybindings in `package.json`
+- Add icon for more task states
+- Inject slurm syntax highlight into shell
+
+### Changed
+
+- Change scripts view to launcher view
+- Refactor the code into a more hierarchical structure
+- Change required vscode version from ^1.93.0 to ^1.89.0
+
+### Fixed
+
+- Fixed the issue where the GRES and output path of a task fail after load from the disk.
+
 ## [0.1.2][0.1.2] - 2024-10-05
 
 ### Added
@@ -13,7 +31,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add task storage
 - Add task confirm button
 - Add `finished` field in `task` class
-- Add some state of task
+- Add some states of task
 
 ### Changed
 
