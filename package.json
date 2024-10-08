@@ -2,7 +2,7 @@
   "name": "slurm--extension",
   "displayName": "slurm--",
   "description": "",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.89.0"
   },
@@ -172,7 +172,9 @@
       {
         "path": "./syntaxes/slurm.injection.json",
         "scopeName": "slurm.injection.shell",
-        "injectTo": ["source.shell"]
+        "injectTo": [
+          "source.shell"
+        ]
       }
     ]
   },
