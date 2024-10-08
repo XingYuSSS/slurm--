@@ -17,7 +17,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - Change scripts view to launcher view
-- Refactor the code into a more hierarchical structure.
+- Refactor the code into a more hierarchical structure
+- Change required vscode version from ^1.93.0 to ^1.89.0
 
 ### Fixed
 
