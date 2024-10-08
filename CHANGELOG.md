@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.2.0][0.2.0] - 2024-10-08
+
 ### Added
 
 - Add select multiple tasks
@@ -75,7 +77,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.2.0...HEAD
+[0.1.2]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/XingYuSSS/slurm--/tree/v0.1.0
