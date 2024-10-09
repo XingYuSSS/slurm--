@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Task, TaskState } from '../../model/taskModel';
+import { Task, TaskState } from '../../models';
 
 function taskDescription(task: Task): string {
     return task.state === TaskState.R ? task.runing_time + '/' + task.limit_time : task.reason;

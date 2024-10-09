@@ -2,8 +2,7 @@ import * as vscode from 'vscode';
 
 import { initTaskCmd } from './commands/taskCommands';
 import { initTasksView} from './view/taskView';
-import { initConfigManager } from './model/configManager';
-import { initTaskManager } from './model/tasksManager';
+import { initConfigManager, initTaskManager } from './services';
 
 export var extensionRootUri: vscode.Uri;
 export var userName: string;

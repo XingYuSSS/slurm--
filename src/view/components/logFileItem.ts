@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { LogFile } from '../../model/logFileModel';
+import { LogFile } from '../../models';
 
 export class LogFileItem extends vscode.TreeItem {
     constructor(public readonly file: LogFile, description?: string | boolean, tooltip?: string | vscode.MarkdownString) {

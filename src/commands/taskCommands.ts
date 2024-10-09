@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 
 import { runBash } from '../utils/utils';
-import { taskManager } from '../model/tasksManager';
+import { Task } from '../models';
+import { taskManager, configManager } from '../services';
 import * as taskView from '../view/taskView';
-import { configManager } from '../model/configManager';
-import { Task } from '../model/taskModel';
 import { LogFileItem, TaskItem } from '../view/components';
 
 // while (extensionRootUri !== null){}

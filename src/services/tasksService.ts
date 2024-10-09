@@ -2,17 +2,14 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { Task } from './taskModel';
-import { Gres } from './gresModel';
-import { LogFile } from './logFileModel';
+import { Task, Gres, LogFile } from '../models';
 
-
-export class TaskManager {
+export class TaskService {
     private storagePath;
     private taskMap!: Map<number, Task>;
     private initing: boolean = true;
 
-    private static _instance: TaskManager | null = null;
+    private static _instance: TaskService | null = null;
     private constructor(context: vscode.ExtensionContext) {
         this.storagePath = path.join(context.globalStorageUri.fsPath, 'tasks.json');
         const dir = path.dirname(this.storagePath);
@@ -20,14 +17,14 @@ export class TaskManager {
         this.load_task();
     }
 
-    static getInstance(context?: vscode.ExtensionContext): TaskManager {
-        if (TaskManager._instance === null) {
+    static getInstance(context?: vscode.ExtensionContext): TaskService {
+        if (TaskService._instance === null) {
             if (context === undefined) {
                 throw new Error(`init ${this.name} failed.`);
             }
-            TaskManager._instance = new TaskManager(context);
+            TaskService._instance = new TaskService(context);
         }
-        return TaskManager._instance;
+        return TaskService._instance;
     }
 
     private load_task() {
@@ -96,8 +93,8 @@ export class TaskManager {
 
 }
 
-export let taskManager: TaskManager;
+export let taskManager: TaskService;
 
 export function initTaskManager(context: vscode.ExtensionContext) {
-    taskManager = TaskManager.getInstance(context);
+    taskManager = TaskService.getInstance(context);
 }

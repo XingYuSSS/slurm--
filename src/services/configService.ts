@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 
-class ConfigManager {
+class ConfigService {
     private _taskRefreshInterval_ms: number;
     public get taskRefreshInterval_ms() : number {
         return this._taskRefreshInterval_ms;
@@ -22,8 +22,8 @@ class ConfigManager {
     }
 }
 
-export let configManager: ConfigManager;
+export let configManager: ConfigService;
 
 export function initConfigManager(context: vscode.ExtensionContext) {
-    configManager = new ConfigManager(context);
+    configManager = new ConfigService(context);
 }

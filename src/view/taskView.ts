@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
-import { taskManager } from '../model/tasksManager';
-import { Task } from '../model/taskModel';
+import { taskManager } from '../services';
+import { Task } from '../models/';
 import { FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskItem } from './components';
 
 function getTaskInfoItems(task: Task): vscode.TreeItem[] {
