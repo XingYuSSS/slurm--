@@ -7,14 +7,13 @@ import { Task, Gres, LogFile } from '../models';
 export class TaskService {
     private storagePath;
     private taskMap!: Map<number, Task>;
-    private initing: boolean = true;
 
     private static _instance: TaskService | null = null;
     private constructor(context: vscode.ExtensionContext) {
         this.storagePath = path.join(context.globalStorageUri.fsPath, 'tasks.json');
         const dir = path.dirname(this.storagePath);
         fs.mkdirSync(dir, { recursive: true });
-        this.load_task();
+        this.loadTask();
     }
 
     static getInstance(context?: vscode.ExtensionContext): TaskService {
@@ -27,7 +26,7 @@ export class TaskService {
         return TaskService._instance;
     }
 
-    private load_task() {
+    private loadTask() {
         if (fs.existsSync(this.storagePath)) {
             const jsonData = fs.readFileSync(this.storagePath, 'utf8');
             const saveMap = JSON.parse(jsonData);
@@ -38,7 +37,7 @@ export class TaskService {
         }
     }
 
-    private save_task() {
+    private saveTask() {
         const arrData = Array.from(this.taskMap.entries());
         const jsonData = JSON.stringify(arrData, (k, v)=>{
             if (k === 'gres') {
@@ -49,15 +48,16 @@ export class TaskService {
             }
             return v;
         });
-        fs.writeFile(this.storagePath, jsonData, 'utf8', () => { });
-        
+        fs.writeFileSync(this.storagePath, jsonData, 'utf8');
     }
 
     public addTask(...tasks: Task[]) {
         tasks.forEach(value => this.taskMap.set(value.jobid, value));
+        this.saveTask();
     }
 
     public updateTask(...tasks: Task[]) {
+        this.loadTask();
         const newId = tasks.map(value => value.jobid);
         const oldId = [...this.taskMap.keys()];
 
@@ -66,12 +66,13 @@ export class TaskService {
         const dropId = oldId.filter(value => !updateId.includes(value));
 
 
-        this.addTask(...tasks.filter(value => addId.includes(value.jobid)));
+        tasks.filter(value => addId.includes(value.jobid))
+            .forEach(value => this.taskMap.set(value.jobid, value));
         tasks.filter(value => updateId.includes(value.jobid))
             .forEach(value => this.taskMap.get(value.jobid)?.update(value));
         dropId.forEach(v => this.taskMap.get(v)?.finish());
 
-        this.save_task();
+        this.saveTask();
     }
 
     public deleteTask(...tasks: number[]): void;
@@ -85,6 +86,7 @@ export class TaskService {
         } else {
             tasks.forEach(value => this.taskMap.delete((value as Task).jobid));
         }
+        this.saveTask();
     }
 
     public getTask(): Task[] {
@@ -93,8 +95,8 @@ export class TaskService {
 
 }
 
-export let taskManager: TaskService;
+export let taskService: TaskService;
 
 export function initTaskManager(context: vscode.ExtensionContext) {
-    taskManager = TaskService.getInstance(context);
+    taskService = TaskService.getInstance(context);
 }

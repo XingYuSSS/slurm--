@@ -18,10 +18,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "slurm--.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "slurm--.refreshUserTasks",
         "title": "refresh user tasks",
         "shortTitle": "refresh",
@@ -80,6 +76,13 @@
         "shortTitle": "open",
         "category": "slurm--",
         "icon": "$(go-to-file)"
+      },
+      {
+        "command": "slurm--.refreshResources",
+        "title": "refresh resources",
+        "shortTitle": "refresh",
+        "category": "slurm--",
+        "icon": "$(sync)"
       }
     ],
     "viewsContainers": {

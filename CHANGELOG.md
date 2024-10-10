@@ -6,6 +6,22 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add refresh resouces command
+- Add resouce services
+- Add node model
+
+### Fixed
+
+- Fixed tasks view not refresh after confirm all finished tasks
+- Fixed tasks service not save to disk after confirm task and confirm all tasks
+- Fixed confirmd tasks not write to disk when multiple users were using the system simultaneously 
+
+### Removed
+
+- Removed useless `hello world` command
+
 ## [0.2.0][0.2.0] - 2024-10-08
 
 ### Added
@@ -24,7 +40,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-- Fixed the issue where the GRES and output path of a task fail after load from the disk.
+- Fixed the issue where the GRES and output path of a task fail after load from the disk
 
 ## [0.1.2][0.1.2] - 2024-10-05
 

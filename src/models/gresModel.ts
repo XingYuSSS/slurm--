@@ -16,4 +16,8 @@ export class Gres {
     toString() {
         return this.type + (this.name ? ':' + this.name : '') + (this.other ? ':' + this.other : '') + ':' + this.num.toString();
     }
+
+    toIdString() {
+        return this.type + (this.name ? ':' + this.name : '') + (this.other ? ':' + this.other : '');
+    }
 }

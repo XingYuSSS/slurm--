@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { taskManager } from '../services';
+import { taskService } from '../services';
 import { Task } from '../models/';
 import { FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskItem } from './components';
 
@@ -49,7 +49,7 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskItem | 
 
     getChildren(element?: TaskItem | FinishedTaskItem | ListItem): Thenable<ListItem[] | TaskItem[] | FinishedTaskItem[] | InfoItem[] | LogFileItem[]> {
         if (!element) {
-            return Promise.resolve(getListItemsOfGroupedTask(taskManager.getTask()));
+            return Promise.resolve(getListItemsOfGroupedTask(taskService.getTask()));
         }
         if (element instanceof TaskItem || element instanceof FinishedTaskItem) {
             return Promise.resolve(getTaskInfoItems(element.task));
