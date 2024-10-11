@@ -50,8 +50,8 @@ export class Task {
         this.limit_time = limit_time;
         this.runing_time = runing_time;
         this.command = command;
-        this.out_path = typeof out_path === "string" ? new LogFile(out_path.replace('%j', jobid.toString())) : out_path;
-        this.err_path = typeof err_path === "string" ? new LogFile(err_path.replace('%j', jobid.toString())) : err_path;
+        this.out_path = typeof out_path === "string" ? new LogFile(out_path.replace(/%j/i, jobid.toString())) : out_path;
+        this.err_path = typeof err_path === "string" ? new LogFile(err_path.replace(/%j/i, jobid.toString())) : err_path;
         this.reason = reason === 'None' ? '' : reason;
         this.finished = finished??false;
     }
