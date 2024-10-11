@@ -6,7 +6,7 @@ export class Gres {
     readonly other: string | null = null;
     readonly num: number;
     constructor(gres: string) {
-        const slicedGres = gres.replace(RegExp('^gres:'), '').replace(RegExp('\\(.*\\)$'), '').split(":");
+        const slicedGres = gres.replace(/^gres:/, '').replace(/\\(.*\\)$/, '').split(":");
         this.type = slicedGres[0];
         this.name = slicedGres.length > 2 ? slicedGres[1] : null;
         this.other = slicedGres.length > 3 ? slicedGres.slice(2, -1).join(":") : null;

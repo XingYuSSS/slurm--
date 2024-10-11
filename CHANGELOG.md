@@ -14,6 +14,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add resouce services
 - Add node model
 
+### Changed
+
+- use regex literal instead of RegExp
+
 ### Fixed
 
 - Fixed tasks view not refresh after confirm all finished tasks
