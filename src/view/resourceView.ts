@@ -13,7 +13,7 @@ function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
 function getGroupedNode(): ListItem[] {
     return [...resourceService.groupByGres().values()].map(nodes => {
         const rgres = ResourceGres.fromArray(nodes.map(v => v.gres));
-        return new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), '${length} nodes', gresIcon(rgres), undefined, false);
+        return new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), '${length} nodes', gresIcon(rgres), 'gresList', false);
     });
 }
 
@@ -51,8 +51,8 @@ export class ResourceViewDataProvider implements vscode.TreeDataProvider<NodeIte
 }
 
 export const resourceViewDataProvider = ResourceViewDataProvider.getInstance();
+export const resourceTreeView = vscode.window.createTreeView('slurm--_resource_view', { treeDataProvider: resourceViewDataProvider });
 
 export function initResourceView(context: vscode.ExtensionContext) {
-    const treeView = vscode.window.createTreeView('slurm--_resource_view', { treeDataProvider: resourceViewDataProvider });
-    context.subscriptions.push(treeView);
+    context.subscriptions.push(resourceTreeView);
 }

@@ -27,7 +27,7 @@ A extension for slurm system user
 - [ ] Resources
   - [X] scan availabal GRES and Memory
   - [X] auto refreash
-  - [ ] copy GRES or node to clipboard
+  - [X] copy GRES or node to clipboard
 - [ ] Script Syntax
   - [X] syntax highlight
 - [ ] Launcher

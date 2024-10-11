@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { Node, ResourceGres } from '../models';
 
 export class ResourceService {
-    private nodeList!: Node[];
+    private nodeList: Node[] = [];
 
     private static _instance: ResourceService | null = null;
     private constructor() { }

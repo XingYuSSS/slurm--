@@ -1,5 +1,4 @@
-import { LogFile } from "./logFileModel";
-import { Gres, ResourceGres } from "./gresModel";
+import { ResourceGres } from "./gresModel";
 
 
 export class Node {

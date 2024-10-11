@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 
 import { runBash } from '../utils/utils';
 import { Node } from '../models';
-import { resourceViewDataProvider } from '../view/resourceView';
+import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
+import { ListItem, NodeItem } from '../view/components';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -53,10 +54,21 @@ export async function unautoRefreshRes() {
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
 }
 
+export async function copyGres() {
+    const selected = resourceTreeView.selection[0];
+    if (selected instanceof ListItem){
+        const gresString = (selected.title as string).replace(RegExp('\\s*\\(.*\\)$'), '');
+        vscode.env.clipboard.writeText(gresString);
+    } else if (selected instanceof NodeItem){
+        vscode.env.clipboard.writeText(selected.node.nodeid);
+    }
+}
+
 export function initResCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', refreshResources));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshRes', autoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshRes', unautoRefreshRes));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.copyGres', copyGres));
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
     vscode.commands.executeCommand('slurm--.refreshResources');

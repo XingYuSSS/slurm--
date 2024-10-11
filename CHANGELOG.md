@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Add resource view
 - Add refresh resouces and auto refresh command
+- Add copy GRES and node to clipboard by CTRL+C
 - Add resouce services
 - Add node model
 
@@ -17,7 +18,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Fixed tasks view not refresh after confirm all finished tasks
 - Fixed tasks service not save to disk after confirm task and confirm all tasks
-- Fixed confirmd tasks not write to disk when multiple users were using the system simultaneously 
+- Fixed confirmd tasks not write to disk when multiple users were using the system simultaneously
 
 ### Removed
 

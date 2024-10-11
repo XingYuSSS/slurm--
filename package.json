@@ -95,6 +95,11 @@
         "title": "stop auto refresh",
         "category": "slurm--",
         "icon": "$(sync~spin)"
+      },
+      {
+        "command": "slurm--.copyGres",
+        "title": "copy",
+        "category": "slurm--"
       }
     ],
     "viewsContainers": {
@@ -191,6 +196,11 @@
         "command": "slurm--.cancelSelectedTasks",
         "key": "delete",
         "when": "focusedView == slurm--_tasks_view"
+      },
+      {
+        "command": "slurm--.copyGres",
+        "key": "ctrl+c",
+        "when": "focusedView == slurm--_resource_view"
       }
     ],
     "grammars": [

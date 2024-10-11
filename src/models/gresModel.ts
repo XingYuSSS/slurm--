@@ -34,7 +34,7 @@ export class ResourceGres extends Gres {
     }
 
     toString() {
-        return this.type + (this.name ? ':' + this.name : '') + (this.other ? ':' + this.other : '') + `(${this.usedNum.toString()}/${this.totalNum.toString()})`;
+        return this.type + (this.name ? ':' + this.name : '') + (this.other ? ':' + this.other : '') + ` (${this.usedNum.toString()}/${this.totalNum.toString()})`;
     }
 
     is(rgres: ResourceGres): boolean {
