@@ -2,7 +2,10 @@ import * as vscode from 'vscode';
 
 import { runBash } from '../utils/utils';
 import { Node } from '../models';
-import { resourceService } from '../services/resouceService';
+import { resourceViewDataProvider } from '../view/resourceView';
+import { resourceService, configService } from '../services';
+
+let autoRefreshTimer: NodeJS.Timeout;
 
 function extractNodes(nodeString: string, short_length: number, long_length: number): Node[] {
     let slices = [short_length, short_length, short_length, short_length, long_length, long_length, short_length];
@@ -34,9 +37,27 @@ export async function refreshResources() {
     const long = 50;
     const [out, err] = await runBash(`sinfo --noheader -O NODELIST:${short},Available:${short},Memory:${short},AllocMem:${short},Gres:${long},GresUsed:${long},Partition:${short}`);
     resourceService.updateNode(...extractNodes(out, short, long));
-    console.log(resourceService.getNode())
+    resourceViewDataProvider.refresh();
+}
+
+export async function autoRefreshRes() {
+    clearInterval(autoRefreshTimer);
+    autoRefreshTimer = setInterval(() => {
+        vscode.commands.executeCommand('slurm--.refreshResources');
+    }, configService.taskRefreshInterval_ms);
+    vscode.commands.executeCommand('setContext', 'autoRefreshingRes', true);
+}
+
+export async function unautoRefreshRes() {
+    clearInterval(autoRefreshTimer);
+    vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
 }
 
 export function initResCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', refreshResources));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshRes', autoRefreshRes));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshRes', unautoRefreshRes));
+
+    vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
+    vscode.commands.executeCommand('slurm--.refreshResources');
 }

@@ -8,7 +8,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
-- Add refresh resouces command
+- Add resource view
+- Add refresh resouces and auto refresh command
 - Add resouce services
 - Add node model
 

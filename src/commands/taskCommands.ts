@@ -83,12 +83,12 @@ export async function autoRefreshTask() {
     autoRefreshTimer = setInterval(() => {
         vscode.commands.executeCommand('slurm--.refreshUserTasks');
     }, configService.taskRefreshInterval_ms);
-    vscode.commands.executeCommand('setContext', 'autoRefreshing', true);
+    vscode.commands.executeCommand('setContext', 'autoRefreshingTask', true);
 }
 
 export async function unautoRefreshTask() {
     clearInterval(autoRefreshTimer);
-    vscode.commands.executeCommand('setContext', 'autoRefreshing', false);
+    vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
 }
 
 export async function confirmTask(task: TaskItem) {
@@ -121,7 +121,7 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
 
     vscode.commands.executeCommand('setContext', 'refreshingUserTasks', false);
-    vscode.commands.executeCommand('setContext', 'autoRefreshing', false);
+    vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
     vscode.commands.executeCommand('slurm--.refreshUserTasks');
 }
 

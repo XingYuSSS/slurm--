@@ -14,14 +14,14 @@ function getTaskInfoItems(task: Task): vscode.TreeItem[] {
     ];
 }
 
-function getListItemsOfGroupedTask(tasks: Task[]): ListItem[] {
+function getGroupedTask(tasks: Task[]): ListItem[] {
     let running = tasks.filter(v => !v.finished);
     let finished = tasks.filter(v => v.finished);
     // console.log(running)
     // console.log(finished)
     return [
-        new ListItem('running', running.map((value) => { return new TaskItem(value); })),
-        new ListItem('finished', finished.map((value) => { return new FinishedTaskItem(value); }), 'finishedTaskList'),
+        new ListItem('running', running.map((value) => { return new TaskItem(value); }), '${length} tasks'),
+        new ListItem('finished', finished.map((value) => { return new FinishedTaskItem(value); }), '${length} tasks', undefined, 'finishedTaskList'),
     ];
 }
 
@@ -49,7 +49,7 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskItem | 
 
     getChildren(element?: TaskItem | FinishedTaskItem | ListItem): Thenable<ListItem[] | TaskItem[] | FinishedTaskItem[] | InfoItem[] | LogFileItem[]> {
         if (!element) {
-            return Promise.resolve(getListItemsOfGroupedTask(taskService.getTask()));
+            return Promise.resolve(getGroupedTask(taskService.getTask()));
         }
         if (element instanceof TaskItem || element instanceof FinishedTaskItem) {
             return Promise.resolve(getTaskInfoItems(element.task));
@@ -57,10 +57,6 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskItem | 
             return Promise.resolve(element.children);
         }
         return Promise.resolve([]);
-    }
-
-    getParent(element: TaskItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem): vscode.ProviderResult<TaskItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem> {
-        return element;
     }
 }
 
