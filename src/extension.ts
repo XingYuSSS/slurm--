@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 
 import { initTaskCmd } from './commands/taskCommands';
-import { initTasksView} from './view/taskView';
-import { initConfigManager } from './model/configManager';
-import { initTaskManager } from './model/tasksManager';
+import { initResCmd } from './commands/resourceCommand';
+import { initTasksView } from './view/taskView';
+import { initConfigManager, initTaskManager } from './services';
+import { initResourceView } from './view/resourceView';
 
 export var extensionRootUri: vscode.Uri;
 export var userName: string;
@@ -17,8 +18,10 @@ export function activate(context: vscode.ExtensionContext) {
 	initTaskManager(context);
 
 	initTaskCmd(context);
+	initResCmd(context);
 
 	initTasksView(context);
+	initResourceView(context);
 	// context.subscriptions.push(vscode.window.createTreeView('slurm--_config_view', { treeDataProvider: taskViewDataProvider }));
 	
 

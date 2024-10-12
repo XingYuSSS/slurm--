@@ -6,6 +6,31 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.3.0][0.3.0] - 2024-10-12
+
+### Added
+
+- Add resource view
+- Add refresh resouces and auto refresh command
+- Add copy GRES and node to clipboard by CTRL+C
+- Add resouce services
+- Add node model
+
+### Changed
+
+- use regex literal instead of RegExp
+
+### Fixed
+
+- Fixed tasks view not refresh after confirm all finished tasks
+- Fixed tasks service not save to disk after confirm task and confirm all tasks
+- Fixed confirmd tasks not write to disk when multiple users were using the system simultaneously
+- Fixed `%J` in outpath
+
+### Removed
+
+- Removed useless `hello world` command
+
 ## [0.2.0][0.2.0] - 2024-10-08
 
 ### Added
@@ -24,7 +49,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-- Fixed the issue where the GRES and output path of a task fail after load from the disk.
+- Fixed the issue where the GRES and output path of a task fail after load from the disk
 
 ## [0.1.2][0.1.2] - 2024-10-05
 
@@ -77,8 +102,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.2.0...HEAD
-[0.1.2]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...v0.2.0
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/XingYuSSS/slurm--/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/XingYuSSS/slurm--/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/XingYuSSS/slurm--/tree/v0.1.0

@@ -18,10 +18,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "slurm--.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "slurm--.refreshUserTasks",
         "title": "refresh user tasks",
         "shortTitle": "refresh",
@@ -80,6 +76,30 @@
         "shortTitle": "open",
         "category": "slurm--",
         "icon": "$(go-to-file)"
+      },
+      {
+        "command": "slurm--.refreshResources",
+        "title": "refresh resources",
+        "shortTitle": "refresh",
+        "category": "slurm--",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "slurm--.autoRefreshRes",
+        "title": "start auto refresh",
+        "category": "slurm--",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "slurm--.unautoRefreshRes",
+        "title": "stop auto refresh",
+        "category": "slurm--",
+        "icon": "$(sync~spin)"
+      },
+      {
+        "command": "slurm--.copyGres",
+        "title": "copy",
+        "category": "slurm--"
       }
     ],
     "viewsContainers": {
@@ -99,8 +119,8 @@
           "icon": "assets/icons/task.svg"
         },
         {
-          "id": "slurm--_launcher_view",
-          "name": "launcher",
+          "id": "slurm--_resource_view",
+          "name": "resources",
           "icon": "assets/icons/task.svg"
         }
       ]
@@ -119,12 +139,22 @@
         },
         {
           "command": "slurm--.autoRefreshTask",
-          "when": "view == slurm--_tasks_view && !autoRefreshing",
+          "when": "view == slurm--_tasks_view && !autoRefreshingTask",
           "group": "navigation"
         },
         {
           "command": "slurm--.unautoRefreshTask",
-          "when": "view == slurm--_tasks_view && autoRefreshing",
+          "when": "view == slurm--_tasks_view && autoRefreshingTask",
+          "group": "navigation"
+        },
+        {
+          "command": "slurm--.autoRefreshRes",
+          "when": "view == slurm--_resource_view && !autoRefreshingRes",
+          "group": "navigation"
+        },
+        {
+          "command": "slurm--.unautoRefreshRes",
+          "when": "view == slurm--_resource_view && autoRefreshingRes",
           "group": "navigation"
         }
       ],
@@ -166,6 +196,11 @@
         "command": "slurm--.cancelSelectedTasks",
         "key": "delete",
         "when": "focusedView == slurm--_tasks_view"
+      },
+      {
+        "command": "slurm--.copyGres",
+        "key": "ctrl+c",
+        "when": "focusedView == slurm--_resource_view"
       }
     ],
     "grammars": [
@@ -187,19 +222,23 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.89.0",
+    "@types/lodash": "^4.17.10",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
+    "@types/vscode": "^1.89.0",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",
-    "eslint": "^9.9.1",
-    "typescript": "^5.5.4",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.9.1",
+    "typescript": "^5.5.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/XingYuSSS/slurm--"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }

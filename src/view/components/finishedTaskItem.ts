@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Task } from '../../model/taskModel';
+import { Task } from '../../models';
 
 const finishedIcon = new vscode.ThemeIcon('pass', new vscode.ThemeColor('gitDecoration.addedResourceForeground'));
 

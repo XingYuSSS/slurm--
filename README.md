@@ -15,7 +15,7 @@ A extension for slurm system user
 ## TODO
 
 - [ ] Task
-  - [X] Auto task refresh
+  - [X] auto task refresh
   - [X] cancel task
   - [X] show gres and command info
   - [X] open log file
@@ -24,6 +24,10 @@ A extension for slurm system user
   - [ ] group and count by state, command or start time
   - [ ] start and end time
   - [ ] scripts arguments
+- [ ] Resources
+  - [X] scan availabal GRES and Memory
+  - [X] auto refreash
+  - [X] copy GRES or node to clipboard
 - [ ] Script Syntax
   - [X] syntax highlight
 - [ ] Launcher
