@@ -7,7 +7,7 @@ import { FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskItem } from './c
 function getTaskInfoItems(task: Task): vscode.TreeItem[] {
     return [
         new InfoItem(task.jobid.toString(), 'id'),
-        new InfoItem(task.gres.toString(), 'GRES'),
+        new InfoItem(task.gres?.toString() ?? 'No GRES', 'GRES'),
         new InfoItem(task.command, 'command'),
         new LogFileItem(task.out_path, 'stdout'),
         new LogFileItem(task.err_path, 'stderr'),

@@ -36,7 +36,7 @@ function extractNodes(nodeString: string, short_length: number, long_length: num
 export async function refreshResources() {
     const short = 15;
     const long = 50;
-    const [out, err] = await runBash(`sinfo --noheader -O NODELIST:${short},Available:${short},Memory:${short},AllocMem:${short},Gres:${long},GresUsed:${long},Partition:${short}`);
+    const [out, err] = await runBash(`sinfo --noheader --Node -O NODELIST:${short},Available:${short},Memory:${short},AllocMem:${short},Gres:${long},GresUsed:${long},Partition:${short}`);
     resourceService.updateNode(...extractNodes(out, short, long));
     resourceViewDataProvider.refresh();
 }

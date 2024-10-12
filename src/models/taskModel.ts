@@ -14,7 +14,7 @@ export class Task {
     readonly user: string;
     state: TaskState;
     readonly node: string;
-    readonly gres: Gres;
+    readonly gres: Gres | null;
     readonly limit_time: string;
     runing_time: string;
     readonly command: string;
@@ -24,7 +24,7 @@ export class Task {
     finished: boolean;
     //JobID,Name:255,Username:20,State:20,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100
     constructor(jobid: string, name: string, user: string, state: string, node: string, gres: string, limit_time: string, runing_time: string, command: string, out_path: string, err_path: string, reason: string)
-    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres, limit_time: string, runing_time: string, command: string, out_path: LogFile, err_path: LogFile, reason: string, finished: boolean)
+    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres | null, limit_time: string, runing_time: string, command: string, out_path: LogFile, err_path: LogFile, reason: string, finished: boolean)
 
     constructor(
         jobid: number | string,
@@ -32,7 +32,7 @@ export class Task {
         user: string,
         state: TaskState,
         node: string,
-        gres: string | Gres,
+        gres: string | Gres | null,
         limit_time: string,
         runing_time: string,
         command: string,
@@ -46,14 +46,14 @@ export class Task {
         this.user = user;
         this.state = state;
         this.node = node;
-        this.gres = typeof gres === "string" ? new Gres(gres) : gres;
+        this.gres = typeof gres === "string" ? (gres === 'N/A' ? null : new Gres(gres)) : gres;
         this.limit_time = limit_time;
         this.runing_time = runing_time;
         this.command = command;
         this.out_path = typeof out_path === "string" ? new LogFile(out_path.replace(/%j/i, jobid.toString())) : out_path;
         this.err_path = typeof err_path === "string" ? new LogFile(err_path.replace(/%j/i, jobid.toString())) : err_path;
         this.reason = reason === 'None' ? '' : reason;
-        this.finished = finished??false;
+        this.finished = finished ?? false;
     }
 
     public static fromObject(obj: Task): Task {

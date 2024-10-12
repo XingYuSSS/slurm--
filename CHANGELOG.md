@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Fixed
+
+- Fix same state nodes showing together in resource view
+- Fix no GRES node showing `(NaN/NaN)` in resource view
+- Fix no GRES task showing `(N/A:NaN)` in resource view
+
 ## [0.3.0][0.3.0] - 2024-10-12
 
 ### Added

@@ -26,7 +26,7 @@ export class ResourceService {
 
     public groupByGres(): Map<String, Node[]> {
         return this.nodeList.reduce((group, node) => {
-            const gresId = node.gres.toIdString();
+            const gresId = node.gres === null ? 'null': node.gres.toIdString();
             if (!group.has(gresId)) {
                 group.set(gresId, []);
             }

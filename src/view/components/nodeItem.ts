@@ -2,10 +2,11 @@ import * as vscode from 'vscode';
 import { Node, ResourceGres } from '../../models';
 
 function nodeDescription(node: Node): string {
-    return `${node.gres}\t${node.allocMemory}/${node.memory}GB`;
+    return `${node.gres ?? 'No GRES'}\t${node.allocMemory}GB/${node.memory}GB`;
 }
 
-function nodeIcon(node: Node): vscode.ThemeIcon {
+function nodeIcon(node: Node): vscode.ThemeIcon | undefined {
+    if (node.gres === null) { return undefined; }
     if (node.gres.usedNum === 0) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.addedResourceForeground')); }
     if (node.gres.usedNum < node.gres.totalNum) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground')); }
     return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'));

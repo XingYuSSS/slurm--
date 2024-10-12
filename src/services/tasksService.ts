@@ -41,6 +41,7 @@ export class TaskService {
         const arrData = Array.from(this.taskMap.entries());
         const jsonData = JSON.stringify(arrData, (k, v)=>{
             if (k === 'gres') {
+                if (v === null) { return 'N/A'; }
                 return Gres.prototype.toString.call(v);
             }
             if (k === 'out_path' || k === 'err_path') {
