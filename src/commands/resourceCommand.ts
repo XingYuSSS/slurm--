@@ -57,7 +57,7 @@ export async function unautoRefreshRes() {
 export async function copyGres() {
     const selected = resourceTreeView.selection[0];
     if (selected instanceof ListItem){
-        const gresString = (selected.title as string).replace(/\\s*\\(.*\\)$/, '');
+        const gresString = (selected.title as string).replace(/\s*\(.*\)$/, '');
         vscode.env.clipboard.writeText(gresString);
     } else if (selected instanceof NodeItem){
         vscode.env.clipboard.writeText(selected.node.nodeid);
