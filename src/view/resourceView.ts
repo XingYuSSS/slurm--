@@ -12,7 +12,8 @@ function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
 
 function getGroupedNode(): ListItem[] {
     return [...resourceService.groupByGres().values()].map(nodes => {
-        const rgres = ResourceGres.fromArray(nodes.map(v => v.gres));
+        if (nodes[0].gres === null) { return new ListItem('No GRES', nodes.map(v => new NodeItem(v)), '${length} nodes', undefined, 'gresList', false); }
+        const rgres = ResourceGres.fromArray(nodes.map(v => v.gres!));
         return new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), '${length} nodes', gresIcon(rgres), 'gresList', false);
     });
 }

@@ -9,3 +9,8 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+
+out/**
+**/webpack.config.js
+**/esbuild.js
+node_modules/**

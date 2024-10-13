@@ -6,6 +6,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.3.1][0.3.1]
+
+### Added
+
+- Bundle the extension using webpack
+
+### Fixed
+
+- Fix same state nodes showing together in resource view
+- Fix no GRES node showing `(NaN/NaN)` in resource view
+- Fix no GRES task showing `(N/A:NaN)` in resource view
+
 ## [0.3.0][0.3.0] - 2024-10-12
 
 ### Added
@@ -102,7 +114,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/XingYuSSS/slurm--/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/XingYuSSS/slurm--/compare/v0.1.1...v0.1.2

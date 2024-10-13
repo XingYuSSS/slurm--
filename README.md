@@ -6,15 +6,16 @@ A extension for slurm system user
 
 - show slurm running tasks and informations
 - record task state, and when they finished
+- slrum script config syntax highlight
+- show availabel resources about nodes and GRES
 
 ## future features
 
-- slrum script config syntax highlight
 - launch task with chosen GRES and timelimit
 
 ## TODO
 
-- [ ] Task
+- Task
   - [X] auto task refresh
   - [X] cancel task
   - [X] show gres and command info
@@ -24,13 +25,13 @@ A extension for slurm system user
   - [ ] group and count by state, command or start time
   - [ ] start and end time
   - [ ] scripts arguments
-- [ ] Resources
+- Resources
   - [X] scan availabal GRES and Memory
   - [X] auto refreash
   - [X] copy GRES or node to clipboard
-- [ ] Script Syntax
+- Script Syntax
   - [X] syntax highlight
-- [ ] Launcher
+- Launcher
   - [ ] Shell scripts reader
   - [ ] scripts arguments manager
   - [ ] cost computer
