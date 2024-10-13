@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Bundle the extension using webpack
+
 ### Fixed
 
 - Fix same state nodes showing together in resource view
