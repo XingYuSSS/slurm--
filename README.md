@@ -32,8 +32,9 @@ A extension for slurm system user
 - Script Syntax
   - [X] syntax highlight
 - Launcher
+  - [X] launch script
+  - [X] drop script file to view
+  - [ ] start srun
   - [ ] Shell scripts reader
   - [ ] scripts arguments manager
-  - [ ] cost computer
   - [ ] gpu selector
-  - [ ] start srun

@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
-import { Node, ResourceGres } from '../models/';
+import { ResourceGres } from '../models/';
 import { ListItem, NodeItem } from './components';
-import { resourceService } from '../services/resouceService';
+import { resourceService } from '../services';
 
 function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
     if (gres.usedNum === 0) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.addedResourceForeground')); }
@@ -52,8 +52,9 @@ export class ResourceViewDataProvider implements vscode.TreeDataProvider<NodeIte
 }
 
 export const resourceViewDataProvider = ResourceViewDataProvider.getInstance();
-export const resourceTreeView = vscode.window.createTreeView('slurm--_resource_view', { treeDataProvider: resourceViewDataProvider });
+export let resourceTreeView: vscode.TreeView<ListItem | NodeItem>;
 
 export function initResourceView(context: vscode.ExtensionContext) {
+    resourceTreeView = vscode.window.createTreeView('slurm--_resource_view', { treeDataProvider: resourceViewDataProvider });
     context.subscriptions.push(resourceTreeView);
 }

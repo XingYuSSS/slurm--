@@ -98,6 +98,6 @@ export class TaskService {
 
 export let taskService: TaskService;
 
-export function initTaskManager(context: vscode.ExtensionContext) {
+export function initTaskService(context: vscode.ExtensionContext) {
     taskService = TaskService.getInstance(context);
 }

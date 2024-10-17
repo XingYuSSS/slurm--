@@ -61,11 +61,12 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskItem | 
 }
 
 export const taskViewDataProvider = TaskViewDataProvider.getInstance();
+export let taskTreeView: vscode.TreeView<InfoItem>;
 export let selectedTaskItems: TaskItem[] = [];
 
 export function initTasksView(context: vscode.ExtensionContext) {
-    const treeView = vscode.window.createTreeView('slurm--_tasks_view', { treeDataProvider: taskViewDataProvider, canSelectMany: true });
-    const disposable = treeView.onDidChangeSelection(e => {
+    taskTreeView = vscode.window.createTreeView('slurm--_tasks_view', { treeDataProvider: taskViewDataProvider, canSelectMany: true });
+    const disposable = taskTreeView.onDidChangeSelection(e => {
         if (e.selection && e.selection.length > 0) {
             selectedTaskItems = e.selection.filter(v => v instanceof TaskItem);
         }
