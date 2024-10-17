@@ -7,7 +7,7 @@ export class Script {
     readonly name: string;
     constructor(scrpitPath: string | vscode.Uri) {
         this.uri = scrpitPath instanceof vscode.Uri ? scrpitPath: vscode.Uri.file(scrpitPath);
-        this.relativePath = path.relative(vscode.workspace.workspaceFolders?.[0].uri.path ?? '/', this.uri.path);
+        this.relativePath = path.relative(vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/', this.uri.path);
         let uriPart = this.uri.path.split('/');
         this.name = uriPart[uriPart.length - 1];
     }

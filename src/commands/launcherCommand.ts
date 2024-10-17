@@ -12,9 +12,8 @@ export async function refreshLauncher() {
 }
 
 export async function launchScript(script: ScriptItem) {
-    // const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
-    // const [out, err] = await runBash(`cd ${workspacePath}\nsbatch ${script.script.uri.path}`);
-    const [out, err] = await runBash(`sbatch ${script.script.uri.path}`);
+    const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
+    const [out, err] = await runBash(`cd ${workspacePath}\nsbatch ${script.script.uri.path}`);
     vscode.window.showInformationMessage(out);
 }
 

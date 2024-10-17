@@ -11,7 +11,7 @@ import { initLauncherCmd } from './commands/launcherCommand';
 export var userName: string;
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('running')
+	// console.log('running')
 
 	initConfigService(context);
 	initTaskService(context);

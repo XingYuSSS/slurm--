@@ -5,7 +5,7 @@ import { InfoItem, ListItem, ScriptItem } from './components';
 import { scriptService } from '../services';
 
 function getScripts(): ScriptItem[] | InfoItem[] {
-    const scriptItems = scriptService.getScript().map(v=>new ScriptItem(v))
+    const scriptItems = scriptService.getScript().map(v=>new ScriptItem(v));
     return scriptItems.length === 0? [new InfoItem('Drop a script to here')] : scriptItems;
 }
 
@@ -16,23 +16,21 @@ class FileDragAndDropController implements vscode.TreeDragAndDropController<Scri
 
     
     async handleDrag(source: readonly ScriptItem[], dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken) {
-        console.log('drag')
-        console.log(dataTransfer)
-        console.log(source)
+        // console.log('drag')
+        // console.log(dataTransfer)
+        // console.log(source)
     }
 
     async handleDrop(target: ScriptItem | undefined, dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken) {
-        console.log('drop')
-        console.log(dataTransfer)
-        console.log(target)
+        // console.log('drop')
+        // console.log(dataTransfer)
+        // console.log(target)
         const uriList = dataTransfer.get('text/uri-list');
         if (uriList) {
             const lines = (await uriList.asString()).split('\r\n');
-            console.log(lines)
             const pathList = lines
                 .filter(line => line.startsWith('file:///'))
                 .map(line => line.slice(7));
-            console.log(pathList)
             vscode.commands.executeCommand('slurm--.addScript', pathList);
         }
     }
