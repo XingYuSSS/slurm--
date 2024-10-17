@@ -7,5 +7,6 @@ export class LogFileItem extends vscode.TreeItem {
         this.description = description;
         this.tooltip = tooltip;
         this.contextValue = 'openableFile';
+        this.command = {command: 'slurm--.openFile', title: 'open', arguments: [file]};
     }
 }

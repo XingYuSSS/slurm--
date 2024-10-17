@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { runBash } from '../utils/utils';
-import { Task } from '../models';
+import { LogFile, Task } from '../models';
 import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
 import { LogFileItem, TaskItem } from '../view/components';
@@ -104,8 +104,8 @@ export async function confirmAllTask() {
 }
 
 
-export async function openFile(file: LogFileItem) {
-    file.file.open();
+export async function openFile(file: LogFile) {
+    file.open();
 }
 
 

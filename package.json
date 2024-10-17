@@ -82,7 +82,7 @@
         "title": "refresh resources",
         "shortTitle": "refresh",
         "category": "slurm--",
-        "icon": "$(sync)"
+        "icon": "$(refresh)"
       },
       {
         "command": "slurm--.autoRefreshRes",
@@ -99,6 +99,29 @@
       {
         "command": "slurm--.copyGres",
         "title": "copy",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.refreshLauncher",
+        "title": "refresh launcher",
+        "category": "slurm--",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "slurm--.launchScript",
+        "title": "launch script",
+        "category": "slurm--",
+        "icon": "$(run)"
+      },
+      {
+        "command": "slurm--.removeScript",
+        "title": "remove script",
+        "category": "slurm--",
+        "icon": "$(close)"
+      },
+      {
+        "command": "slurm--.addScript",
+        "title": "remove script",
         "category": "slurm--"
       }
     ],
@@ -121,6 +144,11 @@
         {
           "id": "slurm--_resource_view",
           "name": "resources",
+          "icon": "assets/icons/task.svg"
+        },
+        {
+          "id": "slurm--_launcher_view",
+          "name": "launcher",
           "icon": "assets/icons/task.svg"
         }
       ]
@@ -148,6 +176,11 @@
           "group": "navigation"
         },
         {
+          "command": "slurm--.refreshResources",
+          "when": "view == slurm--_resource_view",
+          "group": "navigation"
+        },
+        {
           "command": "slurm--.autoRefreshRes",
           "when": "view == slurm--_resource_view && !autoRefreshingRes",
           "group": "navigation"
@@ -155,6 +188,11 @@
         {
           "command": "slurm--.unautoRefreshRes",
           "when": "view == slurm--_resource_view && autoRefreshingRes",
+          "group": "navigation"
+        },
+        {
+          "command": "slurm--.refreshLauncher",
+          "when": "view == slurm--_launcher_view",
           "group": "navigation"
         }
       ],
@@ -175,9 +213,18 @@
           "when": "view == slurm--_tasks_view && viewItem == finishedTaskList"
         },
         {
-          "command": "slurm--.openFile",
+          "command": "slurm--.copyGres",
+          "when": "view == slurm--_resource_view && viewItem == gresList"
+        },
+        {
+          "command": "slurm--.launchScript",
           "group": "inline",
-          "when": "view == slurm--_tasks_view && viewItem == openableFile"
+          "when": "view == slurm--_launcher_view && viewItem == scriptItem"
+        },
+        {
+          "command": "slurm--.removeScript",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == scriptItem"
         }
       ]
     },

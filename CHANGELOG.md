@@ -6,6 +6,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add launcher view
+- Add `refresh scripts`, `launch scripts`, `add scripts` and `delete scripts` commands and buttons
+- Add `refresh resources` button
+- Add drop file controller in launcher view
+- Add script service
+- Add script model
+
+### Changed
+
+- Replace openfile button with open by click treeview item
+
 ## [0.3.1][0.3.1]
 
 ### Added
@@ -25,7 +38,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add resource view
 - Add refresh resouces and auto refresh command
 - Add copy GRES and node to clipboard by CTRL+C
-- Add resouce services
+- Add resouce service
 - Add node model
 
 ### Changed
