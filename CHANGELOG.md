@@ -6,6 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.4.0][0.4.0]
+
+### Added
+
+- Add launcher view
+- Add `refresh scripts`, `launch scripts`, `add scripts` and `delete scripts` commands and buttons
+- Add `refresh resources` button
+- Add drop file controller in launcher view
+- Add script service
+- Add script model
+
+### Changed
+
+- Replace openfile button with open by click treeview item
+
 ## [0.3.1][0.3.1]
 
 ### Added
@@ -25,7 +40,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add resource view
 - Add refresh resouces and auto refresh command
 - Add copy GRES and node to clipboard by CTRL+C
-- Add resouce services
+- Add resouce service
 - Add node model
 
 ### Changed
@@ -114,7 +129,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.3.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/XingYuSSS/slurm--/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/XingYuSSS/slurm--/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/XingYuSSS/slurm--/compare/v0.1.2...v0.2.0

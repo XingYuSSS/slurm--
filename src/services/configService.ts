@@ -24,6 +24,6 @@ class ConfigService {
 
 export let configService: ConfigService;
 
-export function initConfigManager(context: vscode.ExtensionContext) {
+export function initConfigService(context: vscode.ExtensionContext) {
     configService = new ConfigService(context);
 }
