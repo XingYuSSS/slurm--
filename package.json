@@ -3,6 +3,7 @@
   "displayName": "slurm--",
   "description": "",
   "version": "0.4.0",
+  "icon": "assets/icons/extension-icon.png",
   "engines": {
     "vscode": "^1.89.0"
   },
