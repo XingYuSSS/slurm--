@@ -6,7 +6,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
-## [0.4.0][0.4.0]
+## [0.4.1][0.4.1] - 2024-11-02
+
+### Added
+
+- Add extension icon
+
+### Changed
+
+- Improving the `readme`
+- Fix `changelog`
+
+## [0.4.0][0.4.0] - 2024-10-18
 
 ### Added
 
@@ -21,7 +32,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Replace openfile button with open by click treeview item
 
-## [0.3.1][0.3.1]
+## [0.3.1][0.3.1] - 2024-10-13
 
 ### Added
 
@@ -129,7 +140,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/XingYuSSS/slurm--/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/XingYuSSS/slurm--/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/XingYuSSS/slurm--/compare/v0.2.0...v0.3.0

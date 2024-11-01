@@ -4,10 +4,27 @@ A extension for slurm system user
 
 ## features
 
+- slrum script syntax highlight
+
+![highlight](assets/pics/highlight.png)
+
 - show slurm running tasks and informations
 - record task state, and when they finished
-- slrum script config syntax highlight
+
+![task](assets/pics/task.png)
+
+> Click on `stdout` or `stderr` to open the file
+
 - show availabel resources about nodes and GRES
+
+![resource](assets/pics/resource.png)
+
+- drop script and one-click launch task
+
+![launcher](assets/pics/launcher.png)
+
+> Drop a script from Explorer to launcher panel
+> Click on script to open the file
 
 ## future features
 
