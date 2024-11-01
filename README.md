@@ -23,7 +23,7 @@ A extension for slurm system user
 
 ![launcher](assets/pics/launcher.png)
 
-> Drop a script from Explorer to launcher panel
+> Drop a script from Explorer to launcher panel  
 > Click on script to open the file
 
 ## future features
