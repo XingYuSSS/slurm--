@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 
-import { runBash } from '../utils/utils';
+import { executeCmd } from '../utils/utils';
 import { Script } from '../models';
 import { launcherViewDataProvider } from '../view/launcherView';
 import { scriptService } from '../services';
-import { ScriptItem } from '../view/components';
+import { ScriptItem, ListItem, NodeItem } from '../view/components';
 
 export async function refreshLauncher() {
     scriptService.loadScript();
@@ -13,7 +13,7 @@ export async function refreshLauncher() {
 
 export async function launchScript(script: ScriptItem) {
     const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
-    const [out, err] = await runBash(`cd ${workspacePath}\nsbatch ${script.script.uri.path}`);
+    const [out, err] = await executeCmd(`cd ${workspacePath}\nsbatch ${script.script.uri.path}`);
     vscode.window.showInformationMessage(out);
 }
 

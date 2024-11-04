@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Node, ResourceGres } from '../../models';
+import { Node } from '../../models';
 
 function nodeDescription(node: Node): string {
     return `${node.gres ?? 'No GRES'}\t${node.allocMemory}GB/${node.memory}GB`;
