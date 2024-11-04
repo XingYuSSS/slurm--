@@ -121,9 +121,16 @@
         "icon": "$(close)"
       },
       {
-        "command": "slurm--.addScript",
-        "title": "remove script",
-        "category": "slurm--"
+        "command": "slurm--.deleteArg",
+        "title": "remove argument",
+        "category": "slurm--",
+        "icon": "$(close)"
+      },
+      {
+        "command": "slurm--.changeArg",
+        "title": "change argument",
+        "category": "slurm--",
+        "icon": "$(pencil)"
       }
     ],
     "viewsContainers": {
@@ -226,6 +233,16 @@
           "command": "slurm--.removeScript",
           "group": "inline",
           "when": "view == slurm--_launcher_view && viewItem == scriptItem"
+        },
+        {
+          "command": "slurm--.deleteArg",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == argItem"
+        },
+        {
+          "command": "slurm--.changeArg",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == argItem"
         }
       ]
     },

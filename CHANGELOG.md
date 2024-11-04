@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add script argument
+- Add `add argument`, `delete scripts` and `change scripts` commands and buttons
+- Add `args` field in script model
+
 ## [0.4.1][0.4.1] - 2024-11-02
 
 ### Added
