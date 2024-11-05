@@ -103,6 +103,12 @@
         "category": "slurm--"
       },
       {
+        "command": "slurm--.launchTerminal",
+        "title": "launch terminal",
+        "category": "slurm--",
+        "icon": "$(terminal)"
+      },
+      {
         "command": "slurm--.refreshLauncher",
         "title": "refresh launcher",
         "category": "slurm--",
@@ -223,6 +229,11 @@
         {
           "command": "slurm--.copyGres",
           "when": "view == slurm--_resource_view && viewItem == gresList"
+        },
+        {
+          "command": "slurm--.launchTerminal",
+          "group": "inline",
+          "when": "view == slurm--_resource_view && viewItem == nodeItem"
         },
         {
           "command": "slurm--.launchScript",

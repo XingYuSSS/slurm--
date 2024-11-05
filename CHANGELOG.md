@@ -11,6 +11,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add script argument
 - Add `add argument`, `delete scripts` and `change scripts` commands and buttons
 - Add `args` field in script model
+- Add launch srun terminal
+- Add `launch terminal` command and button
+- Add state of node and more icons
+
+### Changed
+
+- Node in state except `idle` and `mixed` will not count GRES
 
 ## [0.4.1][0.4.1] - 2024-11-02
 
