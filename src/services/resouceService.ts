@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { Node, ResourceGres } from '../models';
+import { Node } from '../models';
 
 export class ResourceService {
     private nodeList: Node[] = [];

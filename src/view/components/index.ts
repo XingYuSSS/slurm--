@@ -8,3 +8,4 @@ export * from './finishedTaskItem';
 export * from './nodeItem';
 
 export * from './scriptItem';
+export * from './argItem';

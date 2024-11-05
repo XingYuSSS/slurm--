@@ -1,12 +1,17 @@
 import * as vscode from 'vscode';
 
-import { Node, Gres } from '../models/';
-import { InfoItem, ListItem, ScriptItem } from './components';
+import { InfoItem, ListItem, ScriptItem, ArgItem, AddArgItem } from './components';
 import { scriptService } from '../services';
 
 function getScripts(): ScriptItem[] | InfoItem[] {
-    const scriptItems = scriptService.getScript().map(v=>new ScriptItem(v));
-    return scriptItems.length === 0? [new InfoItem('Drop a script to here')] : scriptItems;
+    const scriptItems = scriptService.getScript().map(v => new ScriptItem(v));
+    return scriptItems.length === 0 ? [new InfoItem('Drop a script to here')] : scriptItems;
+}
+
+function getArgs(script: ScriptItem): (ArgItem | AddArgItem)[] {
+    const argItems: ArgItem | AddArgItem[] = script.script.args.map((v, i) => new ArgItem(script.script, i));
+    argItems.push(new AddArgItem(script.script));
+    return argItems;
 }
 
 class FileDragAndDropController implements vscode.TreeDragAndDropController<ScriptItem> {
@@ -14,7 +19,7 @@ class FileDragAndDropController implements vscode.TreeDragAndDropController<Scri
     readonly dragMimeTypes = ['text/uri-list', 'application/vnd.code.resource'];
 
 
-    
+
     async handleDrag(source: readonly ScriptItem[], dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken) {
         // console.log('drag')
         // console.log(dataTransfer)
@@ -59,12 +64,15 @@ export class LauncherViewDataProvider implements vscode.TreeDataProvider<ScriptI
         return element;
     }
 
-    getChildren(element?: ScriptItem | ListItem): Thenable<ListItem[] | ScriptItem[] | InfoItem[]> {
+    getChildren(element?: ScriptItem | ListItem): Thenable<ListItem[] | ScriptItem[] | InfoItem[] | (ArgItem | AddArgItem)[]> {
         if (!element) {
             return Promise.resolve(getScripts());
         }
         if (element instanceof ListItem) {
             return Promise.resolve(element.children as ScriptItem[]);
+        }
+        if (element instanceof ScriptItem) {
+            return Promise.resolve(getArgs(element));
         }
         return Promise.resolve([]);
     }
