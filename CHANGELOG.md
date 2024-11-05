@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.5.0][0.5.0] - 2024-11-05
+
 ### Added
 
 - Add script argument
@@ -153,7 +155,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/XingYuSSS/slurm--/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/XingYuSSS/slurm--/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...v0.3.1
