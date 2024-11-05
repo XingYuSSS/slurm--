@@ -11,7 +11,7 @@ const options: ObjectEncodingOptions & childProcess.ExecOptions = {
     maxBuffer: 1000 * 1024,
 };
 
-export async function runBash(cmd: string): Promise<[string, string]> {
+export async function executeCmd(cmd: string): Promise<[string, string]> {
     const { stdout, stderr } = await execAsync(cmd, options);
     return [stdout.trim(), stderr ? stderr.trim() : ''];
 }

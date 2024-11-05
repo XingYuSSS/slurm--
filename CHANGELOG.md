@@ -6,6 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.5.0][0.5.0] - 2024-11-05
+
+### Added
+
+- Add script argument
+- Add `add argument`, `delete scripts` and `change scripts` commands and buttons
+- Add `args` field in script model
+- Add launch srun terminal
+- Add `launch terminal` command and button
+- Add state of node and more icons
+
+### Changed
+
+- Node in state except `idle` and `mixed` will not count GRES
+
 ## [0.4.1][0.4.1] - 2024-11-02
 
 ### Added
@@ -140,7 +155,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/XingYuSSS/slurm--/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/XingYuSSS/slurm--/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/XingYuSSS/slurm--/compare/v0.3.0...v0.3.1

@@ -36,7 +36,7 @@ export class ScriptService {
         }
     }
 
-    private saveScript() {
+    public saveScript() {
         const jsonData = JSON.stringify(this.scriptList, (k, v) => {
             return v;
         });
@@ -56,7 +56,6 @@ export class ScriptService {
     public getScript(): Script[] {
         return this.scriptList;
     }
-
 }
 
 export let scriptService: ScriptService;

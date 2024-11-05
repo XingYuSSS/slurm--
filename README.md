@@ -39,9 +39,9 @@ A extension for slurm system user
   - [X] open log file
   - [X] save tasks to disk
   - [X] Select multiple tasks and cancel
+  - [X] scripts arguments
   - [ ] group and count by state, command or start time
   - [ ] start and end time
-  - [ ] scripts arguments
 - Resources
   - [X] scan availabal GRES and Memory
   - [X] auto refreash
@@ -51,7 +51,7 @@ A extension for slurm system user
 - Launcher
   - [X] launch script
   - [X] drop script file to view
-  - [ ] start srun
+  - [X] start srun
   - [ ] Shell scripts reader
   - [ ] scripts arguments manager
   - [ ] gpu selector
