@@ -2,7 +2,7 @@
   "name": "slurm--extension",
   "displayName": "slurm--",
   "description": "",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
     "vscode": "^1.89.0"
