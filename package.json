@@ -26,12 +26,6 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "slurm--.refreshing",
-        "title": "refreshing",
-        "shortTitle": "refreshing",
-        "icon": "$(refresh)"
-      },
-      {
         "command": "slurm--.autoRefreshTask",
         "title": "start auto refresh",
         "category": "slurm--",
@@ -171,12 +165,7 @@
       "view/title": [
         {
           "command": "slurm--.refreshUserTasks",
-          "when": "view == slurm--_tasks_view && !refreshingUserTasks",
-          "group": "navigation"
-        },
-        {
-          "command": "slurm--.refreshing",
-          "when": "view == slurm--_tasks_view && refreshingUserTasks",
+          "when": "view == slurm--_tasks_view",
           "group": "navigation"
         },
         {

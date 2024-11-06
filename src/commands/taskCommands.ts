@@ -6,8 +6,7 @@ import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
 import { LogFileItem, TaskItem } from '../view/components';
 
-// while (extensionRootUri !== null){}
-// const command_json = JSON.parse(fs.readFileSync(vscode.Uri.joinPath(extensionRootUri, 'src', 'commands', 'commands.json').fsPath, 'utf-8'));
+
 let autoRefreshTimer: NodeJS.Timeout;
 
 function extractTask(taskString: string, short_length: number, long_length: number): Task[] {
@@ -36,13 +35,11 @@ function extractTask(taskString: string, short_length: number, long_length: numb
 }
 
 export async function refreshUserTasks() {
-    vscode.commands.executeCommand('setContext', 'refreshingUserTasks', true);
     const short = 50;
     const long = 255;
     const [out, err] = await executeCmd(`squeue --me --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
     taskService.updateTask(...extractTask(out, short, long));
     taskView.taskViewDataProvider.refresh();
-    vscode.commands.executeCommand('setContext', 'refreshingUserTasks', false);
 }
 
 
@@ -120,7 +117,6 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
 
-    vscode.commands.executeCommand('setContext', 'refreshingUserTasks', false);
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
     vscode.commands.executeCommand('slurm--.refreshUserTasks');
 }

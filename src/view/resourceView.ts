@@ -16,7 +16,7 @@ function getGroupedNode(): ListItem[] {
     return [...resourceService.groupByGres().values()].map(nodes => {
         if (nodes[0].gres === null) { return new ListItem('No GRES', nodes.map(v => new NodeItem(v)), '${length} nodes', undefined, 'gresList', false); }
         const availNode = nodes.filter(v => v.state === NodeState.MIXED || v.state === NodeState.IDLE);
-        if (availNode.length === 0) { return new ListItem(nodes[0].gres.toIdString() + '(0/0)', nodes.map(v => new NodeItem(v)), '${length} nodes', emptyGresIcon, 'gresList', false); }
+        if (availNode.length === 0) { return new ListItem(nodes[0].gres.toIdString() + ' (0/0)', nodes.map(v => new NodeItem(v)), '${length} nodes', emptyGresIcon, 'gresList', false); }
         const rgres = ResourceGres.fromArray(availNode.map(v => v.gres!));
         return new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), '${length} nodes', gresIcon(rgres), 'gresList', false);
     });
