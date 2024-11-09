@@ -6,28 +6,29 @@ import { launcherViewDataProvider } from '../view/launcherView';
 import { scriptService } from '../services';
 import { ScriptItem, ListItem, NodeItem, ArgItem } from '../view/components';
 
-export async function refreshLauncher() {
+async function refreshLauncher() {
     scriptService.loadScript();
     launcherViewDataProvider.refresh();
 }
 
-export async function launchScript(script: ScriptItem) {
+async function launchScript(script: ScriptItem) {
     const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
     const [out, err] = await executeCmd(`cd ${workspacePath}\nsbatch ${script.script.uri.path} ${script.script.args.join(' ')}`);
     vscode.window.showInformationMessage(out);
+    vscode.commands.executeCommand('slurm--.refreshUserTasks');
 }
 
-export async function removeScript(script: ScriptItem) {
+async function removeScript(script: ScriptItem) {
     scriptService.deleteScript(script.script);
     launcherViewDataProvider.refresh();
 }
 
-export async function addScript(uriList: string[]) {
+async function addScript(uriList: string[]) {
     scriptService.addScript(...uriList.map(v => new Script(v)));
     launcherViewDataProvider.refresh();
 }
 
-export async function addArg(script: Script) {
+async function addArg(script: Script) {
     const arg = await vscode.window.showInputBox({ prompt: 'new argument' });
     if (arg) {
         script.args.push(arg);
@@ -36,13 +37,13 @@ export async function addArg(script: Script) {
     launcherViewDataProvider.refresh();
 }
 
-export async function deleteArg(arg: ArgItem) {
+async function deleteArg(arg: ArgItem) {
     arg.script.args.splice(arg.argIndex, 1);
     scriptService.saveScript();
     launcherViewDataProvider.refresh();
 }
 
-export async function changeArg(arg: ArgItem) {
+async function changeArg(arg: ArgItem) {
     const newArg = await vscode.window.showInputBox({ prompt: 'change argument', value: arg.script.args[arg.argIndex] });
     if (newArg) {
         arg.script.args[arg.argIndex] = newArg;
@@ -51,7 +52,7 @@ export async function changeArg(arg: ArgItem) {
     launcherViewDataProvider.refresh();
 }
 
-export async function launchTerminal(node: NodeItem) {
+async function launchTerminal(node: NodeItem) {
     let gresArg = '';
     if (node.node.gres) {
         const gresNum = await vscode.window.showQuickPick(Array.from({ length: node.node.gres.totalNum - node.node.gres.usedNum + 1 }, (_, i) => i).map(v => v.toString()), { title: 'Choose number of GRES' });
@@ -84,7 +85,7 @@ export async function launchTerminal(node: NodeItem) {
     }
     const terminal = vscode.window.createTerminal();
     terminal.show();
-    terminal.sendText(`srun ${gresArg} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --pty ${shell} -i`);
+    terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --pty ${shell} -i`);
 }
 
 

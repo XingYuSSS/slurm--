@@ -33,7 +33,7 @@ function extractNodes(nodeString: string, short_length: number, long_length: num
     return nodeList;
 }
 
-export async function refreshResources() {
+async function refreshResources() {
     const short = 15;
     const long = 50;
     const [out, err] = await executeCmd(`sinfo --noheader --Node -O NODELIST:${short},Available:${short},Memory:${short},AllocMem:${short},Gres:${long},GresUsed:${long},Partition:${short},StateLong:${short}`);
@@ -41,20 +41,20 @@ export async function refreshResources() {
     resourceViewDataProvider.refresh();
 }
 
-export async function autoRefreshRes() {
+async function autoRefreshRes() {
     clearInterval(autoRefreshTimer);
     autoRefreshTimer = setInterval(() => {
         vscode.commands.executeCommand('slurm--.refreshResources');
-    }, configService.taskRefreshInterval_ms);
+    }, configService.resourceRefreshInterval_ms);
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', true);
 }
 
-export async function unautoRefreshRes() {
+async function unautoRefreshRes() {
     clearInterval(autoRefreshTimer);
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
 }
 
-export async function copyGres() {
+async function copyGres() {
     const selected = resourceTreeView.selection[0];
     if (selected instanceof ListItem){
         const gresString = (selected.title as string).replace(/\s*\(.*\)$/, '');
@@ -64,7 +64,7 @@ export async function copyGres() {
     }
 }
 
-export function initResCmd(context: vscode.ExtensionContext) {
+export function initResourceCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', refreshResources));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshRes', autoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshRes', unautoRefreshRes));

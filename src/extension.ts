@@ -1,12 +1,13 @@
 import * as vscode from 'vscode';
 
 import { initTaskCmd } from './commands/taskCommands';
-import { initResCmd as initResourceCmd } from './commands/resourceCommand';
+import { initResourceCmd } from './commands/resourceCommand';
 import { initTasksView } from './view/taskView';
 import { initConfigService, initTaskService, initScriptService } from './services';
 import { initResourceView } from './view/resourceView';
 import { initLauncherView } from './view/launcherView';
 import { initLauncherCmd } from './commands/launcherCommand';
+import { initConfigCmd } from './commands/configCommands';
 
 export var userName: string;
 
@@ -16,6 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	initConfigService(context);
 	initTaskService(context);
 	initScriptService(context);
+	initConfigCmd(context);
 
 	initTaskCmd(context);
 	initResourceCmd(context);

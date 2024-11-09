@@ -6,6 +6,24 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.5.2][0.5.2] - 2024-11-09
+
+### Added
+
+- Refresh tasks after launch a task
+- Add `cancel selected tasks` to the right-click menu of tasks
+- Add `open config` command and `settings` button
+
+### Changed
+
+- `refresh interval` is divided into `task refresh interval` and `resource refresh interval`
+
+### Fixed
+
+- Add `-p` argument to `launch terminal` command
+- Removed unnecessary `export` keyword
+- Fixed issue where `cancel celected tasks` would cancel previously selected tasks when no selection was made
+
 ## [0.5.1][0.5.1] - 2024-11-06
 
 ### Fixed
@@ -161,7 +179,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/XingYuSSS/slurm--/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/XingYuSSS/slurm--/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/XingYuSSS/slurm--/compare/v0.4.0...v0.4.1

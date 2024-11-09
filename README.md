@@ -10,6 +10,7 @@ A extension for slurm system user
 
 - show slurm running tasks and informations
 - record task state, and when they finished
+- Select multiple running tasks and cancel them
 
 ![task](assets/pics/task.png)
 
