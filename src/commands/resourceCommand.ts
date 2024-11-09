@@ -45,7 +45,7 @@ async function autoRefreshRes() {
     clearInterval(autoRefreshTimer);
     autoRefreshTimer = setInterval(() => {
         vscode.commands.executeCommand('slurm--.refreshResources');
-    }, configService.taskRefreshInterval_ms);
+    }, configService.resourceRefreshInterval_ms);
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', true);
 }
 
@@ -64,7 +64,7 @@ async function copyGres() {
     }
 }
 
-export function initResCmd(context: vscode.ExtensionContext) {
+export function initResourceCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', refreshResources));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshRes', autoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshRes', unautoRefreshRes));

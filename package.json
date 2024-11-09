@@ -131,6 +131,12 @@
         "title": "change argument",
         "category": "slurm--",
         "icon": "$(pencil)"
+      },
+      {
+        "command": "slurm--.openConfig",
+        "title": "settings",
+        "category": "slurm--",
+        "icon": "$(gear)"
       }
     ],
     "viewsContainers": {
@@ -197,6 +203,10 @@
           "command": "slurm--.refreshLauncher",
           "when": "view == slurm--_launcher_view",
           "group": "navigation"
+        },
+        {
+          "command": "slurm--.openConfig",
+          "when": "view == slurm--_tasks_view || view == slurm--_resource_view || view == slurm--_launcher_view"
         }
       ],
       "view/item/context": [
@@ -253,10 +263,15 @@
     "configuration": {
       "title": "slurm--",
       "properties": {
-        "slurm--.autoRefresh.interval(ms)": {
+        "slurm--.tasksPanel.refreshInterval(ms)": {
           "type": "integer",
           "default": 2000,
-          "description": "interval of auto refresh in millisecond"
+          "description": "interval of auto refresh in millisecond (works after restart auto refresh)"
+        },
+        "slurm--.resourcesPanel.refreshInterval(ms)": {
+          "type": "integer",
+          "default": 2000,
+          "description": "interval of auto refresh in millisecond (works after restart auto refresh)"
         }
       }
     },
