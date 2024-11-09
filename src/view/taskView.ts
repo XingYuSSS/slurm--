@@ -67,6 +67,7 @@ export let selectedTaskItems: TaskItem[] = [];
 export function initTasksView(context: vscode.ExtensionContext) {
     taskTreeView = vscode.window.createTreeView('slurm--_tasks_view', { treeDataProvider: taskViewDataProvider, canSelectMany: true });
     const disposable = taskTreeView.onDidChangeSelection(e => {
+        selectedTaskItems = [];
         if (e.selection && e.selection.length > 0) {
             selectedTaskItems = e.selection.filter(v => v instanceof TaskItem);
         }

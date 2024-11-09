@@ -6,6 +6,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Refresh tasks after launch a task
+- Add `cancel selected tasks` to the right-click menu of tasks
+
+### Fixed
+
+- Add `-p` argument to `launch terminal` command
+- Removed unnecessary `export` keyword
+- Fixed issue where `cancel celected tasks` would cancel previously selected tasks when no selection was made
+
 ## [0.5.1][0.5.1] - 2024-11-06
 
 ### Fixed

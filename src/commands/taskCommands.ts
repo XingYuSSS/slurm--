@@ -34,7 +34,7 @@ function extractTask(taskString: string, short_length: number, long_length: numb
     return taskList;
 }
 
-export async function refreshUserTasks() {
+async function refreshUserTasks() {
     const short = 50;
     const long = 255;
     const [out, err] = await executeCmd(`squeue --me --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
@@ -43,7 +43,7 @@ export async function refreshUserTasks() {
 }
 
 
-export async function cancelTask(task: TaskItem) {
+async function cancelTask(task: TaskItem) {
     const result = await vscode.window.showWarningMessage(
         `Cancel task named ${task.task.name}?`,
         'Yes',
@@ -57,7 +57,7 @@ export async function cancelTask(task: TaskItem) {
     }
 }
 
-export async function cancelSelectedTasks() {
+async function cancelSelectedTasks() {
     if (taskView.selectedTaskItems.length === 0) { return; }
     const tasks = taskView.selectedTaskItems.map(v => v.task);
     const result = await vscode.window.showWarningMessage(
@@ -75,7 +75,7 @@ export async function cancelSelectedTasks() {
     }
 }
 
-export async function autoRefreshTask() {
+async function autoRefreshTask() {
     clearInterval(autoRefreshTimer);
     autoRefreshTimer = setInterval(() => {
         vscode.commands.executeCommand('slurm--.refreshUserTasks');
@@ -83,25 +83,25 @@ export async function autoRefreshTask() {
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', true);
 }
 
-export async function unautoRefreshTask() {
+async function unautoRefreshTask() {
     clearInterval(autoRefreshTimer);
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
 }
 
-export async function confirmTask(task: TaskItem) {
+async function confirmTask(task: TaskItem) {
     if (task.task.finished) {
         taskService.deleteTask(task.task);
         taskView.taskViewDataProvider.refresh();
     }
 }
 
-export async function confirmAllTask() {
+async function confirmAllTask() {
     taskService.deleteTask(...taskService.getTask().filter(v => v.finished));
     taskView.taskViewDataProvider.refresh();
 }
 
 
-export async function openFile(file: LogFile) {
+async function openFile(file: LogFile) {
     file.open();
 }
 

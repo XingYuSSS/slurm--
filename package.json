@@ -206,6 +206,10 @@
           "when": "view == slurm--_tasks_view && viewItem == taskItem"
         },
         {
+          "command": "slurm--.cancelSelectedTasks",
+          "when": "view == slurm--_tasks_view && viewItem == taskItem"
+        },
+        {
           "command": "slurm--.confirmTask",
           "group": "inline",
           "when": "view == slurm--_tasks_view && viewItem == finishedTaskItem"
