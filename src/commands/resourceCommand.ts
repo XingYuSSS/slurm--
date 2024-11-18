@@ -37,6 +37,10 @@ async function refreshResources() {
     const short = 15;
     const long = 50;
     const [out, err] = await executeCmd(`sinfo --noheader --Node -O NODELIST:${short},Available:${short},Memory:${short},AllocMem:${short},Gres:${long},GresUsed:${long},Partition:${short},StateLong:${short}`);
+    if (err) {
+        vscode.window.showErrorMessage(err);
+        return;
+    }
     resourceService.updateNode(...extractNodes(out, short, long));
     resourceViewDataProvider.refresh();
 }

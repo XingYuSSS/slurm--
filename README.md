@@ -1,6 +1,8 @@
 # slurm-- Extension
 
-A extension for slurm system user
+slurm-- is a multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.
+
+We are continuously developing this plugin, if there is a feature you would like to see added or if you encounter a bug, please feel free to give us feedback in [github](https://github.com/XingYuSSS/slurm--)!
 
 ## features
 

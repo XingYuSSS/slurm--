@@ -6,6 +6,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.5.3][0.5.3] - 2024-11-18
+
+### Added
+
+- Custom user option to `--me` or `--user <name>`
+- Warning before refresh if user option didn't set
+- Add discription and categories in `package.json`
+
+### Fixed
+
+- Add command execute error message handling
+
 ## [0.5.2][0.5.2] - 2024-11-09
 
 ### Added
@@ -179,7 +191,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.2...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.3...HEAD
+[0.5.3]: https://github.com/XingYuSSS/slurm--/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/XingYuSSS/slurm--/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/XingYuSSS/slurm--/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/XingYuSSS/slurm--/compare/v0.4.1...v0.5.0

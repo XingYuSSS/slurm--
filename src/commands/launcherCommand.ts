@@ -14,6 +14,10 @@ async function refreshLauncher() {
 async function launchScript(script: ScriptItem) {
     const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
     const [out, err] = await executeCmd(`cd ${workspacePath}\nsbatch ${script.script.uri.path} ${script.script.args.join(' ')}`);
+    if (err) {
+        vscode.window.showErrorMessage(err);
+        return;
+    }
     vscode.window.showInformationMessage(out);
     vscode.commands.executeCommand('slurm--.refreshUserTasks');
 }

@@ -9,8 +9,6 @@ import { initLauncherView } from './view/launcherView';
 import { initLauncherCmd } from './commands/launcherCommand';
 import { initConfigCmd } from './commands/configCommands';
 
-export var userName: string;
-
 export function activate(context: vscode.ExtensionContext) {
 	// console.log('running')
 

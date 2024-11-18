@@ -1,13 +1,16 @@
 {
   "name": "slurm--extension",
   "displayName": "slurm--",
-  "description": "",
+  "description": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
   "version": "0.5.2",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
     "vscode": "^1.89.0"
   },
   "categories": [
+    "Visualization",
+    "Programming Languages",
+    "Data Science",
     "Other"
   ],
   "activationEvents": [],
@@ -272,6 +275,11 @@
           "type": "integer",
           "default": 2000,
           "description": "interval of auto refresh in millisecond (works after restart auto refresh)"
+        },
+        "slurm--.commands.user": {
+          "type": "string",
+          "default": "--me",
+          "description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`"
         }
       }
     },

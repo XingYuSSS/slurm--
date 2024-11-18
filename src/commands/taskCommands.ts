@@ -37,7 +37,26 @@ function extractTask(taskString: string, short_length: number, long_length: numb
 async function refreshUserTasks() {
     const short = 50;
     const long = 255;
-    const [out, err] = await executeCmd(`squeue --me --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
+    const user = configService.option_user;
+    if (user === '') {
+        const result = await vscode.window.showWarningMessage(
+            `You didn't set user option, this will show ALL tasks in your system, continue?`,
+            'Yes',
+            'Open settings',
+            'No'
+        );
+        if (result === 'Open settings') {
+            vscode.commands.executeCommand('slurm--.openConfig');
+            return;
+        } else if (result === 'No') {
+            return;
+        }
+    }
+    const [out, err] = await executeCmd(`squeue ${user} --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
+    if (err) {
+        vscode.window.showErrorMessage(err);
+        return;
+    }
     taskService.updateTask(...extractTask(out, short, long));
     taskView.taskViewDataProvider.refresh();
 }
@@ -51,6 +70,10 @@ async function cancelTask(task: TaskItem) {
     );
     if (result === 'Yes') {
         const [out, err] = await executeCmd(`scancel ${task.task.jobid}`);
+        if (err) {
+            vscode.window.showErrorMessage(err);
+            return;
+        }
         taskService.deleteTask(task.task.jobid);
         taskView.taskViewDataProvider.refresh();
     } else if (result === 'No') {
