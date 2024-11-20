@@ -5,7 +5,7 @@ import { scriptService } from '../services';
 
 function getScripts(): ScriptItem[] | InfoItem[] {
     const scriptItems = scriptService.getScript().map(v => new ScriptItem(v));
-    return scriptItems.length === 0 ? [new InfoItem('Drop a script to here')] : scriptItems;
+    return scriptItems.length === 0 ? [new InfoItem(vscode.l10n.t('Drop a script to here'))] : scriptItems;
 }
 
 function getArgs(script: ScriptItem): (ArgItem | AddArgItem)[] {

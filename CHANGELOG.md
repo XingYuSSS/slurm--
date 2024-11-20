@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add multilingual support
+  - add `l10n` and `nls` files, extract all strings
+  - add zh-cn support
+
+### Fixed
+
+- Fixed `%J` in task name
+
 ## [0.5.3][0.5.3] - 2024-11-18
 
 ### Added

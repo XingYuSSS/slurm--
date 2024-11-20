@@ -42,7 +42,7 @@ export class Task {
         finished?: boolean,
     ) {
         this.jobid = typeof jobid === "string" ? parseInt(jobid) : jobid;
-        this.name = name;
+        this.name = name.replace(/%j/i, jobid.toString());
         this.user = user;
         this.state = state;
         this.node = node;

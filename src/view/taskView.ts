@@ -20,8 +20,8 @@ function getGroupedTask(tasks: Task[]): ListItem[] {
     // console.log(running)
     // console.log(finished)
     return [
-        new ListItem('running', running.map((value) => { return new TaskItem(value); }), '${length} tasks'),
-        new ListItem('finished', finished.map((value) => { return new FinishedTaskItem(value); }), '${length} tasks', undefined, 'finishedTaskList'),
+        new ListItem(vscode.l10n.t('running'), running.map((value) => { return new TaskItem(value); }), vscode.l10n.t('${length} tasks')),
+        new ListItem(vscode.l10n.t('finished'), finished.map((value) => { return new FinishedTaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'finishedTaskList'),
     ];
 }
 

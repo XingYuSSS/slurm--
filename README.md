@@ -1,8 +1,12 @@
 # slurm-- Extension
 
+[![version](https://img.shields.io/badge/version-0.5.3-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.5.3/CHANGELOG.md)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
+[![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
+
 slurm-- is a multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.
 
-We are continuously developing this plugin, if there is a feature you would like to see added or if you encounter a bug, please feel free to give us feedback in [github](https://github.com/XingYuSSS/slurm--)!
+We are continuously developing this extension, if there is a feature you would like to see added or if you encounter a bug, please feel free to give us feedback in [github](https://github.com/XingYuSSS/slurm--)!
 
 ## features
 

@@ -10,7 +10,7 @@ export class ArgItem extends vscode.TreeItem {
 
 export class AddArgItem extends vscode.TreeItem {
     constructor(public readonly script: Script) {
-        super('Add Argument', vscode.TreeItemCollapsibleState.None);
+        super(vscode.l10n.t('Add Argument'), vscode.TreeItemCollapsibleState.None);
         this.iconPath = new vscode.ThemeIcon('add');
         this.command = { command: 'slurm--.addArg', title: 'add argument', arguments: [script] };
     }
