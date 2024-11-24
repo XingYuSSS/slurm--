@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.6.0][0.6.0] - 2024-11-24
+
 ### Added
 
 - Add multilingual support
@@ -201,7 +203,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.5.3...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/XingYuSSS/slurm--/compare/v0.5.3...v0.6.0
 [0.5.3]: https://github.com/XingYuSSS/slurm--/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/XingYuSSS/slurm--/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/XingYuSSS/slurm--/compare/v0.5.0...v0.5.1
