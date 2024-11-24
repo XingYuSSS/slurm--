@@ -1,26 +1,39 @@
 # slurm-- Extension
 
+[![version](https://img.shields.io/badge/version-0.5.3-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.5.3/CHANGELOG.md)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
+[![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
+
 slurm-- is a multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.
 
-We are continuously developing this plugin, if there is a feature you would like to see added or if you encounter a bug, please feel free to give us feedback in [github](https://github.com/XingYuSSS/slurm--)!
+We are continuously developing this extension, if there is a feature you would like to see added or if you encounter a bug, please feel free to give us feedback in [github](https://github.com/XingYuSSS/slurm--)!
 
 ## features
 
-- slrum script syntax highlight
+### syntax highlight
+
+- support shell scripts
 
 ![highlight](assets/pics/highlight.png)
 
+### task manager
+
 - show slurm running tasks and informations
 - record task state, and when they finished
-- Select multiple running tasks and cancel them
+- select multiple running tasks and cancel them
 
 ![task](assets/pics/task.png)
 
 > Click on `stdout` or `stderr` to open the file
 
+### resources viewer
+
 - show availabel resources about nodes and GRES
+- launch terminal with chosen GRES
 
 ![resource](assets/pics/resource.png)
+
+### script launcher
 
 - drop script and one-click launch task
 
@@ -29,32 +42,16 @@ We are continuously developing this plugin, if there is a feature you would like
 > Drop a script from Explorer to launcher panel  
 > Click on script to open the file
 
-## future features
+## language support
 
-- launch task with chosen GRES and timelimit
+We add multilingual support at version `0.6.0`!
 
-## TODO
+Supported Languages:
+- en (English)
+- zh-cn (简体中文)
 
-- Task
-  - [X] auto task refresh
-  - [X] cancel task
-  - [X] show gres and command info
-  - [X] open log file
-  - [X] save tasks to disk
-  - [X] Select multiple tasks and cancel
-  - [X] scripts arguments
-  - [ ] group and count by state, command or start time
-  - [ ] start and end time
-- Resources
-  - [X] scan availabal GRES and Memory
-  - [X] auto refreash
-  - [X] copy GRES or node to clipboard
-- Script Syntax
-  - [X] syntax highlight
-- Launcher
-  - [X] launch script
-  - [X] drop script file to view
-  - [X] start srun
-  - [ ] Shell scripts reader
-  - [ ] scripts arguments manager
-  - [ ] gpu selector
+We welcome contributions to add more languages or improve existing translations. If you are interested in helping, please submit a pull request. Thank you for your support!
+
+## License
+
+Slurm-- is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

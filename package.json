@@ -19,125 +19,120 @@
     "workspace"
   ],
   "publisher": "xy-sss",
+  "l10n": "./l10n",
   "contributes": {
     "commands": [
       {
         "command": "slurm--.refreshUserTasks",
-        "title": "refresh user tasks",
-        "shortTitle": "refresh",
+        "title": "%slurm--.refreshUserTasks.title%",
         "category": "slurm--",
         "icon": "$(refresh)"
       },
       {
         "command": "slurm--.autoRefreshTask",
-        "title": "start auto refresh",
+        "title": "%slurm--.autoRefreshTask.title%",
         "category": "slurm--",
         "icon": "$(sync)"
       },
       {
         "command": "slurm--.unautoRefreshTask",
-        "title": "stop auto refresh",
+        "title": "%slurm--.unautoRefreshTask.title%",
         "category": "slurm--",
         "icon": "$(sync~spin)"
       },
       {
         "command": "slurm--.cancelTask",
-        "title": "cancel task",
-        "shortTitle": "cancel",
+        "title": "%slurm--.cancelTask.title%",
         "category": "slurm--",
         "icon": "$(close)"
       },
       {
         "command": "slurm--.cancelSelectedTasks",
-        "title": "cancel selected tasks",
-        "shortTitle": "cancel selected",
+        "title": "%slurm--.cancelSelectedTasks.title%",
         "category": "slurm--",
         "icon": "$(close-all)"
       },
       {
         "command": "slurm--.confirmTask",
-        "title": "confirm task",
-        "shortTitle": "confirm",
+        "title": "%slurm--.confirmTask.title%",
         "category": "slurm--",
         "icon": "$(check)"
       },
       {
         "command": "slurm--.confirmAllTask",
-        "title": "confirm all task",
+        "title": "%slurm--.confirmAllTask.title%",
         "shortTitle": "confirm all",
         "category": "slurm--",
         "icon": "$(check-all)"
       },
       {
         "command": "slurm--.openFile",
-        "title": "open",
-        "shortTitle": "open",
+        "title": "%slurm--.openFile.title%",
         "category": "slurm--",
         "icon": "$(go-to-file)"
       },
       {
         "command": "slurm--.refreshResources",
-        "title": "refresh resources",
-        "shortTitle": "refresh",
+        "title": "%slurm--.refreshResources.title%",
         "category": "slurm--",
         "icon": "$(refresh)"
       },
       {
         "command": "slurm--.autoRefreshRes",
-        "title": "start auto refresh",
+        "title": "%slurm--.autoRefreshRes.title%",
         "category": "slurm--",
         "icon": "$(sync)"
       },
       {
         "command": "slurm--.unautoRefreshRes",
-        "title": "stop auto refresh",
+        "title": "%slurm--.unautoRefreshRes.title%",
         "category": "slurm--",
         "icon": "$(sync~spin)"
       },
       {
         "command": "slurm--.copyGres",
-        "title": "copy",
+        "title": "%slurm--.copyGres.title%",
         "category": "slurm--"
       },
       {
         "command": "slurm--.launchTerminal",
-        "title": "launch terminal",
+        "title": "%slurm--.launchTerminal.title%",
         "category": "slurm--",
         "icon": "$(terminal)"
       },
       {
         "command": "slurm--.refreshLauncher",
-        "title": "refresh launcher",
+        "title": "%slurm--.refreshLauncher.title%",
         "category": "slurm--",
         "icon": "$(refresh)"
       },
       {
         "command": "slurm--.launchScript",
-        "title": "launch script",
+        "title": "%slurm--.launchScript.title%",
         "category": "slurm--",
         "icon": "$(run)"
       },
       {
         "command": "slurm--.removeScript",
-        "title": "remove script",
+        "title": "%slurm--.removeScript.title%",
         "category": "slurm--",
         "icon": "$(close)"
       },
       {
         "command": "slurm--.deleteArg",
-        "title": "remove argument",
+        "title": "%slurm--.deleteArg.title%",
         "category": "slurm--",
         "icon": "$(close)"
       },
       {
         "command": "slurm--.changeArg",
-        "title": "change argument",
+        "title": "%slurm--.changeArg.title%",
         "category": "slurm--",
         "icon": "$(pencil)"
       },
       {
         "command": "slurm--.openConfig",
-        "title": "settings",
+        "title": "%slurm--.openConfig.title%",
         "category": "slurm--",
         "icon": "$(gear)"
       }
@@ -155,17 +150,17 @@
       "slurm--_explorer": [
         {
           "id": "slurm--_tasks_view",
-          "name": "tasks",
+          "name": "%slurm--_tasks_view.name%",
           "icon": "assets/icons/task.svg"
         },
         {
           "id": "slurm--_resource_view",
-          "name": "resources",
+          "name": "%slurm--_resource_view.name%",
           "icon": "assets/icons/task.svg"
         },
         {
           "id": "slurm--_launcher_view",
-          "name": "launcher",
+          "name": "%slurm--_launcher_view.name%",
           "icon": "assets/icons/task.svg"
         }
       ]
@@ -269,17 +264,17 @@
         "slurm--.tasksPanel.refreshInterval(ms)": {
           "type": "integer",
           "default": 2000,
-          "description": "interval of auto refresh in millisecond (works after restart auto refresh)"
+          "description": "%config.tasksPanel.refreshInterval(ms).description%"
         },
         "slurm--.resourcesPanel.refreshInterval(ms)": {
           "type": "integer",
           "default": 2000,
-          "description": "interval of auto refresh in millisecond (works after restart auto refresh)"
+          "description": "%config.resourcesPanel.refreshInterval(ms).description%"
         },
         "slurm--.commands.user": {
           "type": "string",
           "default": "--me",
-          "description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`"
+          "description": "%config.commands.user.description%"
         }
       }
     },

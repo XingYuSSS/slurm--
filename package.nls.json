@@ -1,0 +1,29 @@
+{
+    "slurm--.refreshUserTasks.title": "refresh user tasks",
+    "slurm--.autoRefreshTask.title": "start auto refresh",
+    "slurm--.unautoRefreshTask.title": "stop auto refresh",
+    "slurm--.cancelTask.title": "cancel task",
+    "slurm--.cancelSelectedTasks.title": "cancel selected tasks",
+    "slurm--.confirmTask.title": "confirm task",
+    "slurm--.confirmAllTask.title": "confirm all task",
+    "slurm--.openFile.title": "open file",
+    "slurm--.refreshResources.title": "refresh resources",
+    "slurm--.autoRefreshRes.title": "start auto refresh",
+    "slurm--.unautoRefreshRes.title": "stop auto refresh",
+    "slurm--.copyGres.title": "copy",
+    "slurm--.launchTerminal.title": "launch terminal",
+    "slurm--.refreshLauncher.title": "refresh launcher",
+    "slurm--.launchScript.title": "launch script",
+    "slurm--.removeScript.title": "remove script",
+    "slurm--.deleteArg.title": "remove argument",
+    "slurm--.changeArg.title": "change argument",
+    "slurm--.openConfig.title": "settings",
+
+    "slurm--_tasks_view.name": "tasks",
+    "slurm--_resource_view.name": "resources",
+    "slurm--_launcher_view.name": "launcher",
+
+    "config.tasksPanel.refreshInterval(ms).description": "interval of auto refresh in millisecond (works after restart auto refresh)",
+    "config.resourcesPanel.refreshInterval(ms).description": "interval of auto refresh in millisecond (works after restart auto refresh)",
+    "config.commands.user.description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`"
+}

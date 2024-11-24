@@ -33,7 +33,7 @@ async function addScript(uriList: string[]) {
 }
 
 async function addArg(script: Script) {
-    const arg = await vscode.window.showInputBox({ prompt: 'new argument' });
+    const arg = await vscode.window.showInputBox({ prompt: vscode.l10n.t('new argument') });
     if (arg) {
         script.args.push(arg);
         scriptService.saveScript();
@@ -48,7 +48,7 @@ async function deleteArg(arg: ArgItem) {
 }
 
 async function changeArg(arg: ArgItem) {
-    const newArg = await vscode.window.showInputBox({ prompt: 'change argument', value: arg.script.args[arg.argIndex] });
+    const newArg = await vscode.window.showInputBox({ prompt: vscode.l10n.t('change argument'), value: arg.script.args[arg.argIndex] });
     if (newArg) {
         arg.script.args[arg.argIndex] = newArg;
         scriptService.saveScript();
@@ -59,32 +59,32 @@ async function changeArg(arg: ArgItem) {
 async function launchTerminal(node: NodeItem) {
     let gresArg = '';
     if (node.node.gres) {
-        const gresNum = await vscode.window.showQuickPick(Array.from({ length: node.node.gres.totalNum - node.node.gres.usedNum + 1 }, (_, i) => i).map(v => v.toString()), { title: 'Choose number of GRES' });
+        const gresNum = await vscode.window.showQuickPick(Array.from({ length: node.node.gres.totalNum - node.node.gres.usedNum + 1 }, (_, i) => i).map(v => v.toString()), { title: vscode.l10n.t('Choose number of GRES') });
         if (!gresNum) { return; }
         gresArg = "--gres=" + node.node.gres.toIdString() + ":" + gresNum;
     }
     let mem = undefined;
     while (!mem) {
-        mem = await vscode.window.showQuickPick(Array.from({ length: Math.floor((node.node.memory - node.node.allocMemory) / 50) }, (_, i) => (i + 1) * 50).map(v => `${v}G`).concat(['Custom...']), { title: 'Choose memory to alloc' });
+        mem = await vscode.window.showQuickPick(Array.from({ length: Math.floor((node.node.memory - node.node.allocMemory) / 50) }, (_, i) => (i + 1) * 50).map(v => `${v}G`).concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose memory to alloc') });
         if (!mem) { return; }
-        if (mem === 'Custom...') {
-            mem = await vscode.window.showInputBox({ prompt: 'Custom memory' });
+        if (mem === vscode.l10n.t('Custom...')) {
+            mem = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom memory') });
         }
     }
     let time = undefined;
     while (!time) {
-        time = await vscode.window.showQuickPick(Array.from({ length: 8 }, (_, i) => i + 1).map(v => `${v}:00:00`).concat(['Custom...']), { title: 'Choose time' });
+        time = await vscode.window.showQuickPick(Array.from({ length: 8 }, (_, i) => i + 1).map(v => `${v}:00:00`).concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose time') });
         if (!time) { return; }
-        if (time === 'Custom...') {
-            time = await vscode.window.showInputBox({ prompt: 'Custom time' });
+        if (time === vscode.l10n.t('Custom...')) {
+            time = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom time') });
         }
     }
     let shell = undefined;
     while (!shell) {
-        shell = await vscode.window.showQuickPick(['zsh', 'bash', 'Custom...'], { title: 'Choose shell' });
+        shell = await vscode.window.showQuickPick(['zsh', 'bash', vscode.l10n.t('Custom...')], { title: vscode.l10n.t('Choose shell') });
         if (!shell) { return; }
-        if (shell === 'Custom...') {
-            shell = await vscode.window.showInputBox({ prompt: 'Custom shell' });
+        if (shell === vscode.l10n.t('Custom...')) {
+            shell = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom shell') });
         }
     }
     const terminal = vscode.window.createTerminal();

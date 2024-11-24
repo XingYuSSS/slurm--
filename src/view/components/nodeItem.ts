@@ -2,11 +2,11 @@ import * as vscode from 'vscode';
 import { Node, NodeState } from '../../models';
 
 function nodeDescription(node: Node): string {
-    if (node.state === NodeState.ALLOC) { return `Node has been allocated`; }
+    if (node.state === NodeState.ALLOC) { return vscode.l10n.t(`Node has been allocated`); }
     if (node.state === NodeState.IDLE || node.state === NodeState.MIXED) {
         return `${node.gres ?? 'No GRES'}\t${node.allocMemory}GB/${node.memory}GB`;
     }
-    return `Node not available due to state "${node.state}"`;
+    return vscode.l10n.t(`Node not available due to state "{0}"`, node.state);
 }
 
 function nodeIcon(node: Node): vscode.ThemeIcon | undefined {

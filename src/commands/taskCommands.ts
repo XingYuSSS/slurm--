@@ -40,15 +40,15 @@ async function refreshUserTasks() {
     const user = configService.option_user;
     if (user === '') {
         const result = await vscode.window.showWarningMessage(
-            `You didn't set user option, this will show ALL tasks in your system, continue?`,
-            'Yes',
-            'Open settings',
-            'No'
+            vscode.l10n.t(`You didn't set user option, this will show ALL tasks in your system, continue?`),
+            vscode.l10n.t('Yes'),
+            vscode.l10n.t('Open settings'),
+            vscode.l10n.t('No')
         );
-        if (result === 'Open settings') {
+        if (result === vscode.l10n.t('Open settings')) {
             vscode.commands.executeCommand('slurm--.openConfig');
             return;
-        } else if (result === 'No') {
+        } else if (result === vscode.l10n.t('No')) {
             return;
         }
     }
@@ -64,11 +64,11 @@ async function refreshUserTasks() {
 
 async function cancelTask(task: TaskItem) {
     const result = await vscode.window.showWarningMessage(
-        `Cancel task named ${task.task.name}?`,
-        'Yes',
-        'No'
+        vscode.l10n.t(`Cancel task named {0}?`, task.task.name),
+        vscode.l10n.t('Yes'),
+        vscode.l10n.t('No')
     );
-    if (result === 'Yes') {
+    if (result === vscode.l10n.t('Yes')) {
         const [out, err] = await executeCmd(`scancel ${task.task.jobid}`);
         if (err) {
             vscode.window.showErrorMessage(err);
@@ -76,7 +76,6 @@ async function cancelTask(task: TaskItem) {
         }
         taskService.deleteTask(task.task.jobid);
         taskView.taskViewDataProvider.refresh();
-    } else if (result === 'No') {
     }
 }
 
@@ -84,17 +83,17 @@ async function cancelSelectedTasks() {
     if (taskView.selectedTaskItems.length === 0) { return; }
     const tasks = taskView.selectedTaskItems.map(v => v.task);
     const result = await vscode.window.showWarningMessage(
-        `This will cancel ${tasks.length} tasks below: ` + tasks.map(v => v.name).join('; '),
-        'Yes',
-        'No'
+        vscode.l10n.t(`This will cancel {0} tasks below: `, tasks.length) + tasks.map(v => v.name).join('; '),
+        vscode.l10n.t('Yes'),
+        vscode.l10n.t('No')
     );
-    if (result === 'Yes') {
+    if (result === vscode.l10n.t('Yes')) {
         tasks.forEach(v => {
             executeCmd(`scancel ${v.jobid}`);
             taskService.deleteTask(v.jobid);
         });
         taskView.taskViewDataProvider.refresh();
-    } else if (result === 'No') {
+    } else if (result === vscode.l10n.t('No')) {
     }
 }
 
