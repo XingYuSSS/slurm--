@@ -2,7 +2,7 @@
   "name": "slurm--extension",
   "displayName": "slurm--",
   "description": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
     "vscode": "^1.89.0"
