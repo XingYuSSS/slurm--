@@ -18,9 +18,9 @@
 - [X] launch script
 - [X] drop script file to view
 - [X] start srun
-- [x] scripts arguments manager
-- [x] gpu selector
+- [X] scripts arguments manager
+- [X] gpu selector
 - [ ] Shell scripts reader
 ## Others
-- [x] l10n support
+- [X] l10n support
 

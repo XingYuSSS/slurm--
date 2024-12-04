@@ -12,8 +12,12 @@ const options: ObjectEncodingOptions & childProcess.ExecOptions = {
 };
 
 export async function executeCmd(cmd: string): Promise<[string, string]> {
-    const { stdout, stderr } = await execAsync(cmd, options);
-    return [stdout.trim(), stderr ? stderr.trim() : ''];
+    try {
+        const { stdout, stderr } = await execAsync(cmd, options);
+        return [stdout.trim(), stderr ? stderr.trim() : ''];
+    } catch (error) {
+        return ['', `${error}`];
+    }
 }
 
 

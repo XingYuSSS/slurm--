@@ -24,7 +24,7 @@ export class NodeItem extends vscode.TreeItem {
     constructor(public readonly node: Node) {
         super(node.nodeid, vscode.TreeItemCollapsibleState.None);
         this.description = nodeDescription(node);
-        this.tooltip = `${node.nodeid} state: ${node.state}`;
+        this.tooltip = vscode.l10n.t(`{0} state: {1}`, node.nodeid, node.state);
         this.iconPath = nodeIcon(node);
         this.contextValue = (node.state === NodeState.IDLE || node.state === NodeState.MIXED) ? 'nodeItem' : 'unavailNodeItem';
     }

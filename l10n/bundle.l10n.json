@@ -6,6 +6,7 @@
   "Drop a script to here": "Drop a script to here",
   "Node has been allocated": "Node has been allocated",
   "Node not available due to state \"{0}\"": "Node not available due to state \"{0}\"",
+  "{0} state: {1}": "{0} state: {1}",
   "Add Argument": "Add Argument",
   "Yes": "Yes",
   "No": "No",

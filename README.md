@@ -1,6 +1,6 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.6.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.6.0/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.6.1-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.6.1/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
@@ -12,7 +12,7 @@ We are continuously developing this extension, if there is a feature you would l
 
 ### syntax highlight
 
-- support shell scripts
+- Support for shell-like scripts, including `.sh`, `.slrum` or `.sbatch` files, etc.
 
 ![highlight](assets/pics/highlight.png)
 

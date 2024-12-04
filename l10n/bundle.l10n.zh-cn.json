@@ -6,6 +6,7 @@
   "Drop a script to here": "将slurm脚本拖到这里",
   "Node has been allocated": "节点已被分配",
   "Node not available due to state \"{0}\"": "节点不可用 处于状态\"{0}\"",
+  "{0} state: {1}": "{0} 状态: {1}",
   "Add Argument": "添加参数",
   "Yes": "是",
   "No": "否",
