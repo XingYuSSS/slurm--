@@ -10,20 +10,31 @@
     "slurm--.refreshResources.title": "refresh resources",
     "slurm--.autoRefreshRes.title": "start auto refresh",
     "slurm--.unautoRefreshRes.title": "stop auto refresh",
-    "slurm--.copyGres.title": "copy",
+    "slurm--.copyGres.title": "Copy",
     "slurm--.launchTerminal.title": "launch terminal",
     "slurm--.refreshLauncher.title": "refresh launcher",
     "slurm--.launchScript.title": "launch script",
     "slurm--.removeScript.title": "remove script",
     "slurm--.deleteArg.title": "remove argument",
     "slurm--.changeArg.title": "change argument",
-    "slurm--.openConfig.title": "settings",
+    "slurm--.openConfig.title": "Settings",
+
+    "slurm--.sortById.title": "Sort By Id",
+    "slurm--.sortByName.title": "Sort By Name",
+    "slurm--.sortByAvail.title": "Sort By Availability",
+
+    "slurm--.sortingById.title": "✔ Sort By Id",
+    "slurm--.sortingByName.title": "✔ Sort By Name",
+    "slurm--.sortingByAvail.title": "✔ Sort By Availability",
 
     "slurm--_tasks_view.name": "tasks",
     "slurm--_resource_view.name": "resources",
     "slurm--_launcher_view.name": "launcher",
 
-    "config.tasksPanel.refreshInterval(ms).description": "interval of auto refresh in millisecond (works after restart auto refresh)",
-    "config.resourcesPanel.refreshInterval(ms).description": "interval of auto refresh in millisecond (works after restart auto refresh)",
-    "config.commands.user.description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`"
+    "config.tasksPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
+    "config.resourcesPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
+    "config.commands.user.description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`",
+    "config.label.id": "Id",
+    "config.label.name": "Name",
+    "config.label.availability": "Availability"
 }

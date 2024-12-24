@@ -6,12 +6,16 @@
 - [X] save tasks to disk
 - [X] Select multiple tasks and cancel
 - [X] scripts arguments
+- [ ] quick buttons
+- [ ] cancel all
+- [X] sort by id or name
 - [ ] group and count by state, command or start time
 - [ ] start and end time
 ## Resources
 - [X] scan availabal GRES and Memory
 - [X] auto refreash
 - [X] copy GRES or node to clipboard
+- [X] sort by name or availability
 ## Script Syntax
 - [X] syntax highlight
 ## Launcher

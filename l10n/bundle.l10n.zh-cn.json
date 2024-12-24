@@ -10,6 +10,8 @@
   "Add Argument": "添加参数",
   "Yes": "是",
   "No": "否",
+  "Error task sort key: {0}": "无效的任务排序键: {0}",
+  "Error resource sort key: {0}": "无效的资源排序键: {0}",
   "Open settings": "打开设置",
   "You didn't set user option, this will show ALL tasks in your system, continue?": "用户名设置为空，将会展示slurm系统中**所有**任务，是否继续?",
   "Cancel task named {0}?": "取消任务 {0} ?",

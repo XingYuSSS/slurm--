@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { taskService } from '../services';
+import { taskService, configService, TaskSortKeys } from '../services';
 import { Task } from '../models/';
 import { FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskItem } from './components';
 
@@ -14,11 +14,14 @@ function getTaskInfoItems(task: Task): vscode.TreeItem[] {
     ];
 }
 
+const sortFn = new Map([
+    [TaskSortKeys.ID, (a: Task, b: Task) => a.jobid - b.jobid],
+    [TaskSortKeys.NAME, (a: Task, b: Task) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })]
+]);
+
 function getGroupedTask(tasks: Task[]): ListItem[] {
-    let running = tasks.filter(v => !v.finished);
-    let finished = tasks.filter(v => v.finished);
-    // console.log(running)
-    // console.log(finished)
+    let running = tasks.filter(v => !v.finished).sort(sortFn.get(configService.taskSortKey));
+    let finished = tasks.filter(v => v.finished).sort(sortFn.get(configService.taskSortKey));
     return [
         new ListItem(vscode.l10n.t('running'), running.map((value) => { return new TaskItem(value); }), vscode.l10n.t('${length} tasks')),
         new ListItem(vscode.l10n.t('finished'), finished.map((value) => { return new FinishedTaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'finishedTaskList'),

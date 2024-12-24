@@ -10,6 +10,8 @@
   "Add Argument": "Add Argument",
   "Yes": "Yes",
   "No": "No",
+  "Error task sort key: {0}": "Error task sort key: {0}",
+  "Error resource sort key: {0}": "Error resource sort key: {0}",
   "Open settings": "Open settings",
   "You didn't set user option, this will show ALL tasks in your system, continue?": "You didn't set user option, this will show ALL tasks in your system, continue?",
   "Cancel task named {0}?": "Cancel task named {0}?",

@@ -8,8 +8,19 @@ import { ListItem, NodeItem } from '../view/components';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
-function extractNodes(nodeString: string, short_length: number, long_length: number): Node[] {
-    let slices = [short_length, short_length, short_length, short_length, long_length, long_length, short_length, short_length];
+const fieldMap = new Map([
+    ["NODELIST", 20],
+    ["Available", 15],
+    ["Memory", 15],
+    ["AllocMem", 15],
+    ["Gres", 50],
+    ["GresUsed", 50],
+    ["Partition", 20],
+    ["StateLong", 20],
+]);
+
+function extractNodes(nodeString: string): Node[] {
+    let slices = Array.from(fieldMap.values());
     slices.reduce((arr, currentValue, currentIndex) => {
         if (currentIndex > 0) {
             slices[currentIndex] = slices[currentIndex - 1] + currentValue;
@@ -34,14 +45,13 @@ function extractNodes(nodeString: string, short_length: number, long_length: num
 }
 
 async function refreshResources() {
-    const short = 15;
-    const long = 50;
-    const [out, err] = await executeCmd(`sinfo --noheader --Node -O NODELIST:${short},Available:${short},Memory:${short},AllocMem:${short},Gres:${long},GresUsed:${long},Partition:${short},StateLong:${short}`);
+    const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
+    const [out, err] = await executeCmd(`sinfo --noheader --Node -O ${query}`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
     }
-    resourceService.updateNode(...extractNodes(out, short, long));
+    resourceService.updateNode(...extractNodes(out));
     resourceViewDataProvider.refresh();
 }
 

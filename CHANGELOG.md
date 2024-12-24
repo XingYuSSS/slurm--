@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add sorting options for the menu of task view and resource view
+- Add sorting options in configuration
+
+### Changed
+
+- Improve the command line parsing of `squeue` and `sinfo`
+
 ## [0.6.1][0.6.1] - 2024-12-04
 
 ### Fixed

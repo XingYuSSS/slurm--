@@ -9,8 +9,23 @@ import { LogFileItem, TaskItem } from '../view/components';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
-function extractTask(taskString: string, short_length: number, long_length: number): Task[] {
-    let slices = [short_length, long_length, short_length, short_length, short_length, short_length, short_length, short_length, long_length, long_length, long_length, short_length];
+const fieldMap = new Map([
+    ["JobID", 20],
+    ["Name", 100],
+    ["Username", 50],
+    ["State", 20],
+    ["NodeList", 50],
+    ["Gres", 50],
+    ["TimeLimit", 20],
+    ["TimeUsed", 20],
+    ["Command", 255],
+    ["STDOUT", 255],
+    ["STDERR", 255],
+    ["Reason", 50]
+]);
+
+function extractTask(taskString: string): Task[] {
+    let slices = Array.from(fieldMap.values());
     slices.reduce((arr, currentValue, currentIndex) => {
         if (currentIndex > 0) {
             slices[currentIndex] = slices[currentIndex - 1] + currentValue;
@@ -35,9 +50,7 @@ function extractTask(taskString: string, short_length: number, long_length: numb
 }
 
 async function refreshUserTasks() {
-    const short = 50;
-    const long = 255;
-    const user = configService.option_user;
+    const user = configService.optionUser;
     if (user === '') {
         const result = await vscode.window.showWarningMessage(
             vscode.l10n.t(`You didn't set user option, this will show ALL tasks in your system, continue?`),
@@ -52,12 +65,13 @@ async function refreshUserTasks() {
             return;
         }
     }
-    const [out, err] = await executeCmd(`squeue ${user} --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
+    const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
+    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
     }
-    taskService.updateTask(...extractTask(out, short, long));
+    taskService.updateTask(...extractTask(out));
     taskView.taskViewDataProvider.refresh();
 }
 
