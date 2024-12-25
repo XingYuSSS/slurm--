@@ -111,6 +111,23 @@ async function cancelSelectedTasks() {
     }
 }
 
+async function cancelAllTasks() {
+    const tasks = taskService.getTask().filter(v => !v.finished);
+    const result = await vscode.window.showWarningMessage(
+        vscode.l10n.t(`This will cancel all {0} tasks below (unscaned tasks will not be canceled): `, tasks.length) + tasks.map(v => v.name).join('; '),
+        vscode.l10n.t('Yes'),
+        vscode.l10n.t('No')
+    );
+    if (result === vscode.l10n.t('Yes')) {
+        tasks.forEach(v => {
+            executeCmd(`scancel ${v.jobid}`);
+            taskService.deleteTask(v.jobid);
+        });
+        taskView.taskViewDataProvider.refresh();
+    } else if (result === vscode.l10n.t('No')) {
+    }
+}
+
 async function autoRefreshTask() {
     clearInterval(autoRefreshTimer);
     autoRefreshTimer = setInterval(() => {
@@ -146,6 +163,7 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelSelectedTasks', cancelSelectedTasks));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelAllTasks', cancelAllTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshTask', autoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTask', confirmTask));

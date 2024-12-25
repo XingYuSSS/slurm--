@@ -47,6 +47,12 @@
         "icon": "$(close)"
       },
       {
+        "command": "slurm--.cancelAllTasks",
+        "title": "%slurm--.cancelAllTasks.title%",
+        "category": "slurm--",
+        "icon": "$(close-all)"
+      },
+      {
         "command": "slurm--.cancelSelectedTasks",
         "title": "%slurm--.cancelSelectedTasks.title%",
         "category": "slurm--",
@@ -298,6 +304,11 @@
           "when": "view == slurm--_tasks_view && viewItem == taskItem"
         },
         {
+          "command": "slurm--.cancelAllTasks",
+          "group": "inline",
+          "when": "view == slurm--_tasks_view && viewItem == taskList"
+        },
+        {
           "command": "slurm--.confirmTask",
           "group": "inline",
           "when": "view == slurm--_tasks_view && viewItem == finishedTaskItem"
@@ -360,23 +371,23 @@
           "type": "string",
           "enum": ["id", "name"],
           "markdownEnumDescriptions": [
-            "Sort By Task Id",
-            "Sort By Task Name"
+            "%config.tasksPanel.sortBy.id.description%",
+            "%config.tasksPanel.sortBy.name.description%"
           ],
           "enumItemLabels": ["%config.label.id%", "%config.label.name%"],
           "default": "id",
-          "description": "The key which the tasks sort by"
+          "description": "%config.tasksPanel.sortBy.description%"
         },
         "slurm--.resourcesPanel.sortBy": {
           "type": "string",
           "enum": ["name", "availability"],
           "markdownEnumDescriptions": [
-            "Sort By Node and GRES Name",
-            "Sort By Node and GRES Availability"
+            "%config.resourcesPanel.sortBy.name.description%",
+            "%config.resourcesPanel.sortBy.availability.description%"
           ],
           "enumItemLabels": ["%config.label.name%", "%config.label.availability%"],
           "default": "name",
-          "description": "The key which the resources sort by"
+          "description": "%config.resourcesPanel.sortBy.description%"
         }
       }
     },

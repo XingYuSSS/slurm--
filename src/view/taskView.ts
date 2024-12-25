@@ -23,7 +23,7 @@ function getGroupedTask(tasks: Task[]): ListItem[] {
     let running = tasks.filter(v => !v.finished).sort(sortFn.get(configService.taskSortKey));
     let finished = tasks.filter(v => v.finished).sort(sortFn.get(configService.taskSortKey));
     return [
-        new ListItem(vscode.l10n.t('running'), running.map((value) => { return new TaskItem(value); }), vscode.l10n.t('${length} tasks')),
+        new ListItem(vscode.l10n.t('running'), running.map((value) => { return new TaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'taskList'),
         new ListItem(vscode.l10n.t('finished'), finished.map((value) => { return new FinishedTaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'finishedTaskList'),
     ];
 }

@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Add sorting options for the menu of task view and resource view
 - Add sorting options in configuration
+- Add `cancel all tasks` button and command
 
 ### Changed
 

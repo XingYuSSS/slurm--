@@ -7,7 +7,7 @@
 - [X] Select multiple tasks and cancel
 - [X] scripts arguments
 - [ ] quick buttons
-- [ ] cancel all
+- [X] cancel all
 - [X] sort by id or name
 - [ ] group and count by state, command or start time
 - [ ] start and end time
@@ -27,4 +27,4 @@
 - [ ] Shell scripts reader
 ## Others
 - [X] l10n support
-
+- [ ] cmd cache
