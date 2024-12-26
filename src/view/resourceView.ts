@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { Node, NodeState, ResourceGres } from '../models/';
 import { ListItem, NodeItem } from './components';
 import { configService, GresSortKeys, resourceService } from '../services';
+import { resignFn } from '../utils/utils';
 
 function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
     if (gres.totalNum === 0) { return new vscode.ThemeIcon('close', new vscode.ThemeColor('gitDecoration.deletedResourceForeground')); }
@@ -13,7 +14,7 @@ function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
 
 const nodeSortFn = new Map([
     [GresSortKeys.NAME, (a: Node, b: Node) => a.nodeid.localeCompare(b.nodeid, undefined, { sensitivity: 'base' })],
-    [GresSortKeys.AVAIL, (a: Node, b: Node) => a.gres === null || b.gres === null ? 0 : (a.gres.totalNum - a.gres.usedNum) - (b.gres.totalNum - b.gres.usedNum)],
+    [GresSortKeys.AVAIL, (a: Node, b: Node) => a.gres === null || b.gres === null ? 0 : (!a.isAvailableState ? -1 : (!b.isAvailableState ? 1 : (a.gres.totalNum - a.gres.usedNum) - (b.gres.totalNum - b.gres.usedNum)))],
 ]);
 
 const listSortFn = new Map([
@@ -24,15 +25,15 @@ const listSortFn = new Map([
 function getGroupedNode(): ListItem[] {
     return [...resourceService.groupByGres().values()]
         .map(nodes => {
-            nodes = nodes.sort(nodeSortFn.get(configService.gresSortKey));
             if (nodes[0].gres === null) {
                 return [null, new ListItem('No GRES', nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), undefined, 'gresList', false)];
             }
-            const availNode = nodes.filter(v => v.state === NodeState.MIXED || v.state === NodeState.IDLE);
-            const rgres = availNode.length === 0 ? ResourceGres.empty(nodes[0].gres.toIdString()) : ResourceGres.fromArray(availNode.map(v => v.gres!));
+            nodes = nodes.sort(resignFn(nodeSortFn.get(configService.gresSortKey)!, configService.gresSortAscending));
+            const availNode = nodes.filter(v => v.isAvailableState);
+            const rgres = availNode.length === 0 ? ResourceGres.empty(nodes[0]!.gres.toIdString()) : ResourceGres.fromArray(availNode.map(v => v.gres!));
             return [rgres, new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), gresIcon(rgres), 'gresList', false)];
         })
-        .sort((a, b) => listSortFn.get(configService.gresSortKey)!(a[0] as ResourceGres | null, b[0] as ResourceGres | null))
+        .sort((a, b) => resignFn(listSortFn.get(configService.gresSortKey)!, configService.gresSortAscending)(a[0] as ResourceGres | null, b[0] as ResourceGres | null))
         .map(item => item[1]) as ListItem[];
 }
 

@@ -10,6 +10,11 @@ export enum GresSortKeys {
     AVAIL = 'availability',
 }
 
+export enum SortDirection {
+    ASCEND = 'ascending',
+    DESCEND = 'descending'
+}
+
 class ConfigService {
     public get taskRefreshInterval_ms(): number {
         return vscode.workspace.getConfiguration('slurm--.tasksPanel').get('refreshInterval(ms)') ?? 3000;
@@ -23,10 +28,6 @@ class ConfigService {
 
     #taskSortKey: string;
     public get taskSortKey(): TaskSortKeys {
-        if (!Object.values(TaskSortKeys).includes(this.#taskSortKey as TaskSortKeys)) {
-            vscode.window.showWarningMessage(vscode.l10n.t('Error task sort key: {0}', this.#taskSortKey));
-            return TaskSortKeys.ID;
-        }
         return this.#taskSortKey as TaskSortKeys;
     }
     public set taskSortKey(key: TaskSortKeys) {
@@ -35,18 +36,40 @@ class ConfigService {
         this.#taskSortKey = key;
     }
 
+    #taskSortDirection: string;
+    public get taskSortDirection(): SortDirection {
+        return this.#taskSortDirection as SortDirection;
+    }
+    public set taskSortDirection(key: SortDirection) {
+        vscode.workspace.getConfiguration('slurm--.tasksPanel').update('sortDirection', key);
+        vscode.commands.executeCommand('setContext', 'taskSortDirection', key);
+        this.#taskSortDirection = key;
+    }
+    public get taskSortAscending(): boolean {
+        return (this.#taskSortDirection as SortDirection) === SortDirection.ASCEND;
+    }
+
     #gresSortKey: string;
     public get gresSortKey(): GresSortKeys {
-        if (!Object.values(GresSortKeys).includes(this.#gresSortKey as GresSortKeys)) {
-            vscode.window.showWarningMessage(vscode.l10n.t('Error resource sort key: {0}', this.#gresSortKey));
-            return GresSortKeys.NAME;
-        }
         return this.#gresSortKey as GresSortKeys;
     }
     public set gresSortKey(key: GresSortKeys) {
         vscode.workspace.getConfiguration('slurm--.resourcesPanel').update('sortBy', key);
         vscode.commands.executeCommand('setContext', 'gresSortKey', key);
         this.#gresSortKey = key;
+    }
+
+    #gresSortDirection: string;
+    public get gresSortDirection(): SortDirection {
+        return this.#gresSortDirection as SortDirection;
+    }
+    public set gresSortDirection(key: SortDirection) {
+        vscode.workspace.getConfiguration('slurm--.resourcesPanel').update('sortDirection', key);
+        vscode.commands.executeCommand('setContext', 'gresSortDirection', key);
+        this.#gresSortDirection = key;
+    }
+    public get gresSortAscending(): boolean {
+        return (this.#gresSortDirection as SortDirection) === SortDirection.ASCEND;
     }
 
 
@@ -56,13 +79,20 @@ class ConfigService {
 
         this.#gresSortKey = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortBy') as string ?? 'name';
         this.#taskSortKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortBy') as string ?? 'id';
+        this.#gresSortDirection = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortDirection') as string ?? 'ascending';
+        this.#taskSortDirection = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortDirection') as string ?? 'ascending';
+
         this.gresSortKey = this.gresSortKey;
         this.taskSortKey = this.taskSortKey;
+        this.gresSortDirection = this.gresSortDirection;
+        this.taskSortDirection = this.taskSortDirection;
     }
 
     private onUpdateConfig(event: vscode.ConfigurationChangeEvent) {
         this.#gresSortKey = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortBy') as string ?? 'name';
         this.#taskSortKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortBy') as string ?? 'id';
+        this.#gresSortDirection = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortDirection') as string ?? 'ascending';
+        this.#taskSortDirection = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortDirection') as string ?? 'ascending';
     }
 }
 

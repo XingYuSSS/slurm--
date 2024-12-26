@@ -28,6 +28,11 @@
     "slurm--.sortingByName.title": "✔ Sort By Name",
     "slurm--.sortingByAvail.title": "✔ Sort By Availability",
 
+    "slurm--.sortAscend.title": "Ascending",
+    "slurm--.sortDescend.title": "Descending",
+    "slurm--.sortingAscend.title": "✔ Ascending",
+    "slurm--.sortingDescend.title": "✔ Descending",
+
     "slurm--_tasks_view.name": "tasks",
     "slurm--_resource_view.name": "resources",
     "slurm--_launcher_view.name": "launcher",
@@ -43,5 +48,12 @@
     "config.tasksPanel.sortBy.description": "The key which the tasks sort by",
     "config.resourcesPanel.sortBy.name.description": "Sort By Node and GRES Name",
     "config.resourcesPanel.sortBy.availability.description": "Sort By Node and GRES Availability",
-    "config.resourcesPanel.sortBy.description": "The key which the resources sort by"
+    "config.resourcesPanel.sortBy.description": "The key which the resources sort by",
+
+    "config.sortDirection.ascending.description": "Ascending Order",
+    "config.sortDirection.descending.description": "Descending Order",
+    "config.label.ascending": "Ascending",
+    "config.label.descending": "Descending",
+    "config.tasksPanel.sortDirection.description": "Sorting order of tasks",
+    "config.resourcesPanel.sortDirection.description": "Sorting order of Node and GRES"
 }

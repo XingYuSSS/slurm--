@@ -14,9 +14,9 @@ export class Node {
     readonly gres: ResourceGres | null;
     readonly partition: string;
     readonly state: NodeState;
+
     //NODELIST:15,Available:15,Memory:15,AllocMem:15,Gres:50,GresUsed:50,Partition:15,StateLong:15
     constructor(nodeid: string, available: string, memory: string, allocMemory: string, gres: string, usedGres: string, partition: string, state: string)
-
     constructor(
         readonly nodeid: string,
         public available: string,
@@ -33,5 +33,7 @@ export class Node {
         this.partition = partition.endsWith('*') ? partition.slice(0, partition.length - 1) : partition;
         this.state = (state.endsWith('*') ? state.slice(0, state.length - 1) : state) as NodeState;
     }
+
+    get isAvailableState(): boolean { return this.state === NodeState.MIXED || this.state === NodeState.IDLE; }
 
 }

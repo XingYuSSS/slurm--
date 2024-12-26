@@ -28,6 +28,11 @@
     "slurm--.sortingByName.title": "✔ 以名称排序",
     "slurm--.sortingByAvail.title": "✔ 以可用性排序",
 
+    "slurm--.sortAscend.title": "升序",
+    "slurm--.sortDescend.title": "降序",
+    "slurm--.sortingAscend.title": "✔ 升序",
+    "slurm--.sortingDescend.title": "✔ 降序",
+
     "slurm--_tasks_view.name": "任务",
     "slurm--_resource_view.name": "资源",
     "slurm--_launcher_view.name": "启动",
@@ -43,5 +48,12 @@
     "config.tasksPanel.sortBy.description": "任务排序的键",
     "config.resourcesPanel.sortBy.name.description": "根据节点名和资源名排序",
     "config.resourcesPanel.sortBy.availability.description": "根据节点和资源的可用性排序",
-    "config.resourcesPanel.sortBy.description": "资源排序的键"
+    "config.resourcesPanel.sortBy.description": "资源排序的键",
+
+    "config.sortDirection.ascending.description": "按升序排序",
+    "config.sortDirection.descending.description": "按降序排序",
+    "config.label.ascending": "升序",
+    "config.label.descending": "降序",
+    "config.tasksPanel.sortDirection.description": "任务的排列顺序",
+    "config.resourcesPanel.sortDirection.description": "节点和资源的排列顺序"
 }

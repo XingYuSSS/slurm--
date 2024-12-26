@@ -163,6 +163,26 @@
         "category": "slurm--"
       },
       {
+        "command": "slurm--.setTaskSortAscend",
+        "title": "%slurm--.sortAscend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedTaskSortAscend",
+        "title": "%slurm--.sortingAscend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setTaskSortDescend",
+        "title": "%slurm--.sortDescend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedTaskSortDescend",
+        "title": "%slurm--.sortingDescend.title%",
+        "category": "slurm--"
+      },
+      {
         "command": "slurm--.setResourceSortByName",
         "title": "%slurm--.sortByName.title%",
         "category": "slurm--"
@@ -180,6 +200,26 @@
       {
         "command": "slurm--.settedResourceSortByAvail",
         "title": "%slurm--.sortingByAvail.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setResourceSortAscend",
+        "title": "%slurm--.sortAscend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedResourceSortAscend",
+        "title": "%slurm--.sortingAscend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setResourceSortDescend",
+        "title": "%slurm--.sortDescend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedResourceSortDescend",
+        "title": "%slurm--.sortingDescend.title%",
         "category": "slurm--"
       }
     ],
@@ -273,6 +313,26 @@
           "group": "sortby@2"
         },
         {
+          "command": "slurm--.setTaskSortAscend",
+          "when": "view == slurm--_tasks_view && taskSortDirection != ascending",
+          "group": "sortDirection@1"
+        },
+        {
+          "command": "slurm--.settedTaskSortAscend",
+          "when": "view == slurm--_tasks_view && taskSortDirection == ascending",
+          "group": "sortDirection@1"
+        },
+        {
+          "command": "slurm--.setTaskSortDescend",
+          "when": "view == slurm--_tasks_view && taskSortDirection != descending",
+          "group": "sortDirection@2"
+        },
+        {
+          "command": "slurm--.settedTaskSortDescend",
+          "when": "view == slurm--_tasks_view && taskSortDirection == descending",
+          "group": "sortDirection@2"
+        },
+        {
           "command": "slurm--.setResourceSortByName",
           "when": "view == slurm--_resource_view && gresSortKey != name",
           "group": "sortby@1"
@@ -291,6 +351,26 @@
           "command": "slurm--.settedResourceSortByAvail",
           "when": "view == slurm--_resource_view && gresSortKey == availability",
           "group": "sortby@2"
+        },
+        {
+          "command": "slurm--.setResourceSortAscend",
+          "when": "view == slurm--_resource_view && gresSortDirection != ascending",
+          "group": "sortDirection@1"
+        },
+        {
+          "command": "slurm--.settedResourceSortAscend",
+          "when": "view == slurm--_resource_view && gresSortDirection == ascending",
+          "group": "sortDirection@1"
+        },
+        {
+          "command": "slurm--.setResourceSortDescend",
+          "when": "view == slurm--_resource_view && gresSortDirection != descending",
+          "group": "sortDirection@2"
+        },
+        {
+          "command": "slurm--.settedResourceSortDescend",
+          "when": "view == slurm--_resource_view && gresSortDirection == descending",
+          "group": "sortDirection@2"
         }
       ],
       "view/item/context": [
@@ -378,6 +458,17 @@
           "default": "id",
           "description": "%config.tasksPanel.sortBy.description%"
         },
+        "slurm--.tasksPanel.sortDirection": {
+          "type": "string",
+          "enum": ["ascending", "descending"],
+          "markdownEnumDescriptions": [
+            "%config.sortDirection.ascending.description%",
+            "%config.sortDirection.descending.description%"
+          ],
+          "enumItemLabels": ["%config.label.ascending%", "%config.label.descending%"],
+          "default": "ascending",
+          "description": "%config.tasksPanel.sortDirection.description%"
+        },
         "slurm--.resourcesPanel.sortBy": {
           "type": "string",
           "enum": ["name", "availability"],
@@ -388,6 +479,17 @@
           "enumItemLabels": ["%config.label.name%", "%config.label.availability%"],
           "default": "name",
           "description": "%config.resourcesPanel.sortBy.description%"
+        },
+        "slurm--.resourcesPanel.sortDirection": {
+          "type": "string",
+          "enum": ["ascending", "descending"],
+          "markdownEnumDescriptions": [
+            "%config.sortDirection.ascending.description%",
+            "%config.sortDirection.descending.description%"
+          ],
+          "enumItemLabels": ["%config.label.ascending%", "%config.label.descending%"],
+          "default": "ascending",
+          "description": "%config.resourcesPanel.sortDirection.description%"
         }
       }
     },
