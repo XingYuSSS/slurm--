@@ -30,6 +30,10 @@ function setResourceSortDirection(direction: SortDirection) {
     resourceViewDataProvider.refresh();
 }
 
+function setTaskShowShortcutKey(show: boolean) {
+    configService.taskShowShortcutKey = show;
+}
+
 export function initConfigCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openConfig', getOpenConfig(context)));
 
@@ -52,5 +56,8 @@ export function initConfigCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setResourceSortDescend', () => setResourceSortDirection(SortDirection.DESCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceSortAscend', () => setResourceSortDirection(SortDirection.ASCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceSortDescend', () => setResourceSortDirection(SortDirection.DESCEND)));
+
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.showTaskShortcutKey', () => setTaskShowShortcutKey(true)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.hideTaskShortcutKey', () => setTaskShowShortcutKey(false)));
 }
 

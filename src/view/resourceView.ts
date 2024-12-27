@@ -25,10 +25,10 @@ const listSortFn = new Map([
 function getGroupedNode(): ListItem[] {
     return [...resourceService.groupByGres().values()]
         .map(nodes => {
+            nodes = nodes.sort(resignFn(nodeSortFn.get(configService.gresSortKey)!, configService.gresSortAscending));
             if (nodes[0].gres === null) {
                 return [null, new ListItem('No GRES', nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), undefined, 'gresList', false)];
             }
-            nodes = nodes.sort(resignFn(nodeSortFn.get(configService.gresSortKey)!, configService.gresSortAscending));
             const availNode = nodes.filter(v => v.isAvailableState);
             const rgres = availNode.length === 0 ? ResourceGres.empty(nodes[0]!.gres.toIdString()) : ResourceGres.fromArray(availNode.map(v => v.gres!));
             return [rgres, new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), gresIcon(rgres), 'gresList', false)];

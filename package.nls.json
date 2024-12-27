@@ -8,6 +8,8 @@
     "slurm--.confirmTask.title": "confirm task",
     "slurm--.confirmAllTask.title": "confirm all task",
     "slurm--.openFile.title": "open file",
+    "slurm--.openStdout.title": "open stdout file",
+    "slurm--.openStderr.title": "open stderr file",
     "slurm--.refreshResources.title": "refresh resources",
     "slurm--.autoRefreshRes.title": "start auto refresh",
     "slurm--.unautoRefreshRes.title": "stop auto refresh",
@@ -33,6 +35,9 @@
     "slurm--.sortingAscend.title": "✔ Ascending",
     "slurm--.sortingDescend.title": "✔ Descending",
 
+    "slurm--.showShortcutKey.title": "Show Shortcut Key",
+    "slurm--.hideShortcutKey.title": "Hide Shortcut Key",
+
     "slurm--_tasks_view.name": "tasks",
     "slurm--_resource_view.name": "resources",
     "slurm--_launcher_view.name": "launcher",
@@ -55,5 +60,6 @@
     "config.label.ascending": "Ascending",
     "config.label.descending": "Descending",
     "config.tasksPanel.sortDirection.description": "Sorting order of tasks",
-    "config.resourcesPanel.sortDirection.description": "Sorting order of Node and GRES"
+    "config.resourcesPanel.sortDirection.description": "Sorting order of Node and GRES",
+    "config.tasksPanel.showShortcutKey.description": "Show shortcut key for open log files in task panel"
 }

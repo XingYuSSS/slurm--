@@ -158,6 +158,14 @@ async function openFile(file: LogFile) {
     file.open();
 }
 
+async function openStdout(task: TaskItem) {
+    task.task.out_path.open();
+}
+
+async function openStderr(task: TaskItem) {
+    task.task.err_path.open();
+}
+
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
@@ -170,6 +178,8 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmAllTask', confirmAllTask));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStdout', openStdout));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStderr', openStderr));
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
     vscode.commands.executeCommand('slurm--.refreshUserTasks');

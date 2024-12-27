@@ -6,7 +6,7 @@
 - [X] save tasks to disk
 - [X] Select multiple tasks and cancel
 - [X] scripts arguments
-- [ ] quick buttons
+- [X] shortcut keys
 - [X] cancel all
 - [X] sort by id or name
 - [X] sort direction

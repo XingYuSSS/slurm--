@@ -1,7 +1,7 @@
 {
   "name": "slurm--extension",
   "displayName": "slurm--",
-  "description": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
+  "markdownDescription": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
   "version": "0.6.1",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
@@ -76,6 +76,18 @@
         "title": "%slurm--.openFile.title%",
         "category": "slurm--",
         "icon": "$(go-to-file)"
+      },
+      {
+        "command": "slurm--.openStdout",
+        "title": "%slurm--.openStdout.title%",
+        "category": "slurm--",
+        "icon": "$(info)"
+      },
+      {
+        "command": "slurm--.openStderr",
+        "title": "%slurm--.openStderr.title%",
+        "category": "slurm--",
+        "icon": "$(question)"
       },
       {
         "command": "slurm--.refreshResources",
@@ -220,6 +232,16 @@
       {
         "command": "slurm--.settedResourceSortDescend",
         "title": "%slurm--.sortingDescend.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.showTaskShortcutKey",
+        "title": "%slurm--.showShortcutKey.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.hideTaskShortcutKey",
+        "title": "%slurm--.hideShortcutKey.title%",
         "category": "slurm--"
       }
     ],
@@ -371,12 +393,22 @@
           "command": "slurm--.settedResourceSortDescend",
           "when": "view == slurm--_resource_view && gresSortDirection == descending",
           "group": "sortDirection@2"
+        },
+        {
+          "command": "slurm--.showTaskShortcutKey",
+          "when": "view == slurm--_tasks_view && !taskShowShortcutKey",
+          "group": "common@1"
+        },
+        {
+          "command": "slurm--.hideTaskShortcutKey",
+          "when": "view == slurm--_tasks_view && taskShowShortcutKey",
+          "group": "common@1"
         }
       ],
       "view/item/context": [
         {
           "command": "slurm--.cancelTask",
-          "group": "inline",
+          "group": "inline@5",
           "when": "view == slurm--_tasks_view && viewItem == taskItem"
         },
         {
@@ -390,13 +422,23 @@
         },
         {
           "command": "slurm--.confirmTask",
-          "group": "inline",
+          "group": "inline@5",
           "when": "view == slurm--_tasks_view && viewItem == finishedTaskItem"
         },
         {
           "command": "slurm--.confirmAllTask",
           "group": "inline",
           "when": "view == slurm--_tasks_view && viewItem == finishedTaskList"
+        },
+        {
+          "command": "slurm--.openStdout",
+          "group": "inline@1",
+          "when": "view == slurm--_tasks_view && taskShowShortcutKey && (viewItem == taskItem || viewItem == finishedTaskItem)"
+        },
+        {
+          "command": "slurm--.openStderr",
+          "group": "inline@2",
+          "when": "view == slurm--_tasks_view && taskShowShortcutKey && (viewItem == taskItem || viewItem == finishedTaskItem)"
         },
         {
           "command": "slurm--.copyGres",
@@ -435,17 +477,17 @@
         "slurm--.tasksPanel.refreshInterval(ms)": {
           "type": "integer",
           "default": 2000,
-          "description": "%config.tasksPanel.refreshInterval(ms).description%"
+          "markdownDescription": "%config.tasksPanel.refreshInterval(ms).description%"
         },
         "slurm--.resourcesPanel.refreshInterval(ms)": {
           "type": "integer",
           "default": 2000,
-          "description": "%config.resourcesPanel.refreshInterval(ms).description%"
+          "markdownDescription": "%config.resourcesPanel.refreshInterval(ms).description%"
         },
         "slurm--.commands.user": {
           "type": "string",
           "default": "--me",
-          "description": "%config.commands.user.description%"
+          "markdownDescription": "%config.commands.user.description%"
         },
         "slurm--.tasksPanel.sortBy": {
           "type": "string",
@@ -456,7 +498,7 @@
           ],
           "enumItemLabels": ["%config.label.id%", "%config.label.name%"],
           "default": "id",
-          "description": "%config.tasksPanel.sortBy.description%"
+          "markdownDescription": "%config.tasksPanel.sortBy.description%"
         },
         "slurm--.tasksPanel.sortDirection": {
           "type": "string",
@@ -467,7 +509,12 @@
           ],
           "enumItemLabels": ["%config.label.ascending%", "%config.label.descending%"],
           "default": "ascending",
-          "description": "%config.tasksPanel.sortDirection.description%"
+          "markdownDescription": "%config.tasksPanel.sortDirection.description%"
+        },
+        "slurm--.tasksPanel.showShortcutKey": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "%config.tasksPanel.showShortcutKey.description%"
         },
         "slurm--.resourcesPanel.sortBy": {
           "type": "string",
@@ -478,7 +525,7 @@
           ],
           "enumItemLabels": ["%config.label.name%", "%config.label.availability%"],
           "default": "name",
-          "description": "%config.resourcesPanel.sortBy.description%"
+          "markdownDescription": "%config.resourcesPanel.sortBy.description%"
         },
         "slurm--.resourcesPanel.sortDirection": {
           "type": "string",
@@ -489,7 +536,7 @@
           ],
           "enumItemLabels": ["%config.label.ascending%", "%config.label.descending%"],
           "default": "ascending",
-          "description": "%config.resourcesPanel.sortDirection.description%"
+          "markdownDescription": "%config.resourcesPanel.sortDirection.description%"
         }
       }
     },

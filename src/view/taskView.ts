@@ -21,8 +21,8 @@ const sortFn = new Map([
 ]);
 
 function getGroupedTask(tasks: Task[]): ListItem[] {
-    let running = tasks.filter(v => !v.finished).sort(resignFn(sortFn.get(configService.taskSortKey)!, configService.gresSortAscending));
-    let finished = tasks.filter(v => v.finished).sort(resignFn(sortFn.get(configService.taskSortKey)!, configService.gresSortAscending));
+    let running = tasks.filter(v => !v.finished).sort(resignFn(sortFn.get(configService.taskSortKey)!, configService.taskSortAscending));
+    let finished = tasks.filter(v => v.finished).sort(resignFn(sortFn.get(configService.taskSortKey)!, configService.taskSortAscending));
     return [
         new ListItem(vscode.l10n.t('running'), running.map((value) => { return new TaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'taskList'),
         new ListItem(vscode.l10n.t('finished'), finished.map((value) => { return new FinishedTaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'finishedTaskList'),
