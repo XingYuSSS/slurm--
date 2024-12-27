@@ -97,11 +97,11 @@ class ConfigService {
         this.#taskSortDirection = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortDirection') as string ?? 'ascending';
         this.#taskShowShortcutKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showShortcutKey') as boolean ?? true;
         
-        this.gresSortKey = this.gresSortKey;
-        this.taskSortKey = this.taskSortKey;
-        this.gresSortDirection = this.gresSortDirection;
-        this.taskSortDirection = this.taskSortDirection;
-        this.taskShowShortcutKey = this.taskShowShortcutKey;
+        vscode.commands.executeCommand('setContext', 'taskSortKey', this.#taskSortKey);
+        vscode.commands.executeCommand('setContext', 'taskSortDirection', this.#taskSortDirection);
+        vscode.commands.executeCommand('setContext', 'taskShowShortcutKey', this.#taskShowShortcutKey);
+        vscode.commands.executeCommand('setContext', 'gresSortDirection', this.#gresSortDirection);
+        vscode.commands.executeCommand('setContext', 'gresSortKey', this.#gresSortKey);
     }
 }
 
