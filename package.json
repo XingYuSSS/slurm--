@@ -2,7 +2,7 @@
   "name": "slurm--extension",
   "displayName": "slurm--",
   "markdownDescription": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
     "vscode": "^1.89.0"
@@ -491,23 +491,35 @@
         },
         "slurm--.tasksPanel.sortBy": {
           "type": "string",
-          "enum": ["id", "name"],
+          "enum": [
+            "id",
+            "name"
+          ],
           "markdownEnumDescriptions": [
             "%config.tasksPanel.sortBy.id.description%",
             "%config.tasksPanel.sortBy.name.description%"
           ],
-          "enumItemLabels": ["%config.label.id%", "%config.label.name%"],
+          "enumItemLabels": [
+            "%config.label.id%",
+            "%config.label.name%"
+          ],
           "default": "id",
           "markdownDescription": "%config.tasksPanel.sortBy.description%"
         },
         "slurm--.tasksPanel.sortDirection": {
           "type": "string",
-          "enum": ["ascending", "descending"],
+          "enum": [
+            "ascending",
+            "descending"
+          ],
           "markdownEnumDescriptions": [
             "%config.sortDirection.ascending.description%",
             "%config.sortDirection.descending.description%"
           ],
-          "enumItemLabels": ["%config.label.ascending%", "%config.label.descending%"],
+          "enumItemLabels": [
+            "%config.label.ascending%",
+            "%config.label.descending%"
+          ],
           "default": "ascending",
           "markdownDescription": "%config.tasksPanel.sortDirection.description%"
         },
@@ -518,23 +530,35 @@
         },
         "slurm--.resourcesPanel.sortBy": {
           "type": "string",
-          "enum": ["name", "availability"],
+          "enum": [
+            "name",
+            "availability"
+          ],
           "markdownEnumDescriptions": [
             "%config.resourcesPanel.sortBy.name.description%",
             "%config.resourcesPanel.sortBy.availability.description%"
           ],
-          "enumItemLabels": ["%config.label.name%", "%config.label.availability%"],
+          "enumItemLabels": [
+            "%config.label.name%",
+            "%config.label.availability%"
+          ],
           "default": "name",
           "markdownDescription": "%config.resourcesPanel.sortBy.description%"
         },
         "slurm--.resourcesPanel.sortDirection": {
           "type": "string",
-          "enum": ["ascending", "descending"],
+          "enum": [
+            "ascending",
+            "descending"
+          ],
           "markdownEnumDescriptions": [
             "%config.sortDirection.ascending.description%",
             "%config.sortDirection.descending.description%"
           ],
-          "enumItemLabels": ["%config.label.ascending%", "%config.label.descending%"],
+          "enumItemLabels": [
+            "%config.label.ascending%",
+            "%config.label.descending%"
+          ],
           "default": "ascending",
           "markdownDescription": "%config.resourcesPanel.sortDirection.description%"
         }
