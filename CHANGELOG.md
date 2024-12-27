@@ -6,6 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.7.0][0.7.0] - 2024-12-27
+
+### Added
+
+- Add sorting options for the menu of task view and resource view
+  - sort keys
+  - sort order
+- Add sorting options in configuration
+- Add `cancel all tasks` button and command
+- Add shortcut keys for open task logfiles
+
+### Changed
+
+- Improve the command line parsing of `squeue` and `sinfo`
+
 ## [0.6.1][0.6.1] - 2024-12-04
 
 ### Fixed
@@ -211,7 +226,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.6.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/XingYuSSS/slurm--/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/XingYuSSS/slurm--/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/XingYuSSS/slurm--/compare/v0.5.3...v0.6.0
 [0.5.3]: https://github.com/XingYuSSS/slurm--/compare/v0.5.2...v0.5.3

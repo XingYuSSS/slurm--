@@ -56,5 +56,9 @@ export class ResourceGres extends Gres {
         rgresArray.slice(1).forEach(v => { rgres.add(v); });
         return rgres;
     }
+
+    static empty(id: string): ResourceGres {
+        return new ResourceGres(`${id}:0`, `${id}:0`);
+    }
 }
 

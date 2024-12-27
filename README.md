@@ -1,6 +1,6 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.6.1-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.6.1/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.7.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.7.0/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
@@ -19,16 +19,27 @@ We are continuously developing this extension, if there is a feature you would l
 ### task manager
 
 - show slurm running tasks and informations
-- record task state, and when they finished
+
+- record running tasks, and confirm them when finished
+
+- sort tasks by id or name
+
+- convenient opening of log files
+> Click on `stdout` or `stderr` to open the file
+
 - select multiple running tasks and cancel them
+> Select tasks by `ctrl` or `shift` and press `delete` to cancel them
+
+- cancel all running tasks
 
 ![task](assets/pics/task.png)
-
-> Click on `stdout` or `stderr` to open the file
 
 ### resources viewer
 
 - show availabel resources about nodes and GRES
+
+- sort resources by name or availability
+
 - launch terminal with chosen GRES
 
 ![resource](assets/pics/resource.png)

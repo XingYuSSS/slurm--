@@ -9,8 +9,23 @@ import { LogFileItem, TaskItem } from '../view/components';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
-function extractTask(taskString: string, short_length: number, long_length: number): Task[] {
-    let slices = [short_length, long_length, short_length, short_length, short_length, short_length, short_length, short_length, long_length, long_length, long_length, short_length];
+const fieldMap = new Map([
+    ["JobID", 20],
+    ["Name", 100],
+    ["Username", 50],
+    ["State", 20],
+    ["NodeList", 50],
+    ["Gres", 50],
+    ["TimeLimit", 20],
+    ["TimeUsed", 20],
+    ["Command", 255],
+    ["STDOUT", 255],
+    ["STDERR", 255],
+    ["Reason", 50]
+]);
+
+function extractTask(taskString: string): Task[] {
+    let slices = Array.from(fieldMap.values());
     slices.reduce((arr, currentValue, currentIndex) => {
         if (currentIndex > 0) {
             slices[currentIndex] = slices[currentIndex - 1] + currentValue;
@@ -35,9 +50,7 @@ function extractTask(taskString: string, short_length: number, long_length: numb
 }
 
 async function refreshUserTasks() {
-    const short = 50;
-    const long = 255;
-    const user = configService.option_user;
+    const user = configService.optionUser;
     if (user === '') {
         const result = await vscode.window.showWarningMessage(
             vscode.l10n.t(`You didn't set user option, this will show ALL tasks in your system, continue?`),
@@ -52,12 +65,13 @@ async function refreshUserTasks() {
             return;
         }
     }
-    const [out, err] = await executeCmd(`squeue ${user} --noheader -O JobID:${short},Name:${long},Username:${short},State:${short},NodeList:${short},Gres:${short},TimeLimit:${short},TimeUsed:${short},Command:${long},STDOUT:${long},STDERR:${long},Reason:${short}`);
+    const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
+    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
     }
-    taskService.updateTask(...extractTask(out, short, long));
+    taskService.updateTask(...extractTask(out));
     taskView.taskViewDataProvider.refresh();
 }
 
@@ -84,6 +98,23 @@ async function cancelSelectedTasks() {
     const tasks = taskView.selectedTaskItems.map(v => v.task);
     const result = await vscode.window.showWarningMessage(
         vscode.l10n.t(`This will cancel {0} tasks below: `, tasks.length) + tasks.map(v => v.name).join('; '),
+        vscode.l10n.t('Yes'),
+        vscode.l10n.t('No')
+    );
+    if (result === vscode.l10n.t('Yes')) {
+        tasks.forEach(v => {
+            executeCmd(`scancel ${v.jobid}`);
+            taskService.deleteTask(v.jobid);
+        });
+        taskView.taskViewDataProvider.refresh();
+    } else if (result === vscode.l10n.t('No')) {
+    }
+}
+
+async function cancelAllTasks() {
+    const tasks = taskService.getTask().filter(v => !v.finished);
+    const result = await vscode.window.showWarningMessage(
+        vscode.l10n.t(`This will cancel all {0} tasks below (unscaned tasks will not be canceled): `, tasks.length) + tasks.map(v => v.name).join('; '),
         vscode.l10n.t('Yes'),
         vscode.l10n.t('No')
     );
@@ -127,17 +158,28 @@ async function openFile(file: LogFile) {
     file.open();
 }
 
+async function openStdout(task: TaskItem) {
+    task.task.out_path.open();
+}
+
+async function openStderr(task: TaskItem) {
+    task.task.err_path.open();
+}
+
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelSelectedTasks', cancelSelectedTasks));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelAllTasks', cancelAllTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshTask', autoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTask', confirmTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmAllTask', confirmAllTask));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStdout', openStdout));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStderr', openStderr));
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
     vscode.commands.executeCommand('slurm--.refreshUserTasks');
