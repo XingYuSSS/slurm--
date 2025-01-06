@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add shell executor cache for tasks and resoures
+  - Add executor cache timeout configuration
+
+### Changed
+
+- Hide some commands in command palette
+
 ## [0.7.0][0.7.0] - 2024-12-27
 
 ### Added

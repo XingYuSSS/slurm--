@@ -5,7 +5,7 @@ import { LogFile, Task } from '../models';
 import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
 import { LogFileItem, TaskItem } from '../view/components';
-
+import * as path from 'path';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -23,6 +23,8 @@ const fieldMap = new Map([
     ["STDERR", 255],
     ["Reason", 50]
 ]);
+
+let cachePath: string;
 
 function extractTask(taskString: string): Task[] {
     let slices = Array.from(fieldMap.values());
@@ -66,7 +68,7 @@ async function refreshUserTasks() {
         }
     }
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`);
+    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`, cachePath);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
@@ -183,6 +185,8 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
     vscode.commands.executeCommand('slurm--.refreshUserTasks');
+
+    cachePath = path.join(context.globalStorageUri.fsPath, 'tasks_cache.json');
 }
 
 

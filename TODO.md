@@ -12,6 +12,9 @@
 - [X] sort direction
 - [ ] group and count by state, command or start time
 - [ ] start and end time
+- [ ] job array support
+  - [ ] parsing job array
+  - [ ] show job array infos
 ## Resources
 - [X] scan availabal GRES and Memory
 - [X] auto refreash
@@ -28,5 +31,5 @@
 - [ ] Shell scripts reader
 ## Others
 - [X] l10n support
-- [ ] cmd cache
+- [X] cmd cache
 - [ ] custom cmd out buffer

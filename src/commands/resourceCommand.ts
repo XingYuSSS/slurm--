@@ -5,6 +5,7 @@ import { Node } from '../models';
 import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
 import { ListItem, NodeItem } from '../view/components';
+import * as path from 'path';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -18,6 +19,8 @@ const fieldMap = new Map([
     ["Partition", 20],
     ["StateLong", 20],
 ]);
+
+let cachePath: string;
 
 function extractNodes(nodeString: string): Node[] {
     let slices = Array.from(fieldMap.values());
@@ -46,7 +49,7 @@ function extractNodes(nodeString: string): Node[] {
 
 async function refreshResources() {
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`sinfo --noheader --Node -O ${query}`);
+    const [out, err] = await executeCmd(`sinfo --noheader --Node -O ${query}`, cachePath);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
@@ -86,4 +89,6 @@ export function initResourceCmd(context: vscode.ExtensionContext) {
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
     vscode.commands.executeCommand('slurm--.refreshResources');
+
+    cachePath = path.join(context.globalStorageUri.fsPath, 'resources_cache.json');
 }
