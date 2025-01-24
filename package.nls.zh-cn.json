@@ -61,5 +61,8 @@
     "config.label.descending": "降序",
     "config.tasksPanel.sortDirection.description": "任务的排列顺序",
     "config.resourcesPanel.sortDirection.description": "节点和资源的排列顺序",
-    "config.tasksPanel.showShortcutKey.description": "展示任务界面打开日志文件的快捷键"
+    "config.tasksPanel.showShortcutKey.description": "展示任务界面打开日志文件的快捷键",
+
+    "config.tasksPanel.cacheTimeout.description": "任务刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
+    "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。"
 }

@@ -469,6 +469,120 @@
           "group": "inline",
           "when": "view == slurm--_launcher_view && viewItem == argItem"
         }
+      ],
+      "commandPalette": [
+        {
+          "command": "slurm--.setTaskSortById",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedTaskSortById",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setTaskSortByName",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedTaskSortByName",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setTaskSortAscend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedTaskSortAscend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setTaskSortDescend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedTaskSortDescend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setResourceSortByName",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedResourceSortByName",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setResourceSortByAvail",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedResourceSortByAvail",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setResourceSortAscend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedResourceSortAscend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.setResourceSortDescend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedResourceSortDescend",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.cancelTask",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.cancelSelectedTasks",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.confirmTask",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.openStdout",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.openStderr",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.copyGres",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.launchTerminal",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.launchScript",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.removeScript",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.deleteArg",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.changeArg",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.openFile",
+          "when": "false"
+        }
       ]
     },
     "configuration": {
@@ -561,6 +675,16 @@
           ],
           "default": "ascending",
           "markdownDescription": "%config.resourcesPanel.sortDirection.description%"
+        },
+        "slurm--.tasksPanel.cacheTimeout": {
+          "type": "integer",
+          "default": 1000,
+          "markdownDescription": "%config.tasksPanel.cacheTimeout.description%"
+        },
+        "slurm--.resourcesPanel.cacheTimeout": {
+          "type": "integer",
+          "default": 1000,
+          "markdownDescription": "%config.resourcesPanel.cacheTimeout.description%"
         }
       }
     },

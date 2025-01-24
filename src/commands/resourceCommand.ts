@@ -5,6 +5,7 @@ import { Node } from '../models';
 import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
 import { ListItem, NodeItem } from '../view/components';
+import * as path from 'path';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -19,6 +20,8 @@ const fieldMap = new Map([
     ["StateLong", 20],
 ]);
 
+let cachePath: string;
+
 function extractNodes(nodeString: string): Node[] {
     let slices = Array.from(fieldMap.values());
     slices.reduce((arr, currentValue, currentIndex) => {
@@ -29,13 +32,16 @@ function extractNodes(nodeString: string): Node[] {
     }, 0);
     slices.unshift(0);
 
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder('utf-8');
     let nodeList: Node[] = [];
     nodeString.split('\n').forEach((value) => {
         // NODELIST:15,Available:15,Memory:15,AllocMem:15,Gres:50,GresUsed:50,Partition:15,StateLong:15
         if (value.length === 0) { return; }
 
+        const encodedValue = encoder.encode(value);
         let fields: string[] = slices.slice(1).reduce((arr: string[], v, i) => {
-            arr.push(value.substring(v, slices[i]).trim());
+            arr.push(decoder.decode(encodedValue.slice(slices[i], v)).trim());
             return arr;
         }, []);
         const node = new Node(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7]);
@@ -46,7 +52,7 @@ function extractNodes(nodeString: string): Node[] {
 
 async function refreshResources() {
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`sinfo --noheader --Node -O ${query}`);
+    const [out, err] = await executeCmd(`sinfo --noheader --Node -O ${query}`, cachePath, configService.resourceCacheTimeout);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
@@ -86,4 +92,6 @@ export function initResourceCmd(context: vscode.ExtensionContext) {
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
     vscode.commands.executeCommand('slurm--.refreshResources');
+
+    cachePath = path.join(context.globalStorageUri.fsPath, 'resources_cache.json');
 }

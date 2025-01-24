@@ -61,5 +61,8 @@
     "config.label.descending": "Descending",
     "config.tasksPanel.sortDirection.description": "Sorting order of tasks",
     "config.resourcesPanel.sortDirection.description": "Sorting order of Node and GRES",
-    "config.tasksPanel.showShortcutKey.description": "Show shortcut key for open log files in task panel"
+    "config.tasksPanel.showShortcutKey.description": "Show shortcut key for open log files in task panel",
+
+    "config.tasksPanel.cacheTimeout.description": "The timeout of the task refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
+    "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly."
 }
