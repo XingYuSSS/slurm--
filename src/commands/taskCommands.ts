@@ -36,13 +36,16 @@ function extractTask(taskString: string): Task[] {
     }, 0);
     slices.unshift(0);
 
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder('utf-8');
     let taskList: Task[] = [];
     taskString.split('\n').forEach((value) => {
-        // JobID,Name:255,Username:50,State:50,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100
+        // JobID:20,Name:100,Username:50,State:20,NodeList:50,Gres:50,TimeLimit:20,TimeUsed:20,Command:255,STDOUT:255,STDERR:255,Reason:50
         if (value.length === 0) { return; }
 
+        const encodedValue = encoder.encode(value);
         let fields: string[] = slices.slice(1).reduce((arr: string[], v, i) => {
-            arr.push(value.substring(v, slices[i]).trim());
+            arr.push(decoder.decode(encodedValue.slice(slices[i], v)).trim());
             return arr;
         }, []);
         const task = new Task(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8], fields[9], fields[10], fields[11]);
@@ -68,7 +71,7 @@ async function refreshUserTasks() {
         }
     }
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`, cachePath);
+    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;

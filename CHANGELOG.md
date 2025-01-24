@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.7.1][0.7.1] - 2025-01-24
+
 ### Added
 
 - Add shell executor cache for tasks and resoures
@@ -14,6 +16,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 - Hide some commands in command palette
+
+### Fixed
+
+- Fixed parsing error when name contains non-English characters, now supports all utf-8 characters in the name
 
 ## [0.7.0][0.7.0] - 2024-12-27
 
@@ -235,7 +241,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/XingYuSSS/slurm--/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/XingYuSSS/slurm--/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/XingYuSSS/slurm--/compare/v0.5.3...v0.6.0

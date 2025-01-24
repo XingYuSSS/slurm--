@@ -6,7 +6,7 @@ import * as fs from 'fs';
 const execAsync = promisify(childProcess.exec);
 
 export async function executeCmd(cmd: string, cachePath?: string, cacheTimeout?: number): Promise<[string, string]> {
-    if (cachePath && fs.existsSync(cachePath)) {
+    if (cacheTimeout !== 0 && cachePath && fs.existsSync(cachePath)) {
         const jsonData = fs.readFileSync(cachePath, 'utf8');
         const saveObject = JSON.parse(jsonData);
         const now = Date.now();
@@ -21,7 +21,7 @@ export async function executeCmd(cmd: string, cachePath?: string, cacheTimeout?:
     };
     try {
         const { stdout, stderr } = await execAsync(cmd, options);
-        if (cachePath) {
+        if (cacheTimeout !== 0 && cachePath) {
             const saveObject = {
                 'time': Date.now(),
                 'cmd': cmd,

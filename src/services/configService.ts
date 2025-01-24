@@ -25,6 +25,12 @@ class ConfigService {
     public get optionUser(): string {
         return vscode.workspace.getConfiguration('slurm--.commands').get('user') ?? '--me';
     }
+    public get taskCacheTimeout(): number {
+        return vscode.workspace.getConfiguration('slurm--.tasksPanel').get('cacheTimeout') ?? 1000;
+    }
+    public get resourceCacheTimeout(): number {
+        return vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('cacheTimeout') ?? 1000;
+    }
 
     #taskSortKey!: string;
     public get taskSortKey(): TaskSortKeys {
