@@ -7,9 +7,9 @@ function taskDescription(task: Task): string {
 
 function taskTooltip(task: Task): vscode.MarkdownString {
     return new vscode.MarkdownString(`
-| id | user | status | gres |
-|:--:|:--:|:--:|:--:|
-| ${task.jobid} | ${task.user} | ${task.state} | ${task.gres} |
+| id | user | status | nodelist | gres |
+|:--:|:--:|:--:|:--:|:--:|
+| ${task.jobid} | ${task.user} | ${task.state} | ${task.node} | ${task.gres ?? 'No GRES'} |
     `);
 }
 

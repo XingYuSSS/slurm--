@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add slurm node to job info ([#4](https://github.com/XingYuSSS/slurm--/issues/4))
+
 ## [0.7.1][0.7.1] - 2025-01-24
 
 ### Added
