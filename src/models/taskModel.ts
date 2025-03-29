@@ -2,6 +2,37 @@ import { LogFile } from "./logFileModel";
 import { Gres } from "./gresModel";
 
 
+function parseFilename(
+    pattern: string,
+    jobid: number | string,
+    name: string,
+    user: string,
+    node: string,
+    stepid?: number,
+): string {
+    console.log(pattern)
+    if (pattern.includes('\\')) { return pattern.replaceAll('\\', '') }
+    const replacements: Record<string, string> = {
+        '%A': `${jobid}`,  // Job array master job allocation number
+        '%a': '%a',  // Job array index number, not implemented for now
+        '%b': '%b',  // Job array index modulo 10, not implemented for now
+        '%J': stepid ? `${jobid}.${stepid}` : `${jobid}`,  // jobid.stepid
+        '%j': `${jobid}`,  // jobid
+        '%N': `${node}`,  // short hostname
+        '%n': '0',  // node identifier, not implemented for now
+        '%s': stepid?.toString() ?? '%s',  // stepid
+        '%t': '0',  // task identifier, not implemented for now
+        '%u': user,  // user name
+        '%x': name,  // job name
+    };
+
+    pattern = pattern.replace('%%', '\0');
+    pattern = pattern.replace(/%([A-Za-z])/g, (match, p1) => replacements[`%${p1}`] ?? match);
+    return pattern.replace('\0', '%');
+}
+
+
+
 export enum TaskState {
     R = "RUNNING",
     PD = "PENDING",
@@ -42,7 +73,7 @@ export class Task {
         finished?: boolean,
     ) {
         this.jobid = typeof jobid === "string" ? parseInt(jobid) : jobid;
-        this.name = name.replace(/%j/i, jobid.toString());
+        this.name = name;
         this.user = user;
         this.state = state;
         this.node = node;
@@ -50,8 +81,8 @@ export class Task {
         this.limit_time = limit_time;
         this.runing_time = runing_time;
         this.command = command;
-        this.out_path = typeof out_path === "string" ? new LogFile(out_path.replace(/%j/i, jobid.toString())) : out_path;
-        this.err_path = typeof err_path === "string" ? new LogFile(err_path.replace(/%j/i, jobid.toString())) : err_path;
+        this.out_path = typeof out_path === "string" ? new LogFile(parseFilename(out_path, jobid, name, user, node)) : out_path;
+        this.err_path = typeof err_path === "string" ? new LogFile(parseFilename(err_path, jobid, name, user, node)) : err_path;
         this.reason = reason === 'None' ? '' : reason;
         this.finished = finished ?? false;
     }

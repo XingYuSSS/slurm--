@@ -10,6 +10,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Add slurm node to job info ([#4](https://github.com/XingYuSSS/slurm--/issues/4))
 
+### Fixed
+
+- Parse more [slurm file patterns](https://slurm.schedmd.com/sbatch.html#SECTION_FILENAME-PATTERN) ([#3](https://github.com/XingYuSSS/slurm--/issues/3))
+
 ## [0.7.1][0.7.1] - 2025-01-24
 
 ### Added
