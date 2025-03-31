@@ -6,6 +6,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add slurm node to job info ([#4](https://github.com/XingYuSSS/slurm--/issues/4))
+- Add `show filename only` option ([#3](https://github.com/XingYuSSS/slurm--/issues/3))
+
+### Changed
+
+- Treat `command` as an openable file
+
+### Fixed
+
+- Parse more [slurm file patterns](https://slurm.schedmd.com/sbatch.html#SECTION_FILENAME-PATTERN) ([#3](https://github.com/XingYuSSS/slurm--/issues/3))
+
 ## [0.7.1][0.7.1] - 2025-01-24
 
 ### Added
