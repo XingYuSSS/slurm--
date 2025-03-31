@@ -10,9 +10,9 @@ function getTaskInfoItems(task: Task): vscode.TreeItem[] {
         new InfoItem(task.jobid.toString(), 'id'),
         new InfoItem(task.node, 'nodelist'),
         new InfoItem(task.gres?.toString() ?? 'No GRES', 'GRES'),
-        new InfoItem(task.command, 'command'),
-        new LogFileItem(task.out_path, 'stdout'),
-        new LogFileItem(task.err_path, 'stderr'),
+        new LogFileItem(task.command, 'command', undefined, configService.taskShowFilenameOnly),
+        new LogFileItem(task.out_path, 'stdout', undefined, configService.taskShowFilenameOnly),
+        new LogFileItem(task.err_path, 'stderr', undefined, configService.taskShowFilenameOnly),
     ];
 }
 

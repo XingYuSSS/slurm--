@@ -243,6 +243,16 @@
         "command": "slurm--.hideTaskShortcutKey",
         "title": "%slurm--.hideShortcutKey.title%",
         "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setTaskFilenameOnly",
+        "title": "%slurm--.setFilenameOnly.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.unsetTaskFilenameOnly",
+        "title": "%slurm--.unsetFilenameOnly.title%",
+        "category": "slurm--"
       }
     ],
     "viewsContainers": {
@@ -403,6 +413,16 @@
           "command": "slurm--.hideTaskShortcutKey",
           "when": "view == slurm--_tasks_view && taskShowShortcutKey",
           "group": "common@1"
+        },
+        {
+          "command": "slurm--.setTaskFilenameOnly",
+          "when": "view == slurm--_tasks_view && !showFilenameOnly",
+          "group": "common@2"
+        },
+        {
+          "command": "slurm--.unsetTaskFilenameOnly",
+          "when": "view == slurm--_tasks_view && showFilenameOnly",
+          "group": "common@2"
         }
       ],
       "view/item/context": [
@@ -641,6 +661,11 @@
           "type": "boolean",
           "default": false,
           "markdownDescription": "%config.tasksPanel.showShortcutKey.description%"
+        },
+        "slurm--.tasksPanel.showFilenameOnly": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "%config.tasksPanel.showFilenameOnly.description%"
         },
         "slurm--.resourcesPanel.sortBy": {
           "type": "string",

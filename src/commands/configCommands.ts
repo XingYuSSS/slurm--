@@ -10,6 +10,11 @@ function getOpenConfig(context: vscode.ExtensionContext) {
     };
 }
 
+function setTaskFilenameOnly(only: boolean) {
+    configService.taskShowFilenameOnly = only;
+    taskViewDataProvider.refresh();
+}
+
 function setTaskSortKey(key: TaskSortKeys) {
     configService.taskSortKey = key;
     taskViewDataProvider.refresh();
@@ -37,6 +42,9 @@ function setTaskShowShortcutKey(show: boolean) {
 export function initConfigCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openConfig', getOpenConfig(context)));
 
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskFilenameOnly', () => setTaskFilenameOnly(true)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.unsetTaskFilenameOnly', () => setTaskFilenameOnly(false)));
+    
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskSortById', () => setTaskSortKey(TaskSortKeys.ID)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskSortByName', () => setTaskSortKey(TaskSortKeys.NAME)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedTaskSortById', () => setTaskSortKey(TaskSortKeys.ID)));

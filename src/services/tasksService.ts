@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { Task, Gres, LogFile } from '../models';
+import { Task, Gres, LogFile, TaskProperties } from '../models';
 
 export class TaskService {
     private storagePath;
@@ -27,24 +27,25 @@ export class TaskService {
     }
 
     private loadTask() {
+        this.taskMap = new Map();
+
         if (fs.existsSync(this.storagePath)) {
             const jsonData = fs.readFileSync(this.storagePath, 'utf8');
             const saveMap = JSON.parse(jsonData);
-            this.taskMap = new Map(saveMap);
-            this.taskMap.forEach((v, k) => this.taskMap.set(k, Task.fromObject(v)));
-        } else {
-            this.taskMap = new Map();
+            const taskMap = new Map(saveMap) as Map<number, TaskProperties>;
+            
+            taskMap.forEach((v, k) => this.taskMap.set(k, Task.fromObject(v)));
         }
     }
 
     private saveTask() {
         const arrData = Array.from(this.taskMap.entries());
-        const jsonData = JSON.stringify(arrData, (k, v)=>{
+        const jsonData = JSON.stringify(arrData, (k, v) => {
             if (k === 'gres') {
                 if (v === null) { return 'N/A'; }
                 return Gres.prototype.toString.call(v);
             }
-            if (k === 'out_path' || k === 'err_path') {
+            if (k === 'out_path' || k === 'err_path' || k === 'command') {
                 return LogFile.prototype.toString.call(v);
             }
             return v;

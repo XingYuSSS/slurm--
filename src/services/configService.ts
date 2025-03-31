@@ -65,6 +65,16 @@ class ConfigService {
         this.#taskShowShortcutKey = show;
     }
 
+    #taskShowFilenameOnly!: boolean;
+    public get taskShowFilenameOnly(): boolean {
+        return this.#taskShowFilenameOnly;
+    }
+    public set taskShowFilenameOnly(only: boolean) {
+        vscode.workspace.getConfiguration('slurm--.tasksPanel').update('showFilenameOnly', only);
+        vscode.commands.executeCommand('setContext', 'showFilenameOnly', only);
+        this.#taskShowFilenameOnly = only;
+    }
+
     #gresSortKey!: string;
     public get gresSortKey(): GresSortKeys {
         return this.#gresSortKey as GresSortKeys;
@@ -102,10 +112,12 @@ class ConfigService {
         this.#gresSortDirection = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortDirection') as string ?? 'ascending';
         this.#taskSortDirection = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortDirection') as string ?? 'ascending';
         this.#taskShowShortcutKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showShortcutKey') as boolean ?? true;
+        this.#taskShowFilenameOnly = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showFilenameOnly') as boolean ?? true;
         
         vscode.commands.executeCommand('setContext', 'taskSortKey', this.#taskSortKey);
         vscode.commands.executeCommand('setContext', 'taskSortDirection', this.#taskSortDirection);
         vscode.commands.executeCommand('setContext', 'taskShowShortcutKey', this.#taskShowShortcutKey);
+        vscode.commands.executeCommand('setContext', 'showFilenameOnly', this.#taskShowFilenameOnly);
         vscode.commands.executeCommand('setContext', 'gresSortDirection', this.#gresSortDirection);
         vscode.commands.executeCommand('setContext', 'gresSortKey', this.#gresSortKey);
     }

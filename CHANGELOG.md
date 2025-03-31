@@ -9,6 +9,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Add slurm node to job info ([#4](https://github.com/XingYuSSS/slurm--/issues/4))
+- Add `show filename only` option ([#3](https://github.com/XingYuSSS/slurm--/issues/3))
+
+### Changed
+
+- Treat `command` as an openable file
 
 ### Fixed
 

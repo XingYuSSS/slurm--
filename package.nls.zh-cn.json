@@ -38,6 +38,9 @@
     "slurm--.showShortcutKey.title": "展示快捷键",
     "slurm--.hideShortcutKey.title": "隐藏快捷键",
 
+    "slurm--.setFilenameOnly.title": "仅展示文件名",
+    "slurm--.unsetFilenameOnly.title": "展示完整路径",
+
     "slurm--_tasks_view.name": "任务",
     "slurm--_resource_view.name": "资源",
     "slurm--_launcher_view.name": "启动",
@@ -62,6 +65,7 @@
     "config.tasksPanel.sortDirection.description": "任务的排列顺序",
     "config.resourcesPanel.sortDirection.description": "节点和资源的排列顺序",
     "config.tasksPanel.showShortcutKey.description": "展示任务界面打开日志文件的快捷键",
+    "config.tasksPanel.showFilenameOnly.description": "只展示文件名或展示完整路径. 影响 `command`, `stdout` 及 `stderr` 文件.",
 
     "config.tasksPanel.cacheTimeout.description": "任务刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
     "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。"

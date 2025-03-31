@@ -10,7 +10,6 @@ function parseFilename(
     node: string,
     stepid?: number,
 ): string {
-    console.log(pattern)
     if (pattern.includes('\\')) { return pattern.replaceAll('\\', '') }
     const replacements: Record<string, string> = {
         '%A': `${jobid}`,  // Job array master job allocation number
@@ -39,6 +38,10 @@ export enum TaskState {
     CG = "COMPLETING",
 }
 
+export type TaskProperties = {
+    [K in keyof Task]: Task[K] extends LogFile ? string : Task[K];
+};
+
 export class Task {
     readonly jobid: number;
     readonly name: string;
@@ -48,14 +51,14 @@ export class Task {
     readonly gres: Gres | null;
     readonly limit_time: string;
     runing_time: string;
-    readonly command: string;
+    readonly command: LogFile;
     readonly out_path: LogFile;
     readonly err_path: LogFile;
     reason: string;
     finished: boolean;
     //JobID,Name:255,Username:20,State:20,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100
     constructor(jobid: string, name: string, user: string, state: string, node: string, gres: string, limit_time: string, runing_time: string, command: string, out_path: string, err_path: string, reason: string)
-    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres | null, limit_time: string, runing_time: string, command: string, out_path: LogFile, err_path: LogFile, reason: string, finished: boolean)
+    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres | null, limit_time: string, runing_time: string, command: LogFile, out_path: LogFile, err_path: LogFile, reason: string, finished: boolean)
 
     constructor(
         jobid: number | string,
@@ -66,7 +69,7 @@ export class Task {
         gres: string | Gres | null,
         limit_time: string,
         runing_time: string,
-        command: string,
+        command: string | LogFile,
         out_path: string | LogFile,
         err_path: string | LogFile,
         reason: string,
@@ -80,14 +83,14 @@ export class Task {
         this.gres = typeof gres === "string" ? (gres === 'N/A' ? null : new Gres(gres)) : gres;
         this.limit_time = limit_time;
         this.runing_time = runing_time;
-        this.command = command;
+        this.command = typeof command === "string" ? new LogFile(command) : command;
         this.out_path = typeof out_path === "string" ? new LogFile(parseFilename(out_path, jobid, name, user, node)) : out_path;
         this.err_path = typeof err_path === "string" ? new LogFile(parseFilename(err_path, jobid, name, user, node)) : err_path;
         this.reason = reason === 'None' ? '' : reason;
         this.finished = finished ?? false;
     }
 
-    public static fromObject(obj: Task): Task {
+    public static fromObject(obj: TaskProperties): Task {
         return new Task(
             obj.jobid,
             obj.name,
@@ -97,9 +100,9 @@ export class Task {
             obj.gres,
             obj.limit_time,
             obj.runing_time,
-            obj.command,
-            obj.out_path,
-            obj.err_path,
+            new LogFile(obj.command),
+            new LogFile(obj.out_path),
+            new LogFile(obj.err_path),
             obj.reason,
             obj.finished
         );
