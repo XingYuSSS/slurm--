@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.7.2][0.7.2] - 2025-04-01
+
 ### Added
 
 - Add slurm node to job info ([#4](https://github.com/XingYuSSS/slurm--/issues/4))
@@ -254,7 +256,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.7.2...HEAD
+[0.7.2]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/XingYuSSS/slurm--/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/XingYuSSS/slurm--/compare/v0.6.0...v0.6.1

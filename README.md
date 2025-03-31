@@ -1,6 +1,6 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.7.1-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.7.1/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.7.2-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.7.2/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
