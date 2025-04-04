@@ -10,7 +10,6 @@ import { initLauncherCmd } from './commands/launcherCommand';
 import { initConfigCmd } from './commands/configCommands';
 
 export function activate(context: vscode.ExtensionContext) {
-	// console.log('running')
 
 	initConfigService(context);
 	initTaskService(context);
@@ -24,7 +23,6 @@ export function activate(context: vscode.ExtensionContext) {
 	initTasksView(context);
 	initResourceView(context);
 	initLauncherView(context);
-	
 
 }
 

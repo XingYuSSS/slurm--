@@ -10,7 +10,7 @@ function parseFilename(
     node: string,
     stepid?: number,
 ): string {
-    if (pattern.includes('\\')) { return pattern.replaceAll('\\', '') }
+    if (pattern.includes('\\')) { return pattern.replaceAll('\\', ''); }
     const replacements: Record<string, string> = {
         '%A': `${jobid}`,  // Job array master job allocation number
         '%a': '%a',  // Job array index number, not implemented for now
@@ -55,10 +55,15 @@ export class Task {
     readonly out_path: LogFile;
     readonly err_path: LogFile;
     reason: string;
+    readonly submit_time: string;
+    start_time: string | null;
+    end_time: string | null;
+
     finished: boolean;
+
     //JobID,Name:255,Username:20,State:20,NodeList,Gres:50,TimeLimit,TimeUsed,Command:255,STDOUT:255,STDERR:255,Reason:100
-    constructor(jobid: string, name: string, user: string, state: string, node: string, gres: string, limit_time: string, runing_time: string, command: string, out_path: string, err_path: string, reason: string)
-    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres | null, limit_time: string, runing_time: string, command: LogFile, out_path: LogFile, err_path: LogFile, reason: string, finished: boolean)
+    constructor(jobid: string, name: string, user: string, state: string, node: string, gres: string, limit_time: string, runing_time: string, command: string, out_path: string, err_path: string, reason: string, submit_time: string, start_time: string, end_time: string)
+    constructor(jobid: number, name: string, user: string, state: string, node: string, gres: Gres | null, limit_time: string, runing_time: string, command: LogFile, out_path: LogFile, err_path: LogFile, reason: string, submit_time: string, start_time: string | null, end_time: string | null, finished: boolean)
 
     constructor(
         jobid: number | string,
@@ -73,6 +78,9 @@ export class Task {
         out_path: string | LogFile,
         err_path: string | LogFile,
         reason: string,
+        submit_time: string,
+        start_time: string | null,
+        end_time: string | null,
         finished?: boolean,
     ) {
         this.jobid = typeof jobid === "string" ? parseInt(jobid) : jobid;
@@ -87,6 +95,10 @@ export class Task {
         this.out_path = typeof out_path === "string" ? new LogFile(parseFilename(out_path, jobid, name, user, node)) : out_path;
         this.err_path = typeof err_path === "string" ? new LogFile(parseFilename(err_path, jobid, name, user, node)) : err_path;
         this.reason = reason === 'None' ? '' : reason;
+        this.submit_time = submit_time;
+        this.start_time = start_time === 'N/A' ? null : start_time;
+        this.end_time = end_time === 'N/A' ? null : end_time;
+
         this.finished = finished ?? false;
     }
 
@@ -104,6 +116,9 @@ export class Task {
             new LogFile(obj.out_path),
             new LogFile(obj.err_path),
             obj.reason,
+            obj.submit_time,
+            obj.start_time,
+            obj.end_time,
             obj.finished
         );
     }
@@ -112,9 +127,12 @@ export class Task {
         this.state = task.state;
         this.runing_time = task.runing_time;
         this.reason = task.reason;
+        this.start_time = task.start_time;
+        this.end_time = task.end_time;
     }
 
-    public finish() {
+    public finish(end_time: string) {
+        this.end_time = end_time;
         this.finished = true;
     }
 

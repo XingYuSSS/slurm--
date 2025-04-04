@@ -11,7 +11,7 @@
 - [X] sort by id or name
 - [X] sort direction
 - [ ] group and count by state, command or start time
-- [ ] start and end time
+- [X] start and end time
 - [ ] job array support
   - [ ] parsing job array
   - [ ] show job array infos

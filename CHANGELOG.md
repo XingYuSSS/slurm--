@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add `submit time`, `start time` and `end time` in task info.
+
+### Changed
+
+- Change `save task` method to async for better performance.
+
 ## [0.7.2][0.7.2] - 2025-04-01
 
 ### Added
