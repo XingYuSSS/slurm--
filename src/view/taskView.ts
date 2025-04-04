@@ -6,24 +6,19 @@ import { FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskItem } from './c
 import { resignFn } from '../utils/utils';
 
 function getTaskInfoItems(task: Task): vscode.TreeItem[] {
-    const items = [
+    return [
         new InfoItem(task.jobid.toString(), 'id'),
-        new InfoItem(task.node, 'nodelist'),
+        ...(task.node.length === 0 ? [new InfoItem(task.node, 'nodelist')] : []),
         new InfoItem(task.gres?.toString() ?? 'No GRES', 'GRES'),
         new LogFileItem(task.command, 'command', undefined, configService.taskShowFilenameOnly),
         new LogFileItem(task.out_path, 'stdout', undefined, configService.taskShowFilenameOnly),
         new LogFileItem(task.err_path, 'stderr', undefined, configService.taskShowFilenameOnly),
         new InfoItem(task.submit_time?.replace('T', ' '), 'submited'),
+        ...(task.start_time ? [
+            new InfoItem(task.start_time.replace('T', ' '), 'started'),
+            new InfoItem(task.end_time!.replace('T', ' '), task.finished ? 'finished' : 'finish (exp)'),
+        ] : [])
     ];
-    if (task.start_time) {
-        items.push(new InfoItem(task.start_time.replace('T', ' '), 'started'));
-        if (!task.finished) {
-            items.push(new InfoItem(task.end_time!.replace('T', ' '), 'finish (exp)'));
-        } else {
-            items.push(new InfoItem(task.end_time!.replace('T', ' '), 'finished'));
-        }
-    }
-    return items;
 }
 
 const sortFn = new Map([

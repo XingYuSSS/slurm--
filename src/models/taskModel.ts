@@ -47,7 +47,7 @@ export class Task {
     readonly name: string;
     readonly user: string;
     state: TaskState;
-    readonly node: string;
+    node: string;
     readonly gres: Gres | null;
     readonly limit_time: string;
     runing_time: string;
@@ -125,6 +125,7 @@ export class Task {
 
     public update(task: Task) {
         this.state = task.state;
+        this.node = task.node;
         this.runing_time = task.runing_time;
         this.reason = task.reason;
         this.start_time = task.start_time;
