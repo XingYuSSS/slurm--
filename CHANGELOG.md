@@ -9,6 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Add `submit time`, `start time` and `end time` in task info
+- Add `Set display information` button and command to custom display tasks information
 
 ### Changed
 

@@ -253,6 +253,11 @@
         "command": "slurm--.unsetTaskFilenameOnly",
         "title": "%slurm--.unsetFilenameOnly.title%",
         "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setTaskDisplayInfo",
+        "title": "%slurm--.setTaskDisplayInfo.title%",
+        "category": "slurm--"
       }
     ],
     "viewsContainers": {
@@ -423,6 +428,11 @@
           "command": "slurm--.unsetTaskFilenameOnly",
           "when": "view == slurm--_tasks_view && showFilenameOnly",
           "group": "common@2"
+        },
+        {
+          "command": "slurm--.setTaskDisplayInfo",
+          "when": "view == slurm--_tasks_view",
+          "group": "common@3"
         }
       ],
       "view/item/context": [
@@ -622,6 +632,53 @@
           "type": "string",
           "default": "--me",
           "markdownDescription": "%config.commands.user.description%"
+        },
+        "slurm--.tasksPanel.displayInformation": {
+          "type": "object",
+          "markdownDescription": "%config.tasksPanel.displayInformation.description%",
+          "properties": {
+            "id": {
+              "type": "boolean"
+            },
+            "nodelist": {
+              "type": "boolean"
+            },
+            "GRES": {
+              "type": "boolean"
+            },
+            "command": {
+              "type": "boolean"
+            },
+            "stdout": {
+              "type": "boolean"
+            },
+            "stderr": {
+              "type": "boolean"
+            },
+            "submit": {
+              "type": "boolean"
+            },
+            "start": {
+              "type": "boolean"
+            },
+            "finish": {
+              "type": "boolean"
+            }
+          },
+          "default": {
+            "id": true,
+            "nodelist": true,
+            "GRES": true,
+            "command": true,
+            "stdout": true,
+            "stderr": true,
+            "submit": true,
+            "start": true,
+            "finish": true
+          },
+          "patternProperties": {
+            ".*" : { "type": "boolean" }
+          }
         },
         "slurm--.tasksPanel.sortBy": {
           "type": "string",

@@ -15,6 +15,12 @@ export enum SortDirection {
     DESCEND = 'descending'
 }
 
+export const TaskInfoConfigKeys = ["id", "nodelist", "GRES", "command", "stdout", "stderr", "submit", "start", "finish"];
+
+export type TaskInfoConfig = {
+    [key in typeof TaskInfoConfigKeys[number]]: boolean;
+}
+
 class ConfigService {
     public get taskRefreshInterval_ms(): number {
         return vscode.workspace.getConfiguration('slurm--.tasksPanel').get('refreshInterval(ms)') ?? 3000;
@@ -75,6 +81,15 @@ class ConfigService {
         this.#taskShowFilenameOnly = only;
     }
 
+    #taskDisplayInfo!: TaskInfoConfig;
+    public get taskDisplayInfo(): TaskInfoConfig {
+        return this.#taskDisplayInfo;
+    }
+    public set taskDisplayInfo(info: TaskInfoConfig) {
+        vscode.workspace.getConfiguration('slurm--.tasksPanel').update('displayInformation', info);
+        this.#taskDisplayInfo = info;
+    }
+
     #gresSortKey!: string;
     public get gresSortKey(): GresSortKeys {
         return this.#gresSortKey as GresSortKeys;
@@ -113,6 +128,7 @@ class ConfigService {
         this.#taskSortDirection = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortDirection') as string ?? 'ascending';
         this.#taskShowShortcutKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showShortcutKey') as boolean ?? true;
         this.#taskShowFilenameOnly = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showFilenameOnly') as boolean ?? true;
+        this.#taskDisplayInfo = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('displayInformation') as TaskInfoConfig;
         
         vscode.commands.executeCommand('setContext', 'taskSortKey', this.#taskSortKey);
         vscode.commands.executeCommand('setContext', 'taskSortDirection', this.#taskSortDirection);

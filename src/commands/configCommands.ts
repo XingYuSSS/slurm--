@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { configService, GresSortKeys, SortDirection, TaskSortKeys } from '../services';
+import { configService, GresSortKeys, SortDirection, TaskInfoConfig, TaskInfoConfigKeys, TaskSortKeys } from '../services';
 import { taskViewDataProvider } from '../view/taskView';
 import { resourceViewDataProvider } from '../view/resourceView';
 
@@ -39,12 +39,29 @@ function setTaskShowShortcutKey(show: boolean) {
     configService.taskShowShortcutKey = show;
 }
 
+async function setTaskDisplayInfo() {
+    const showing = configService.taskDisplayInfo;
+    const selected = await vscode.window.showQuickPick(
+        TaskInfoConfigKeys.map(v => { return { label: v, picked: showing[v] }; }),
+        { canPickMany: true, title: vscode.l10n.t('Configure display information for expanded task in tasksPanel') }
+    );
+
+    if (selected === undefined) { return; }
+    const selectedKeys = selected.map(item => item.label);
+    const config = TaskInfoConfigKeys.reduce((acc, item) => {
+        acc[item] = selectedKeys.includes(item);
+        return acc;
+    }, {} as TaskInfoConfig);
+    configService.taskDisplayInfo = config;
+    taskViewDataProvider.refresh();
+}
+
 export function initConfigCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openConfig', getOpenConfig(context)));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskFilenameOnly', () => setTaskFilenameOnly(true)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unsetTaskFilenameOnly', () => setTaskFilenameOnly(false)));
-    
+
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskSortById', () => setTaskSortKey(TaskSortKeys.ID)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskSortByName', () => setTaskSortKey(TaskSortKeys.NAME)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedTaskSortById', () => setTaskSortKey(TaskSortKeys.ID)));
@@ -67,5 +84,7 @@ export function initConfigCmd(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.showTaskShortcutKey', () => setTaskShowShortcutKey(true)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.hideTaskShortcutKey', () => setTaskShowShortcutKey(false)));
+
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskDisplayInfo', setTaskDisplayInfo));
 }
 

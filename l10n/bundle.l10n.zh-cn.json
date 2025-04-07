@@ -26,5 +26,6 @@
   "Choose time": "选择时间",
   "Custom time": "自定义时间",
   "Choose shell": "选择shell",
-  "Custom shell": "自定义shell"
+  "Custom shell": "自定义shell",
+  "Configure display information for expanded task in tasksPanel": "设置任务展开后所展示的信息"
 }
