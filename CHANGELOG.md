@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.8.0][0.8.0] - 2025-04-08
+
 ### Added
 
 - Add `submit time`, `start time` and `end time` in task info
@@ -271,7 +273,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.7.2...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/XingYuSSS/slurm--/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/XingYuSSS/slurm--/compare/v0.6.1...v0.7.0
