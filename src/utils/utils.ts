@@ -43,3 +43,24 @@ export function resignFn<T extends (...args: any[]) => number>(fn: T, sign: bool
         return sign ? result : -result;
     }) as T;
 }
+
+
+const asyncOnceStates: { [key: string]: Promise<any> | null } = {};
+
+export function AsyncOnce<T extends (...args: any[]) => Promise<any>>(fn: T, key?: string): T {
+    return (async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
+        if (key === undefined) { key = fn.name; }
+        
+        if (!asyncOnceStates[key]) {
+            asyncOnceStates[key] = (async () => {
+                try {
+                    return await fn.apply(null, args);
+                } finally {
+                    asyncOnceStates[key] = null;
+                }
+            })();
+        }
+
+        return asyncOnceStates[key] as Awaited<ReturnType<T>>;
+    }) as unknown as T;
+}

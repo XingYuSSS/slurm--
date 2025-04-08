@@ -7,12 +7,17 @@ import { resignFn } from '../utils/utils';
 
 function getTaskInfoItems(task: Task): vscode.TreeItem[] {
     return [
-        new InfoItem(task.jobid.toString(), 'id'),
-        new InfoItem(task.node, 'nodelist'),
-        new InfoItem(task.gres?.toString() ?? 'No GRES', 'GRES'),
-        new LogFileItem(task.command, 'command', undefined, configService.taskShowFilenameOnly),
-        new LogFileItem(task.out_path, 'stdout', undefined, configService.taskShowFilenameOnly),
-        new LogFileItem(task.err_path, 'stderr', undefined, configService.taskShowFilenameOnly),
+        ...(configService.taskDisplayInfo.id ? [new InfoItem(task.jobid.toString(), 'id'),] : []),
+        ...(configService.taskDisplayInfo.nodelist && task.node.length !== 0 ? [new InfoItem(task.node, 'nodelist'),] : []),
+        ...(configService.taskDisplayInfo.GRES ? [new InfoItem(task.gres?.toString() ?? 'No GRES', 'GRES'),] : []),
+        ...(configService.taskDisplayInfo.command ? [new LogFileItem(task.command, 'command', undefined, configService.taskShowFilenameOnly),] : []),
+        ...(configService.taskDisplayInfo.stdout ? [new LogFileItem(task.out_path, 'stdout', undefined, configService.taskShowFilenameOnly),] : []),
+        ...(configService.taskDisplayInfo.stderr ? [new LogFileItem(task.err_path, 'stderr', undefined, configService.taskShowFilenameOnly),] : []),
+        ...(configService.taskDisplayInfo.submit ? [new InfoItem(task.submit_time?.replace('T', ' '), 'submited'),] : []),
+        ...(task.start_time ? [
+            ...(configService.taskDisplayInfo.start ? [new InfoItem(task.start_time.replace('T', ' '), 'started'),] : []),
+            ...(configService.taskDisplayInfo.finish ? [new InfoItem(task.end_time!.replace('T', ' '), task.finished ? 'finished' : 'finish (exp)'),] : []),
+        ] : [])
     ];
 }
 

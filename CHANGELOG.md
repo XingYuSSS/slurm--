@@ -6,6 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add `submit time`, `start time` and `end time` in task info
+- Add `Set display information` button and command to custom display tasks information
+- Add cache for async functions to avoid repeated calls
+
+### Changed
+
+- Change `save task` method to async for better performance
+
+### Fixed
+
+- Fixed the node will not show correctly after running, if the task did not start immediately upon submission
+- Fixed the task marked as finished would be set to finished every refresh
+
 ## [0.7.2][0.7.2] - 2025-04-01
 
 ### Added

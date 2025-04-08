@@ -3,6 +3,30 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { Task, Gres, LogFile, TaskProperties } from '../models';
+import { executeCmd } from '../utils/utils';
+
+async function getFinishTime(taskId: number[]): Promise<Map<number, string>> {
+    if (taskId.length === 0) { return new Map(); }
+    const jobid_len = 40;
+
+    const taskIdStr = taskId.map((v) => String(v));
+    const [out, err] = await executeCmd(`sacct -j ${taskId.join(',')} --format=JobID%${jobid_len},End%25`);
+    if (err) {
+        vscode.window.showErrorMessage(err);
+        return new Map();
+    }
+    const lines = out.split('\n');
+
+    const finishTimes: Map<number, string> = new Map();
+    for (let j = 2; j < lines.length; j++) {
+        const line = lines[j];
+        const jobid = line.slice(0, jobid_len).trim();
+        if (taskIdStr.includes(jobid)) {
+            finishTimes.set(parseInt(jobid), line.slice(jobid_len + 1).trim());
+        }
+    }
+    return finishTimes;
+}
 
 export class TaskService {
     private storagePath;
@@ -33,12 +57,12 @@ export class TaskService {
             const jsonData = fs.readFileSync(this.storagePath, 'utf8');
             const saveMap = JSON.parse(jsonData);
             const taskMap = new Map(saveMap) as Map<number, TaskProperties>;
-            
+
             taskMap.forEach((v, k) => this.taskMap.set(k, Task.fromObject(v)));
         }
     }
 
-    private saveTask() {
+    private async saveTask() {
         const arrData = Array.from(this.taskMap.entries());
         const jsonData = JSON.stringify(arrData, (k, v) => {
             if (k === 'gres') {
@@ -53,15 +77,21 @@ export class TaskService {
         fs.writeFileSync(this.storagePath, jsonData, 'utf8');
     }
 
+    private async finishTask(taskId: number[]) {
+        if (taskId.length === 0) { return; }
+        const endmap = await getFinishTime(taskId);
+        endmap.forEach((v, k) => this.taskMap.get(k)?.finish(v));
+    }
+
     public addTask(...tasks: Task[]) {
         tasks.forEach(value => this.taskMap.set(value.jobid, value));
         this.saveTask();
     }
 
-    public updateTask(...tasks: Task[]) {
+    public async updateTask(...tasks: Task[]) {
         this.loadTask();
         const newId = tasks.map(value => value.jobid);
-        const oldId = [...this.taskMap.keys()];
+        const oldId = [...this.taskMap.values()].filter(v => !v.finished).map(v => v.jobid);
 
         const updateId = newId.filter(value => oldId.includes(value));
         const addId = newId.filter(value => !updateId.includes(value));
@@ -72,7 +102,7 @@ export class TaskService {
             .forEach(value => this.taskMap.set(value.jobid, value));
         tasks.filter(value => updateId.includes(value.jobid))
             .forEach(value => this.taskMap.get(value.jobid)?.update(value));
-        dropId.forEach(v => this.taskMap.get(v)?.finish());
+        await this.finishTask(dropId);
 
         this.saveTask();
     }

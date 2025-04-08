@@ -41,6 +41,8 @@
     "slurm--.setFilenameOnly.title": "Show Filename Only",
     "slurm--.unsetFilenameOnly.title": "Show Full Path",
 
+    "slurm--.setTaskDisplayInfo.title": "Set Display Information",
+
     "slurm--_tasks_view.name": "tasks",
     "slurm--_resource_view.name": "resources",
     "slurm--_launcher_view.name": "launcher",
@@ -66,6 +68,7 @@
     "config.resourcesPanel.sortDirection.description": "Sorting order of Node and GRES",
     "config.tasksPanel.showShortcutKey.description": "Show shortcut key for open log files in task panel",
     "config.tasksPanel.showFilenameOnly.description": "Show filename only or show full path. Affect `command`, `stdout` and `stderr` files.",
+    "config.tasksPanel.displayInformation.description": "Configure display information for expanded task in tasksPanel",
 
     "config.tasksPanel.cacheTimeout.description": "The timeout of the task refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
     "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly."

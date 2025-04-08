@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { executeCmd } from '../utils/utils';
+import { AsyncOnce, executeCmd } from '../utils/utils';
 import { LogFile, Task } from '../models';
 import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
@@ -21,7 +21,10 @@ const fieldMap = new Map([
     ["Command", 255],
     ["STDOUT", 255],
     ["STDERR", 255],
-    ["Reason", 50]
+    ["Reason", 50],
+    ["SubmitTime", 20],
+    ["StartTime", 20],
+    ["EndTime", 20],
 ]);
 
 let cachePath: string;
@@ -40,7 +43,7 @@ function extractTask(taskString: string): Task[] {
     const decoder = new TextDecoder('utf-8');
     let taskList: Task[] = [];
     taskString.split('\n').forEach((value) => {
-        // JobID:20,Name:100,Username:50,State:20,NodeList:50,Gres:50,TimeLimit:20,TimeUsed:20,Command:255,STDOUT:255,STDERR:255,Reason:50
+        // JobID:20,Name:100,Username:50,State:20,NodeList:50,Gres:50,TimeLimit:20,TimeUsed:20,Command:255,STDOUT:255,STDERR:255,Reason:50,SubmitTime:20,StartTime:20,EndTime:20
         if (value.length === 0) { return; }
 
         const encodedValue = encoder.encode(value);
@@ -48,7 +51,7 @@ function extractTask(taskString: string): Task[] {
             arr.push(decoder.decode(encodedValue.slice(slices[i], v)).trim());
             return arr;
         }, []);
-        const task = new Task(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8], fields[9], fields[10], fields[11]);
+        const task = new Task(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8], fields[9], fields[10], fields[11], fields[12], fields[13], fields[14]);
         taskList.push(task);
     });
     return taskList;
@@ -76,7 +79,7 @@ async function refreshUserTasks() {
         vscode.window.showErrorMessage(err);
         return;
     }
-    taskService.updateTask(...extractTask(out));
+    await taskService.updateTask(...extractTask(out));
     taskView.taskViewDataProvider.refresh();
 }
 
@@ -173,7 +176,7 @@ async function openStderr(task: TaskItem) {
 
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', AsyncOnce(refreshUserTasks)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelSelectedTasks', cancelSelectedTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelAllTasks', cancelAllTasks));
