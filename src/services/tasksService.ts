@@ -91,7 +91,7 @@ export class TaskService {
     public async updateTask(...tasks: Task[]) {
         this.loadTask();
         const newId = tasks.map(value => value.jobid);
-        const oldId = [...this.taskMap.keys()];
+        const oldId = [...this.taskMap.values()].filter(v => !v.finished).map(v => v.jobid);
 
         const updateId = newId.filter(value => oldId.includes(value));
         const addId = newId.filter(value => !updateId.includes(value));

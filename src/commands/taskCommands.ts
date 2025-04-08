@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { executeCmd } from '../utils/utils';
+import { AsyncOnce, executeCmd } from '../utils/utils';
 import { LogFile, Task } from '../models';
 import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
@@ -176,7 +176,7 @@ async function openStderr(task: TaskItem) {
 
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', refreshUserTasks));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', AsyncOnce(refreshUserTasks)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelSelectedTasks', cancelSelectedTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelAllTasks', cancelAllTasks));
