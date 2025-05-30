@@ -1,16 +1,19 @@
 import * as vscode from 'vscode';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import _ from 'lodash';
 
 import { AsyncOnce, executeCmd } from '../utils/utils';
-import { LogFile, Task } from '../models';
+import { BaseTask, LogFile, Task, TaskArray, TaskState } from '../models';
 import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
-import { LogFileItem, TaskItem } from '../view/components';
+import { LogFileItem, TaskArrayItem, TaskItem } from '../view/components';
 import * as path from 'path';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
 const fieldMap = new Map([
-    ["JobID", 20],
+    ["ArrayJobID", 20],
+    ["ArrayTaskID", 10],
     ["Name", 100],
     ["Username", 50],
     ["State", 20],
@@ -26,6 +29,7 @@ const fieldMap = new Map([
     ["StartTime", 20],
     ["EndTime", 20],
 ]);
+const fieldNames = Array.from(fieldMap.keys());
 
 let cachePath: string;
 
@@ -47,14 +51,37 @@ function extractTask(taskString: string): Task[] {
         if (value.length === 0) { return; }
 
         const encodedValue = encoder.encode(value);
-        let fields: string[] = slices.slice(1).reduce((arr: string[], v, i) => {
-            arr.push(decoder.decode(encodedValue.slice(slices[i], v)).trim());
-            return arr;
-        }, []);
-        const task = new Task(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7], fields[8], fields[9], fields[10], fields[11], fields[12], fields[13], fields[14]);
+        let fields: Record<string, string> = slices.slice(1).reduce((rec: Record<string, string>, v, i) => {
+            rec[fieldNames[i]] = decoder.decode(encodedValue.slice(slices[i], v)).trim();
+            return rec;
+        }, {});
+
+        const task = new Task({
+            jobid: fields["ArrayJobID"],
+            arrayid: fields["ArrayTaskID"],
+            name: fields["Name"],
+            user: fields["Username"],
+            state: fields["State"] as TaskState,
+            node: fields["NodeList"],
+            gres: fields["Gres"],
+            limitTime: fields["TimeLimit"],
+            runningTime: fields["TimeUsed"],
+            command: fields["Command"],
+            outPath: fields["STDOUT"],
+            errPath: fields["STDERR"],
+            reason: fields["Reason"],
+            submitTime: fields["SubmitTime"],
+            startTime: fields["StartTime"],
+            endTime: fields["EndTime"],
+        });
         taskList.push(task);
     });
     return taskList;
+}
+
+function buildTaskArray(taskList: Task[]): BaseTask[] {
+    const grouped = _.groupBy(taskList, 'jobid');
+    return Object.values(grouped).map((v) => v[0].arrayid ? new TaskArray(v) : v[0]);
 }
 
 async function refreshUserTasks() {
@@ -74,12 +101,13 @@ async function refreshUserTasks() {
         }
     }
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`squeue ${user} --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
+    const [out, err] = await executeCmd(`squeue ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
     }
-    await taskService.updateTask(...extractTask(out));
+    const taskList = buildTaskArray(extractTask(out));
+    await taskService.updateTask(...taskList);
     taskView.taskViewDataProvider.refresh();
 }
 
@@ -103,9 +131,10 @@ async function cancelTask(task: TaskItem) {
 
 async function cancelSelectedTasks() {
     if (taskView.selectedTaskItems.length === 0) { return; }
-    const tasks = taskView.selectedTaskItems.map(v => v.task);
+    const tasks = taskView.selectedTaskItems.map(v => v instanceof TaskArrayItem ? v.taskArray : v.task);
+    const taskLen = tasks.map(v => v instanceof TaskArray ? v.getSubTasks() : v).flat().length;
     const result = await vscode.window.showWarningMessage(
-        vscode.l10n.t(`This will cancel {0} tasks below: `, tasks.length) + tasks.map(v => v.name).join('; '),
+        vscode.l10n.t(`This will cancel {0} tasks below: `, taskLen) + tasks.map(v => v.name).join('; '),
         vscode.l10n.t('Yes'),
         vscode.l10n.t('No')
     );
@@ -121,8 +150,9 @@ async function cancelSelectedTasks() {
 
 async function cancelAllTasks() {
     const tasks = taskService.getTask().filter(v => !v.finished);
+    const taskLen = tasks.map(v => v instanceof TaskArray ? v.getSubTasks() : v).flat().length;
     const result = await vscode.window.showWarningMessage(
-        vscode.l10n.t(`This will cancel all {0} tasks below (unscaned tasks will not be canceled): `, tasks.length) + tasks.map(v => v.name).join('; '),
+        vscode.l10n.t(`This will cancel all {0} tasks below (unscaned tasks will not be canceled): `, taskLen) + tasks.map(v => v.name).join('; '),
         vscode.l10n.t('Yes'),
         vscode.l10n.t('No')
     );
@@ -167,11 +197,11 @@ async function openFile(file: LogFile) {
 }
 
 async function openStdout(task: TaskItem) {
-    task.task.out_path.open();
+    task.task.outPath.open();
 }
 
 async function openStderr(task: TaskItem) {
-    task.task.err_path.open();
+    task.task.errPath.open();
 }
 
 

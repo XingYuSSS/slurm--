@@ -30,8 +30,8 @@ export class Node {
         this.memory = (typeof memory === "string" ? parseInt(memory) : memory) / 1000;
         this.allocMemory = (typeof allocMemory === "string" ? parseInt(allocMemory) : allocMemory) / 1000;
         this.gres = gres === '(null)' ? null : new ResourceGres(usedGres, gres);
-        this.partition = partition.endsWith('*') ? partition.slice(0, partition.length - 1) : partition;
-        this.state = (state.endsWith('*') ? state.slice(0, state.length - 1) : state) as NodeState;
+        this.partition = partition.endsWith('*') ? partition.slice(0, -1) : partition;
+        this.state = (state.endsWith('*') ? state.slice(0, -1) : state) as NodeState;
     }
 
     get isAvailableState(): boolean { return this.state === NodeState.MIXED || this.state === NodeState.IDLE; }

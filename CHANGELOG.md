@@ -6,6 +6,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Add `Job Array` support
+  - `Job Array` parsing
+  - `Job Array` data structure
+  - `Job Array` information display
+
+### Changed
+
+- Use `camelCase` instead of `snake_case` for storage and update property naming convention
+- Refactored `task` code structure for better type organization
+
 ## [0.8.0][0.8.0] - 2025-04-08
 
 ### Added
