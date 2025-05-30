@@ -7,6 +7,7 @@
     "slurm--.cancelAllTasks.title": "cancel all tasks",
     "slurm--.confirmTask.title": "confirm task",
     "slurm--.confirmAllTask.title": "confirm all task",
+    "slurm--.cancelTaskArray.title": "cancel task array",
     "slurm--.openFile.title": "open file",
     "slurm--.openStdout.title": "open stdout file",
     "slurm--.openStderr.title": "open stderr file",

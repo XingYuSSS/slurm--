@@ -17,6 +17,7 @@
   "Cancel task named {0}?": "Cancel task named {0}?",
   "This will cancel {0} tasks below: ": "This will cancel {0} tasks below: ",
   "This will cancel all {0} tasks below (unscaned tasks will not be canceled): ": "This will cancel all {0} tasks below (unscaned tasks will not be canceled): ",
+  "Pend {0}, Run {1}, Done {2}": "Pend {0}, Run {1}, Done {2}",
   "new argument": "new argument",
   "change argument": "change argument",
   "Choose number of GRES": "Choose number of GRES",

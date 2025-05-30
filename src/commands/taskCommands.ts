@@ -81,7 +81,7 @@ function extractTask(taskString: string): Task[] {
 
 function buildTaskArray(taskList: Task[]): BaseTask[] {
     const grouped = _.groupBy(taskList, 'jobid');
-    return Object.values(grouped).map((v) => v[0].arrayid ? new TaskArray(v) : v[0]);
+    return Object.values(grouped).map((v) => v[0].arrayid !== null ? new TaskArray(v) : v[0]);
 }
 
 async function refreshUserTasks() {
@@ -119,19 +119,36 @@ async function cancelTask(task: TaskItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`scancel ${task.task.jobid}`);
+        const [out, err] = await executeCmd(`scancel ${task.task.jobArrayId}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
         }
-        taskService.deleteTask(task.task.jobid);
+        taskService.deleteTask(task.task.jobid, task.task.arrayid);
+        taskView.taskViewDataProvider.refresh();
+    }
+}
+
+async function cancelTaskArray(taskArray: TaskArrayItem) {
+    const result = await vscode.window.showWarningMessage(
+        vscode.l10n.t(`Cancel task array named {0}?`, taskArray.taskArray.name),
+        vscode.l10n.t('Yes'),
+        vscode.l10n.t('No')
+    );
+    if (result === vscode.l10n.t('Yes')) {
+        const [out, err] = await executeCmd(`scancel ${taskArray.taskArray.jobid}`);
+        if (err) {
+            vscode.window.showErrorMessage(err);
+            return;
+        }
+        taskService.deleteTask(taskArray.taskArray.jobid);
         taskView.taskViewDataProvider.refresh();
     }
 }
 
 async function cancelSelectedTasks() {
     if (taskView.selectedTaskItems.length === 0) { return; }
-    const tasks = taskView.selectedTaskItems.map(v => v instanceof TaskArrayItem ? v.taskArray : v.task);
+    const tasks: BaseTask[] = taskView.selectedTaskItems.map(v => v instanceof TaskArrayItem ? v.taskArray : v.task);
     const taskLen = tasks.map(v => v instanceof TaskArray ? v.getSubTasks() : v).flat().length;
     const result = await vscode.window.showWarningMessage(
         vscode.l10n.t(`This will cancel {0} tasks below: `, taskLen) + tasks.map(v => v.name).join('; '),
@@ -140,8 +157,8 @@ async function cancelSelectedTasks() {
     );
     if (result === vscode.l10n.t('Yes')) {
         tasks.forEach(v => {
-            executeCmd(`scancel ${v.jobid}`);
-            taskService.deleteTask(v.jobid);
+            executeCmd(`scancel ${v.jobArrayId instanceof Array ? v.jobid : v.jobArrayId}`);
+            taskService.deleteTask(v.jobid, v.arrayid);
         });
         taskView.taskViewDataProvider.refresh();
     } else if (result === vscode.l10n.t('No')) {
@@ -187,7 +204,7 @@ async function confirmTask(task: TaskItem) {
 }
 
 async function confirmAllTask() {
-    taskService.deleteTask(...taskService.getTask().filter(v => v.finished));
+    taskService.getTask().filter(v => v.finished).forEach(v => taskService.deleteTask(v));
     taskView.taskViewDataProvider.refresh();
 }
 
@@ -214,6 +231,8 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshTask', unautoRefreshTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTask', confirmTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmAllTask', confirmAllTask));
+
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTaskArray', cancelTaskArray));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStdout', openStdout));

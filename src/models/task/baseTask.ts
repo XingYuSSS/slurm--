@@ -8,6 +8,7 @@ export enum TaskState {
 export interface BaseTask {
     readonly jobid: number;
     readonly jobArrayId: string | string[];
+    readonly arrayid?: number | null;
     readonly name: string;
     state: TaskState;
 

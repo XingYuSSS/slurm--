@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { BaseTask, loadObj, TaskObjTypes } from '../models';
+import { BaseTask, loadObj, TaskArray, TaskObjTypes } from '../models';
 import { executeCmd } from '../utils/utils';
 
 
@@ -73,10 +73,9 @@ export class TaskService {
     private async finishTask(taskId: string[]) {
         if (taskId.length === 0) { return; }
         const endmap = await getFinishTime(taskId);
-        console.log(endmap)
         endmap.forEach((v, k) => {
             const [jobid, arrid] = k.split('_');
-            this.taskMap.get(parseInt(jobid))?.finish(arrid ? { [arrid]: v } : v);
+            this.taskMap.get(parseInt(jobid))?.finish(arrid !== undefined ? { [arrid]: v } : v);
         });
     }
 
@@ -101,28 +100,20 @@ export class TaskService {
         const newArrId = tasks.map(value => value.jobArrayId).flat();
         const oldArrId = [...this.taskMap.values()].filter(v => !v.finished).map(v => v.jobArrayId).flat();
 
-        console.log(newArrId, oldArrId)
-
         const updateArrId = newArrId.filter(value => oldArrId.includes(value));
         const dropArrId = oldArrId.filter(value => !updateArrId.includes(value));
-
-        console.log(updateArrId, dropArrId)
 
         await this.finishTask(dropArrId);
 
         this.saveTask();
     }
 
-    public deleteTask(...tasks: number[]): void;
-    public deleteTask(...tasks: BaseTask[]): void;
-    public deleteTask(...tasks: BaseTask[] | number[]): void {
-        if (tasks.length === 0) {
-            return;
-        }
-        if (typeof tasks[0] === "number") {
-            tasks.forEach(value => this.taskMap.delete(value as number));
+    public deleteTask(task: BaseTask | number, arrayId?: number | null): void {
+        const taskId = typeof task === "number" ? task : task.jobid;
+        if (arrayId === undefined || arrayId === null) {
+            this.taskMap.delete(taskId);
         } else {
-            tasks.forEach(value => this.taskMap.delete((value as BaseTask).jobid));
+            delete (this.taskMap.get(taskId) as TaskArray).subTasks[arrayId];
         }
         this.saveTask();
     }

@@ -91,7 +91,7 @@ export class Task implements BaseTask {
             '%A': `${param.jobid}`,  // Job array master job allocation number
             '%a': param.arrayid?.toString() ?? '4294967294',  // Job array index number
             // '%b': param.arrayid?.toString().slice(0, -1) ?? '%b',  // Job array index modulo 10
-            '%J': param.stepid ? `${param.jobid}.${param.stepid}` : `${param.jobid}`,  // jobid.stepid
+            '%J': param.stepid !== undefined ? `${param.jobid}.${param.stepid}` : `${param.jobid}`,  // jobid.stepid
             '%j': `${param.jobid}`,  // jobid
             '%N': `${param.node}`,  // short hostname
             '%n': '0',  // node identifier, not implemented for now

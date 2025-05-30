@@ -12,6 +12,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - `Job Array` parsing
   - `Job Array` data structure
   - `Job Array` information display
+  - Cancel `Job Array` or subtask
 
 ### Changed
 
