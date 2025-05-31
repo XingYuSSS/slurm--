@@ -31,7 +31,15 @@ function getGroupedNode(): ListItem[] {
             }
             const availNode = nodes.filter(v => v.isAvailableState);
             const rgres = availNode.length === 0 ? ResourceGres.empty(nodes[0]!.gres.toIdString()) : ResourceGres.fromArray(availNode.map(v => v.gres!));
-            return [rgres, new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), gresIcon(rgres), 'gresList', false)];
+
+            const item = new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), gresIcon(rgres), 'gresList', false);
+            item.tooltip = new vscode.MarkdownString(`
+| nodeid | state | GRES(idle/total) | memory(i/t) | CPUs(i/t) |
+|:--:|:--:|:--:|:--:|:--:|
+${nodes.slice(0, 10).map(node => `| ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |`).join('\n')}
+${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
+            `);
+            return [rgres, item];
         })
         .sort((a, b) => resignFn(listSortFn.get(configService.gresSortKey)!, configService.gresSortAscending)(a[0] as ResourceGres | null, b[0] as ResourceGres | null))
         .map(item => item[1]) as ListItem[];

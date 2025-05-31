@@ -13,11 +13,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - `Job Array` data structure
   - `Job Array` information display
   - Cancel `Job Array` or subtask
+- Add CPU information in resource view ([#6](https://github.com/XingYuSSS/slurm--/issues/6))
+- Add CPU parameter to `launch terminal` command ([#6](https://github.com/XingYuSSS/slurm--/issues/6))
 
 ### Changed
 
 - Use `camelCase` instead of `snake_case` for storage and update property naming convention
-- Refactored `task` code structure for better type organization
+- Refactored `task` and `node` code structure for better type organization
+- Changed tooltip in resource view to display as table
 
 ## [0.8.0][0.8.0] - 2025-04-08
 
