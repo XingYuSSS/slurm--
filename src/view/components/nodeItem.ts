@@ -4,7 +4,7 @@ import { Node, NodeState } from '../../models';
 function nodeDescription(node: Node): string {
     if (node.state === NodeState.ALLOC) { return vscode.l10n.t(`Node has been allocated`); }
     if (node.state === NodeState.IDLE || node.state === NodeState.MIXED) {
-        return `${node.gres ?? 'No GRES'}\t${node.memory - node.allocMemory}GB/${node.memory}GB\t${node.idleCpu}/${node.cpu}CPUs`;
+        return `${node.gres ?? 'No GRES'} \t${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB \t${node.idleCpu} / ${node.cpu} CPUs`;
     }
     return vscode.l10n.t(`Node not available due to state "{0}"`, node.state);
 }
@@ -25,7 +25,7 @@ export class NodeItem extends vscode.TreeItem {
         super(node.nodeid, vscode.TreeItemCollapsibleState.None);
         this.description = nodeDescription(node);
         this.tooltip = new vscode.MarkdownString(`
-| nodeid | state | GRES(idle/total) | memory(i/t) | CPUs(i/t) |
+| nodeid | state | GRES (idle/total) | memory (i/t) | CPUs (i/t) |
 |:--:|:--:|:--:|:--:|:--:|
 | ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |
             `);

@@ -34,7 +34,7 @@ function getGroupedNode(): ListItem[] {
 
             const item = new ListItem(rgres.toString(), nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), gresIcon(rgres), 'gresList', false);
             item.tooltip = new vscode.MarkdownString(`
-| nodeid | state | GRES(idle/total) | memory(i/t) | CPUs(i/t) |
+| nodeid | state | GRES (idle/total) | memory (i/t) | CPUs (i/t) |
 |:--:|:--:|:--:|:--:|:--:|
 ${nodes.slice(0, 10).map(node => `| ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |`).join('\n')}
 ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}

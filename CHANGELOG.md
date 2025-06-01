@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.9.0][0.9.0] - 2025-06-01
+
 ### Added
 
 - Add `Job Array` support
@@ -289,7 +291,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/XingYuSSS/slurm--/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...v0.7.1
