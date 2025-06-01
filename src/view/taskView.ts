@@ -1,41 +1,55 @@
 import * as vscode from 'vscode';
 
 import { taskService, configService, TaskSortKeys } from '../services';
-import { Task } from '../models/';
-import { FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskItem } from './components';
+import { BaseTask, Task, TaskArray } from '../models/';
+import { FinishedTaskArrayItem, FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskArrayItem, TaskItem } from './components';
 import { resignFn } from '../utils/utils';
 
 function getTaskInfoItems(task: Task): vscode.TreeItem[] {
     return [
-        ...(configService.taskDisplayInfo.id ? [new InfoItem(task.jobid.toString(), 'id'),] : []),
+        ...(configService.taskDisplayInfo.id ? [new InfoItem(task.jobArrayId, 'id'),] : []),
         ...(configService.taskDisplayInfo.nodelist && task.node.length !== 0 ? [new InfoItem(task.node, 'nodelist'),] : []),
         ...(configService.taskDisplayInfo.GRES ? [new InfoItem(task.gres?.toString() ?? 'No GRES', 'GRES'),] : []),
         ...(configService.taskDisplayInfo.command ? [new LogFileItem(task.command, 'command', undefined, configService.taskShowFilenameOnly),] : []),
-        ...(configService.taskDisplayInfo.stdout ? [new LogFileItem(task.out_path, 'stdout', undefined, configService.taskShowFilenameOnly),] : []),
-        ...(configService.taskDisplayInfo.stderr ? [new LogFileItem(task.err_path, 'stderr', undefined, configService.taskShowFilenameOnly),] : []),
-        ...(configService.taskDisplayInfo.submit ? [new InfoItem(task.submit_time?.replace('T', ' '), 'submited'),] : []),
-        ...(task.start_time ? [
-            ...(configService.taskDisplayInfo.start ? [new InfoItem(task.start_time.replace('T', ' '), 'started'),] : []),
-            ...(configService.taskDisplayInfo.finish ? [new InfoItem(task.end_time!.replace('T', ' '), task.finished ? 'finished' : 'finish (exp)'),] : []),
+        ...(configService.taskDisplayInfo.stdout ? [new LogFileItem(task.outPath, 'stdout', undefined, configService.taskShowFilenameOnly),] : []),
+        ...(configService.taskDisplayInfo.stderr ? [new LogFileItem(task.errPath, 'stderr', undefined, configService.taskShowFilenameOnly),] : []),
+        ...(configService.taskDisplayInfo.submit ? [new InfoItem(task.submitTime?.replace('T', ' '), 'submited'),] : []),
+        ...(task.startTime ? [
+            ...(configService.taskDisplayInfo.start ? [new InfoItem(task.startTime.replace('T', ' '), 'started'),] : []),
+            ...(configService.taskDisplayInfo.finish ? [new InfoItem(task.endTime!.replace('T', ' '), task.finished ? 'finished' : 'finish (exp)'),] : []),
         ] : [])
     ];
 }
 
-const sortFn = new Map([
-    [TaskSortKeys.ID, (a: Task, b: Task) => a.jobid - b.jobid],
-    [TaskSortKeys.NAME, (a: Task, b: Task) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })]
-]);
+const sortFn: Record<TaskSortKeys, (a: BaseTask, b: BaseTask) => number> = {
+    [TaskSortKeys.ID]: (a: BaseTask, b: BaseTask) => a.jobid - b.jobid,
+    [TaskSortKeys.NAME]: (a: BaseTask, b: BaseTask) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+};
 
-function getGroupedTask(tasks: Task[]): ListItem[] {
-    let running = tasks.filter(v => !v.finished).sort(resignFn(sortFn.get(configService.taskSortKey)!, configService.taskSortAscending));
-    let finished = tasks.filter(v => v.finished).sort(resignFn(sortFn.get(configService.taskSortKey)!, configService.taskSortAscending));
+function getGroupedTask(tasks: BaseTask[]): ListItem[] {
+    let running = tasks.filter(v => !v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+    let finished = tasks.filter(v => v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
     return [
-        new ListItem(vscode.l10n.t('running'), running.map((value) => { return new TaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'taskList'),
-        new ListItem(vscode.l10n.t('finished'), finished.map((value) => { return new FinishedTaskItem(value); }), vscode.l10n.t('${length} tasks'), undefined, 'finishedTaskList'),
+        new ListItem(
+            vscode.l10n.t('running'),
+            running.map((value) => { return value instanceof TaskArray ? new TaskArrayItem(value) : new TaskItem(value as Task); }),
+            vscode.l10n.t('${length} tasks'),
+            undefined,
+            'taskList'
+        ),
+        new ListItem(
+            vscode.l10n.t('finished'),
+            finished.map((value) => { return value instanceof TaskArray ? new FinishedTaskArrayItem(value) : new FinishedTaskItem(value as Task); }),
+            vscode.l10n.t('${length} tasks'),
+            undefined,
+            'finishedTaskList'
+        ),
     ];
 }
 
-export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem> {
+type AllItem = TaskItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem
+
+export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
     private static _instance: TaskViewDataProvider | null = null;
     private constructor() { }
 
@@ -46,40 +60,47 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<TaskItem | 
         return TaskViewDataProvider._instance;
     }
 
-    private _onDidChangeTreeData: vscode.EventEmitter<TaskItem | undefined | null | void> = new vscode.EventEmitter<TaskItem | undefined | null | void>();
-    readonly onDidChangeTreeData: vscode.Event<TaskItem | undefined | null | void> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: vscode.EventEmitter<AllItem | undefined | null | void> = new vscode.EventEmitter<AllItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<AllItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     refresh(): void {
         this._onDidChangeTreeData.fire();
     }
 
-    getTreeItem(element: TaskItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem): vscode.TreeItem {
+    getTreeItem(element: AllItem): vscode.TreeItem {
         return element;
     }
 
-    getChildren(element?: TaskItem | FinishedTaskItem | ListItem): Thenable<ListItem[] | TaskItem[] | FinishedTaskItem[] | InfoItem[] | LogFileItem[]> {
+    getChildren(element?: AllItem): Thenable<AllItem[]> {
         if (!element) {
             return Promise.resolve(getGroupedTask(taskService.getTask()));
         }
         if (element instanceof TaskItem || element instanceof FinishedTaskItem) {
             return Promise.resolve(getTaskInfoItems(element.task));
+
+        } else if (element instanceof TaskArrayItem) {
+            return Promise.resolve(element.taskArray.getSubTasks().map(v => new TaskItem(v)));
+        } else if (element instanceof FinishedTaskArrayItem) {
+            return Promise.resolve(element.taskArray.getSubTasks().map(v => new FinishedTaskItem(v)));
+
         } else if (element instanceof ListItem) {
             return Promise.resolve(element.children);
         }
+
         return Promise.resolve([]);
     }
 }
 
 export const taskViewDataProvider = TaskViewDataProvider.getInstance();
 export let taskTreeView: vscode.TreeView<InfoItem>;
-export let selectedTaskItems: TaskItem[] = [];
+export let selectedTaskItems: (TaskItem | TaskArrayItem)[] = [];
 
 export function initTasksView(context: vscode.ExtensionContext) {
     taskTreeView = vscode.window.createTreeView('slurm--_tasks_view', { treeDataProvider: taskViewDataProvider, canSelectMany: true });
     const disposable = taskTreeView.onDidChangeSelection(e => {
         selectedTaskItems = [];
         if (e.selection && e.selection.length > 0) {
-            selectedTaskItems = e.selection.filter(v => v instanceof TaskItem);
+            selectedTaskItems = e.selection.filter(v => v instanceof TaskItem || v instanceof TaskArrayItem);
         }
     });
 

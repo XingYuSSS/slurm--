@@ -6,6 +6,24 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.9.0][0.9.0] - 2025-06-01
+
+### Added
+
+- Add `Job Array` support
+  - `Job Array` parsing
+  - `Job Array` data structure
+  - `Job Array` information display
+  - Cancel `Job Array` or subtask
+- Add CPU information in resource view ([#6](https://github.com/XingYuSSS/slurm--/issues/6))
+- Add CPU parameter to `launch terminal` command ([#6](https://github.com/XingYuSSS/slurm--/issues/6))
+
+### Changed
+
+- Use `camelCase` instead of `snake_case` for storage and update property naming convention
+- Refactored `task` and `node` code structure for better type organization
+- Changed tooltip in resource view to display as table
+
 ## [0.8.0][0.8.0] - 2025-04-08
 
 ### Added
@@ -273,7 +291,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/XingYuSSS/slurm--/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/XingYuSSS/slurm--/compare/v0.7.0...v0.7.1

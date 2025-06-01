@@ -12,9 +12,9 @@
 - [X] sort direction
 - [ ] group and count by state, command or start time
 - [X] start and end time
-- [ ] job array support
-  - [ ] parsing job array
-  - [ ] show job array infos
+- [X] job array support
+  - [X] parsing job array
+  - [X] show job array infos
 ## Resources
 - [X] scan availabal GRES and Memory
 - [X] auto refreash

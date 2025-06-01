@@ -17,6 +17,7 @@
   "Cancel task named {0}?": "取消任务 {0} ?",
   "This will cancel {0} tasks below: ": "将取消以下 {0} 个任务: ",
   "This will cancel all {0} tasks below (unscaned tasks will not be canceled): ": "将取消以下所有 {0} 个任务 (未扫描到的任务不会被取消): ",
+  "Pend {0}, Run {1}, Done {2}": "等待 {0}, 运行 {1}, 结束 {2}",
   "new argument": "添加参数",
   "change argument": "修改参数",
   "Choose number of GRES": "选择GRES数量",

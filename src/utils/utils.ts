@@ -50,7 +50,7 @@ const asyncOnceStates: { [key: string]: Promise<any> | null } = {};
 export function AsyncOnce<T extends (...args: any[]) => Promise<any>>(fn: T, key?: string): T {
     return (async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
         if (key === undefined) { key = fn.name; }
-        
+
         if (!asyncOnceStates[key]) {
             asyncOnceStates[key] = (async () => {
                 try {
@@ -63,4 +63,13 @@ export function AsyncOnce<T extends (...args: any[]) => Promise<any>>(fn: T, key
 
         return asyncOnceStates[key] as Awaited<ReturnType<T>>;
     }) as unknown as T;
+}
+
+
+export function convertKeysToCamelCase(obj: Record<string, any>): Record<string, any> {
+  return Object.keys(obj).reduce((acc, key) => {
+    const camelKey = key.replace(/(_\w)/g, (match) => match[1].toUpperCase());
+    acc[camelKey] = obj[key];
+    return acc;
+  }, {} as Record<string, any>);
 }

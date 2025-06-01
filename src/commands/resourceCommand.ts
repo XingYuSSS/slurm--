@@ -18,7 +18,9 @@ const fieldMap = new Map([
     ["GresUsed", 50],
     ["Partition", 20],
     ["StateLong", 20],
+    ["CPUsState", 20],
 ]);
+const fieldNames = Array.from(fieldMap.keys());
 
 let cachePath: string;
 
@@ -40,11 +42,21 @@ function extractNodes(nodeString: string): Node[] {
         if (value.length === 0) { return; }
 
         const encodedValue = encoder.encode(value);
-        let fields: string[] = slices.slice(1).reduce((arr: string[], v, i) => {
-            arr.push(decoder.decode(encodedValue.slice(slices[i], v)).trim());
-            return arr;
-        }, []);
-        const node = new Node(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7]);
+        let fields: Record<string, string> = slices.slice(1).reduce((rec: Record<string, string>, v, i) => {
+            rec[fieldNames[i]] = decoder.decode(encodedValue.slice(slices[i], v)).trim();
+            return rec;
+        }, {});
+        const node = new Node({
+            nodeid: fields['NODELIST'],
+            available: fields['Available'],
+            memory: fields['Memory'],
+            allocMemory: fields['AllocMem'],
+            gres: fields['Gres'],
+            usedGres: fields['GresUsed'],
+            partition: fields['Partition'],
+            state: fields['StateLong'],
+            cpuState: fields['CPUsState'],
+        });
         nodeList.push(node);
     });
     return nodeList;
@@ -76,10 +88,10 @@ async function unautoRefreshRes() {
 
 async function copyGres() {
     const selected = resourceTreeView.selection[0];
-    if (selected instanceof ListItem){
+    if (selected instanceof ListItem) {
         const gresString = selected.title.replace(/\s*\(.*\)$/, '');
         vscode.env.clipboard.writeText(gresString);
-    } else if (selected instanceof NodeItem){
+    } else if (selected instanceof NodeItem) {
         vscode.env.clipboard.writeText(selected.node.nodeid);
     }
 }

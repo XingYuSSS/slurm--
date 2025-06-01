@@ -71,6 +71,14 @@ async function launchTerminal(node: NodeItem) {
             mem = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom memory') });
         }
     }
+    let cpu = undefined;
+    while (!cpu) {
+        cpu = await vscode.window.showQuickPick(Array.from({ length: Math.floor(Math.log2(node.node.idleCpu)) + 1 }, (_, i) => (2 ** i)).map(v => `${v}`).concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose CPUs to alloc') });
+        if (!cpu) { return; }
+        if (cpu === vscode.l10n.t('Custom...')) {
+            cpu = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom CPU') });
+        }
+    }
     let time = undefined;
     while (!time) {
         time = await vscode.window.showQuickPick(Array.from({ length: 8 }, (_, i) => i + 1).map(v => `${v}:00:00`).concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose time') });
@@ -89,7 +97,7 @@ async function launchTerminal(node: NodeItem) {
     }
     const terminal = vscode.window.createTerminal();
     terminal.show();
-    terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --pty ${shell} -i`);
+    terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
 }
 
 

@@ -1,5 +1,5 @@
 export * from './gresModel';
 export * from './logFileModel';
-export * from './taskModel';
 export * from './nodeModel';
 export * from './scriptModel';
+export * from './task';

@@ -1,6 +1,6 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.8.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.8.0/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.9.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.9.0/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
@@ -32,6 +32,8 @@ We are continuously developing this extension, if there is a feature you would l
 
 - cancel all running tasks
 
+- [`job array` support](#job-array-support)
+
 ![task](assets/pics/task.png)
 
 ### resources viewer
@@ -62,6 +64,12 @@ Supported Languages:
 - zh-cn (简体中文)
 
 We welcome contributions to add more languages or improve existing translations. If you are interested in helping, please submit a pull request. Thank you for your support!
+
+## job array support
+
+We add `job array` support at version `0.9.0`!
+
+![jobarray](assets/pics/jobarray.png)
 
 ## License
 
