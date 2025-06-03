@@ -6,10 +6,49 @@ import { BaseTask, loadObj, TaskArray, TaskObjTypes } from '../models';
 import { executeCmd } from '../utils/utils';
 
 
+function parseJobarrayId(jobIdStr: string): string[] {
+    const fullJobMatch = /^(\d+)$/.exec(jobIdStr);
+    if (fullJobMatch) {
+        return [jobIdStr];
+    }
+
+    const singleTaskMatch = /^(\d+)_(\d+)$/.exec(jobIdStr);
+    if (singleTaskMatch) {
+        return [jobIdStr];
+    }
+
+    const bracketMatch = /^(\d+)_\[(.+?)(?:%\d+)?\]$/.exec(jobIdStr);
+    if (bracketMatch) {
+        const jobId = bracketMatch[1];
+        const content = bracketMatch[2];
+
+        const rangeMatch = /^(\d+)-(\d+)$/.exec(content);
+        if (rangeMatch) {
+            const start = parseInt(rangeMatch[1], 10);
+            const end = parseInt(rangeMatch[2], 10);
+            if (!isNaN(start) && !isNaN(end) && start <= end) {
+                const result: string[] = [];
+                for (let i = start; i <= end; i++) {
+                    result.push(`${jobId}_${i}`);
+                }
+                return result;
+            }
+        }
+
+        const listMatch = /^(\d+(?:,\d+)*)$/.exec(content);
+        if (listMatch) {
+            const values = listMatch[1].split(',').map(Number);
+            return values.map((v) => `${jobId}_${v}`);
+        }
+    }
+
+    return [];
+}
+
 async function getFinishTime(taskId: string[]): Promise<Map<string, string>> {
     if (taskId.length === 0) { return new Map(); }
 
-    const [out, err] = await executeCmd(`sacct --array -n -X -P -j ${taskId.join(',')} --format=JobID,End`);
+    const [out, err] = await executeCmd(`sacct -n -X -P -j ${taskId.join(',')} --format=JobID,End`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return new Map();
@@ -19,9 +58,12 @@ async function getFinishTime(taskId: string[]): Promise<Map<string, string>> {
     const finishTimes: Map<string, string> = new Map();
     lines.forEach(line => {
         const [jobid, time] = line.split('|');
-        if (time !== 'Unknown') {
-            finishTimes.set(jobid, time);
-        }
+        const jobidList = parseJobarrayId(jobid);
+        jobidList.forEach(jobid => {
+            if (time !== 'Unknown') {
+                finishTimes.set(jobid, time);
+            }
+        });
     });
     return finishTimes;
 }
@@ -98,7 +140,7 @@ export class TaskService {
             .forEach(value => this.taskMap.get(value.jobid)?.update(value));
 
         const newArrId = tasks.map(value => value.jobArrayId).flat();
-        const oldArrId = [...this.taskMap.values()].filter(v => !v.finished).map(v => v.jobArrayId).flat();
+        const oldArrId = [...this.taskMap.values()].map(v => v instanceof TaskArray ? v.getSubTasks() : v).flat().filter(v => !v.finished).map(v => v.jobArrayId) as string[];
 
         const updateArrId = newArrId.filter(value => oldArrId.includes(value));
         const dropArrId = oldArrId.filter(value => !updateArrId.includes(value));

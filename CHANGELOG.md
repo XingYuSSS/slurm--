@@ -6,6 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.9.1][0.9.1] - 2025-06-03
+
+### Fixed
+
+- Removed `--array` flag in `sacct` command, switched to manual job array parsing for improved compatibility ([#7](https://github.com/XingYuSSS/slurm--/issues/7))
+- Fixed duplicate `sacct` calls on refresh for completed job arrays
+
 ## [0.9.0][0.9.0] - 2025-06-01
 
 ### Added
