@@ -8,6 +8,7 @@ export class FinishedTaskItem extends vscode.TreeItem {
         super(task.name, vscode.TreeItemCollapsibleState.Collapsed);
         this.iconPath = finishedIcon;
         this.contextValue = 'finishedTaskItem';
+        this.id = task.jobArrayId;
     }
 }
 
@@ -19,5 +20,6 @@ export class FinishedTaskArrayItem extends vscode.TreeItem {
         super(taskArray.name, vscode.TreeItemCollapsibleState.Collapsed);
         this.iconPath = finishedArrIcon;
         this.contextValue = 'finishedTaskArrayItem';
+        this.id = 'array_' + taskArray.jobArrayId.join('&');
     }
 }

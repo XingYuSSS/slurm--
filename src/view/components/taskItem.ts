@@ -28,6 +28,7 @@ export class TaskItem extends vscode.TreeItem {
         this.tooltip = taskTooltip(task);
         this.iconPath = iconRec[task.state];
         this.contextValue = 'taskItem';
+        this.id = task.jobArrayId;
     }
 }
 
@@ -64,5 +65,6 @@ export class TaskArrayItem extends vscode.TreeItem {
         this.tooltip = taskArrTooltip(taskArray);
         this.iconPath = iconArrMap[taskArray.state];
         this.contextValue = 'taskArrayItem';
+        this.id = 'array_' + taskArray.jobArrayId.join('&');
     }
 }

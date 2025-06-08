@@ -8,6 +8,7 @@
     "slurm--.confirmTask.title": "确认任务",
     "slurm--.confirmAllTask.title": "确认所有任务",
     "slurm--.cancelTaskArray.title": "取消任务数组",
+    "slurm--.confirmTaskArray.title": "确认任务数组",
     "slurm--.openFile.title": "打开文件",
     "slurm--.openStdout.title": "打开 stdout 文件",
     "slurm--.openStderr.title": "打开 stderr 文件",

@@ -198,7 +198,14 @@ async function unautoRefreshTask() {
 
 async function confirmTask(task: TaskItem) {
     if (task.task.finished) {
-        taskService.deleteTask(task.task);
+        taskService.deleteTask(task.task.jobid, task.task.arrayid);
+        taskView.taskViewDataProvider.refresh();
+    }
+}
+
+async function confirmTaskArray(taskArray: TaskArrayItem) {
+    if (taskArray.taskArray.finished) {
+        taskService.deleteTask(taskArray.taskArray.jobid);
         taskView.taskViewDataProvider.refresh();
     }
 }
@@ -233,6 +240,7 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmAllTask', confirmAllTask));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTaskArray', cancelTaskArray));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.confirmTaskArray', confirmTaskArray));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStdout', openStdout));

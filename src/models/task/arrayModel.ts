@@ -12,7 +12,6 @@ export class TaskArray implements BaseTask {
     readonly subTasks: Record<number, Task>;
     readonly jobid: number;
     readonly jobArrayId: string[];
-    readonly name: string;
 
     finished: boolean;
 
@@ -23,12 +22,11 @@ export class TaskArray implements BaseTask {
         }, {});
         this.jobid = subTasks[0].jobid;
         this.jobArrayId = subTasks.map(v => v.jobArrayId);
-        this.name = subTasks[0].name + ` <${subTasks.length}>`;
         this.finished = this.getSubTasks().every(v => v.finished);
     }
 
-    
-    public get state() : TaskState {
+
+    public get state(): TaskState {
         const tasks = this.getSubTasks();
         if (tasks.some(item => item.state === TaskState.R)) {
             return TaskState.R;
@@ -37,6 +35,11 @@ export class TaskArray implements BaseTask {
         } else {
             return TaskState.CG;
         }
+    }
+
+    public get name(): string {
+        const subTasks = this.getSubTasks();
+        return subTasks[0].name + ` <${subTasks.length}>`;
     }
 
 
@@ -61,6 +64,7 @@ export class TaskArray implements BaseTask {
     }
 
     static fromObj(obj: TaskArrayObj) {
+        if (obj.subTasks.length === 0) { return null; }
         return new TaskArray(obj.subTasks.map(v => Task.fromObj(v)));
     }
 

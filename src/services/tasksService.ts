@@ -99,7 +99,12 @@ export class TaskService {
             const saveMap = JSON.parse(jsonData);
             const taskMap = new Map(saveMap) as Map<number, TaskObjTypes>;
 
-            taskMap.forEach((v, k) => this.taskMap.set(k, loadObj(v)));
+            taskMap.forEach((v, k) => {
+                const loaded = loadObj(v);
+                if (loaded !== null) {
+                    this.taskMap.set(k, loaded);
+                }
+            });
         }
     }
 
@@ -155,7 +160,11 @@ export class TaskService {
         if (arrayId === undefined || arrayId === null) {
             this.taskMap.delete(taskId);
         } else {
-            delete (this.taskMap.get(taskId) as TaskArray).subTasks[arrayId];
+            const array = this.taskMap.get(taskId) as TaskArray;
+            delete array.subTasks[arrayId];
+            if (Object.keys(array.subTasks).length === 0) {
+                this.taskMap.delete(taskId);
+            }
         }
         this.saveTask();
     }

@@ -13,7 +13,7 @@ const TaskTypes = {
 
 export type TaskObjTypes = TaskObj | TaskArrayObj
 
-export function loadObj(data: TaskObjTypes): BaseTask {
+export function loadObj(data: TaskObjTypes): BaseTask | null {
     const cls = data.type ? TaskTypes[data.type] : Task;
     if (!cls) { throw new Error(`Unknown task type: ${data.type}`); }
     return cls.fromObj(data as any);

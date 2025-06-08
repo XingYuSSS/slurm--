@@ -6,6 +6,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.9.2][0.9.2] - 2025-06-08
+
+### Added
+
+- Add `confirm task array` button and command
+
+### Fixed
+
+- Fixed when delete all `subtasks` of a `TaskArray` could result in an empty subtask list, causing the extension to fail unexpectedly ([#8](https://github.com/XingYuSSS/slurm--/issues/8))
+- Skip invalid `TaskArray` entries with empty subtasks when load from `task.json` for better robustness and auto-recovery ([#8](https://github.com/XingYuSSS/slurm--/issues/8))
+- Fixed task count not update after cancel or confirm subtasks in a TaskArray
+- Fixed entire TaskArray be confirmed when only confirm one subtask
+
 ## [0.9.1][0.9.1] - 2025-06-03
 
 ### Fixed
@@ -298,7 +311,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.9.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/XingYuSSS/slurm--/compare/v0.9.1...v0.9.2
+[0.9.1]: https://github.com/XingYuSSS/slurm--/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/XingYuSSS/slurm--/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/XingYuSSS/slurm--/compare/v0.7.1...v0.7.2

@@ -63,11 +63,18 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<AllItem | undefined | null | void> = new vscode.EventEmitter<AllItem | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<AllItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
+    private expandedItems = new Set<string>();
+
     refresh(): void {
         this._onDidChangeTreeData.fire();
     }
 
     getTreeItem(element: AllItem): vscode.TreeItem {
+        if (element.id) {
+            element.collapsibleState = this.expandedItems.has(element.id!)
+            ? vscode.TreeItemCollapsibleState.Expanded
+            : vscode.TreeItemCollapsibleState.Collapsed;
+        }
         return element;
     }
 
@@ -89,6 +96,15 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
 
         return Promise.resolve([]);
     }
+
+    setExpandedState(item: AllItem, isExpanded: boolean) {
+        if (isExpanded) {
+            this.expandedItems.add(item.id!);
+        } else {
+            this.expandedItems.delete(item.id!);
+        }
+    }
+
 }
 
 export const taskViewDataProvider = TaskViewDataProvider.getInstance();
@@ -105,5 +121,13 @@ export function initTasksView(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
+
+    const expandListener = vscode.commands.registerCommand('myTreeViewId.expand', (item) => {
+        taskViewDataProvider.setExpandedState(item, true);
+    });
+    
+    const collapseListener = vscode.commands.registerCommand('myTreeViewId.collapse', (item) => {
+        taskViewDataProvider.setExpandedState(item, false);
+    });
 
 }
