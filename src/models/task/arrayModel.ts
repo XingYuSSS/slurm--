@@ -49,9 +49,9 @@ export class TaskArray implements BaseTask {
         }
     }
 
-    public finish(endTimes: Record<number, string>) {
+    public finish(endTimes: Record<number, string>, exitCodes: Record<number, string>, states: Record<number, string>) {
         for (const [key, value] of Object.entries(endTimes)) {
-            this.subTasks[Number(key)].finish(value);
+            this.subTasks[Number(key)].finish(value, exitCodes[Number(key)], states[Number(key)]);
         }
         this.finished = this.getSubTasks().every(v => v.finished);
     }

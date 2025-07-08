@@ -6,6 +6,20 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Use detailed icons for finished tasks based on their state in `sacct`  (`COMPLETED`, `FAILED`, `CANCELLED`, etc.) ([#9](https://github.com/XingYuSSS/slurm--/issues/9))
+- Add a tooltip to finished tasks to show their detailed state and original exit code ([#9](https://github.com/XingYuSSS/slurm--/issues/9))
+
+### Changed
+
+- Centralized all task state icons into a single, unified map for consistency and easier maintenance
+
+### Fixed
+
+- Fixed a crash that occurred when loading empty or invalid task file
+- Fixed incorrect formatting in `command` field that blocked opening script files
+
 ## [0.9.2][0.9.2] - 2025-06-08
 
 ### Added

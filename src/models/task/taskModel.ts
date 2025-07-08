@@ -3,7 +3,6 @@ import { Gres } from "../gresModel";
 import { BaseTask, TaskState } from "./baseTask";
 import { convertKeysToCamelCase } from "../../utils/utils";
 
-
 export interface TaskParams {
     jobid: number | string;
     arrayid: number | string | null;
@@ -21,6 +20,7 @@ export interface TaskParams {
     submitTime: string;
     startTime?: string | null;
     endTime?: string | null;
+    exitCode?: string | null;
     finished?: boolean;
 }
 
@@ -55,6 +55,7 @@ export class Task implements BaseTask {
     readonly submitTime: string;
     startTime: string | null;
     endTime: string | null;
+    exitCode: string | null;
 
     finished: boolean;
 
@@ -78,6 +79,7 @@ export class Task implements BaseTask {
         this.submitTime = params.submitTime;
         this.startTime = params.startTime === 'N/A' || !params.startTime ? null : params.startTime;
         this.endTime = params.endTime === 'N/A' || !params.endTime ? null : params.endTime;
+        this.exitCode = params.exitCode === 'N/A' || !params.exitCode ? null : params.exitCode;
 
         this.finished = params.finished ?? false;
     }
@@ -115,11 +117,12 @@ export class Task implements BaseTask {
         this.endTime = task.endTime;
     }
 
-    public finish(endTime: string) {
+    public finish(endTime: string, exitCode: string, state: string) {
         this.node = '';
         this.reason = '';
-        this.state = TaskState.CG;
+        this.state = state as TaskState;
         this.endTime = endTime;
+        this.exitCode = exitCode;
         this.finished = true;
     }
 
@@ -133,6 +136,7 @@ export class Task implements BaseTask {
                     result[key] = value?.toString() ?? 'N/A';
                     break;
 
+                case 'command':
                 case 'outPath':
                 case 'errPath':
                     result[key] = value.toString();
@@ -140,6 +144,7 @@ export class Task implements BaseTask {
 
                 case 'startTime':
                 case 'endTime':
+                case 'exitCode':
                     result[key] = value ?? 'N/A';
                     break;
 
@@ -155,6 +160,13 @@ export class Task implements BaseTask {
     static fromObj(obj: TaskObj) {
         obj = convertKeysToCamelCase(obj) as TaskObj;
         return new Task(obj as TaskParams);
+    }
+
+    public isSuccessful(): boolean | null {
+        if (!this.finished) {
+            return null;
+        }
+        return this.state === TaskState.COMPLETED || this.state === TaskState.CG;
     }
 
 }
