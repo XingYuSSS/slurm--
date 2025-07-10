@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.10.0][0.10.0] - 2025-07-10
+
 ### Added
 
 - Use detailed icons for finished tasks based on their state in `sacct`  (`COMPLETED`, `FAILED`, `CANCELLED`, etc.) ([#9](https://github.com/XingYuSSS/slurm--/issues/9))
@@ -325,7 +327,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.9.2...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/XingYuSSS/slurm--/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/XingYuSSS/slurm--/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/XingYuSSS/slurm--/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/XingYuSSS/slurm--/compare/v0.8.0...v0.9.0
