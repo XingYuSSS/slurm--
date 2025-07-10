@@ -45,27 +45,33 @@ function parseJobarrayId(jobIdStr: string): string[] {
     return [];
 }
 
-async function getFinishTime(taskId: string[]): Promise<Map<string, string>> {
+interface TaskFinishInfo {
+    endTime: string;
+    exitCode: string;
+    state: string;
+}
+
+async function getTaskFinishInfo(taskId: string[]): Promise<Map<string, TaskFinishInfo>> {
     if (taskId.length === 0) { return new Map(); }
 
-    const [out, err] = await executeCmd(`sacct -n -X -P -j ${taskId.join(',')} --format=JobID,End`);
+    const [out, err] = await executeCmd(`sacct -n -X -P -j ${taskId.join(',')} --format=JobID,End,ExitCode,State`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return new Map();
     }
     const lines = out.split('\n');
 
-    const finishTimes: Map<string, string> = new Map();
+    const finishInfoMap: Map<string, TaskFinishInfo> = new Map();
     lines.forEach(line => {
-        const [jobid, time] = line.split('|');
+        const [jobid, time, exitCode, state] = line.split('|');
         const jobidList = parseJobarrayId(jobid);
         jobidList.forEach(jobid => {
             if (time !== 'Unknown') {
-                finishTimes.set(jobid, time);
+                finishInfoMap.set(jobid, { endTime: time, exitCode: exitCode, state: state.split(' ')[0] });
             }
         });
     });
-    return finishTimes;
+    return finishInfoMap;
 }
 
 
@@ -95,7 +101,8 @@ export class TaskService {
         this.taskMap = new Map();
 
         if (fs.existsSync(this.storagePath)) {
-            const jsonData = fs.readFileSync(this.storagePath, 'utf8');
+            let jsonData = fs.readFileSync(this.storagePath, 'utf8');
+            if (jsonData === '') { jsonData = '[]'; }
             const saveMap = JSON.parse(jsonData);
             const taskMap = new Map(saveMap) as Map<number, TaskObjTypes>;
 
@@ -119,10 +126,18 @@ export class TaskService {
 
     private async finishTask(taskId: string[]) {
         if (taskId.length === 0) { return; }
-        const endmap = await getFinishTime(taskId);
-        endmap.forEach((v, k) => {
-            const [jobid, arrid] = k.split('_');
-            this.taskMap.get(parseInt(jobid))?.finish(arrid !== undefined ? { [arrid]: v } : v);
+        const finishInfoMap = await getTaskFinishInfo(taskId);
+        finishInfoMap.forEach((info, jobArrayId) => {
+            const [jobid, arrid] = jobArrayId.split('_');
+            if (arrid !== undefined) {
+                this.taskMap.get(parseInt(jobid))?.finish(
+                    { [arrid]: info.endTime },
+                    { [arrid]: info.exitCode },
+                    { [arrid]: info.state }
+                );
+            } else {
+                this.taskMap.get(parseInt(jobid))?.finish(info.endTime, info.exitCode, info.state);
+            }
         });
     }
 
