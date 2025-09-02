@@ -52,6 +52,8 @@
     "config.tasksPanel.refreshInterval(ms).description": "任务自动刷新间隔 (单位毫秒，重启自动刷新后生效)",
     "config.resourcesPanel.refreshInterval(ms).description": "资源自动刷新间隔 (单位毫秒，重启自动刷新后生效)",
     "config.commands.user.description": "用于`squeue`命令的<user>参数，默认为`--me`。如果使用的slurm系统版本不支持`--me`参数，请设置为`--user <your_username>`。",
+    "config.commands.sinfoExtraArgs.description": "用于`sinfo`命令的额外参数。每个键值对表示一个参数，需包含前缀`-`或`--`。当开启`Sinfo Show All Clusters`选项时，请勿重复添加`-M`参数。",
+    "config.commands.sinfoShowAllClusters.description": "勾选时向 `sinfo` 命令添加`-M all`参数。当集群中的 GRES 资源显示不完整时，可尝试启用此选项。",
     "config.label.id": "Id",
     "config.label.name": "名称",
     "config.label.availability": "可用性",

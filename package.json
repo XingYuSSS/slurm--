@@ -655,6 +655,21 @@
           "default": "--me",
           "markdownDescription": "%config.commands.user.description%"
         },
+        "slurm--.commands.sinfoExtraArgs": {
+          "type": "object",
+          "default": {},
+          "markdownDescription": "%config.commands.sinfoExtraArgs.description%",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "slurm--.commands.sinfoShowAllClusters": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "%config.commands.sinfoShowAllClusters.description%"
+        },
         "slurm--.tasksPanel.displayInformation": {
           "type": "object",
           "markdownDescription": "%config.tasksPanel.displayInformation.description%",

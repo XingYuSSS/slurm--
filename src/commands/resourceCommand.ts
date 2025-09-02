@@ -38,7 +38,7 @@ function extractNodes(nodeString: string): Node[] {
     const decoder = new TextDecoder('utf-8');
     let nodeList: Node[] = [];
     nodeString.split('\n').forEach((value) => {
-        // NODELIST:15,Available:15,Memory:15,AllocMem:15,Gres:50,GresUsed:50,Partition:15,StateLong:15
+        // NODELIST:20,Available:15,Memory:15,AllocMem:15,Gres:50,GresUsed:50,Partition:20,StateLong:20,CPUsState:20
         if (value.length === 0) { return; }
 
         const encodedValue = encoder.encode(value);
@@ -63,12 +63,23 @@ function extractNodes(nodeString: string): Node[] {
 }
 
 async function refreshResources() {
+    const argsObj = configService.sinfoExtraArgs;
+    const showAll = configService.sinfoShowAllClusters;
+    if ('-M' in argsObj && showAll) {
+        vscode.window.showErrorMessage('Do not add the -M option when "Sinfo Show All Clusters" is enabled.');
+    }
+
+    const args = Object.entries(argsObj)
+        .map(([key, value]) => `${key} ${value}`)
+        .join(' ') + showAll ? ' -M all' : '';
+    
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`sinfo --noheader --Node -O ${query}`, cachePath, configService.resourceCacheTimeout);
+    const [out, err] = await executeCmd(`sinfo --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
     }
+
     resourceService.updateNode(...extractNodes(out));
     resourceViewDataProvider.refresh();
 }

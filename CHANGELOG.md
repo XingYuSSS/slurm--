@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Added "Sinfo Show All Clusters" option to include `-M all` in `sinfo` command for full GRES visibility ([#10](https://github.com/XingYuSSS/slurm--/issues/10))
+- Added support for custom arguments in `sinfo` ([#10](https://github.com/XingYuSSS/slurm--/issues/10))
+
 ## [0.10.0][0.10.0] - 2025-07-10
 
 ### Added

@@ -31,6 +31,12 @@ class ConfigService {
     public get optionUser(): string {
         return vscode.workspace.getConfiguration('slurm--.commands').get('user') ?? '--me';
     }
+    public get sinfoExtraArgs(): object {
+        return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoExtraArgs') ?? {};
+    }
+    public get sinfoShowAllClusters(): boolean {
+        return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoShowAllClusters') ?? false;
+    }
     public get taskCacheTimeout(): number {
         return vscode.workspace.getConfiguration('slurm--.tasksPanel').get('cacheTimeout') ?? 1000;
     }

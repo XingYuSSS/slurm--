@@ -52,6 +52,8 @@
     "config.tasksPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
     "config.resourcesPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
     "config.commands.user.description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`",
+    "config.commands.sinfoExtraArgs.description": "Additional arguments for the `sinfo` command. Each key-value pair represents one argument, which must include a leading `-` or `--`. When the `Sinfo Show All Clusters` option is enabled, do not add the -M option again.",
+    "config.commands.sinfoShowAllClusters.description": "When checked, adds the `-M all` argument to the `sinfo` command. Enable this option if GRES resources in the cluster are not fully displayed",
     "config.label.id": "Id",
     "config.label.name": "Name",
     "config.label.availability": "Availability",
