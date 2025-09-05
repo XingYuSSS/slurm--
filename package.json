@@ -837,6 +837,23 @@
           "default": "ascending",
           "markdownDescription": "%config.resourcesPanel.sortDirection.description%"
         },
+        "slurm--.resourcesPanel.groupBy": {
+          "type": "string",
+          "enum": [
+            "gres",
+            "partition"
+          ],
+          "markdownEnumDescriptions": [
+            "%config.groupBy.gres.description%",
+            "%config.groupBy.partition.description%"
+          ],
+          "enumItemLabels": [
+            "%config.label.gres%",
+            "%config.label.partition%"
+          ],
+          "default": "gres",
+          "markdownDescription": "%config.resourcesPanel.groupBy.description%"
+        },
         "slurm--.tasksPanel.cacheTimeout": {
           "type": "integer",
           "default": 1000,

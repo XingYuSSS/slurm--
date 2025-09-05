@@ -69,6 +69,12 @@
     "config.resourcesPanel.sortBy.availability.description": "Sort By Node and GRES Availability",
     "config.resourcesPanel.sortBy.description": "The key which the resources sort by",
 
+    "config.groupBy.gres.description": "Group By GRES",
+    "config.groupBy.partition.description": "Group By Partition",
+    "config.resourcesPanel。groupBy.description": "The key which the nodes group by",
+    "config.label.gres": "GRES",
+    "config.label.partition": "Partition",
+
     "config.sortDirection.ascending.description": "Ascending Order",
     "config.sortDirection.descending.description": "Descending Order",
     "config.label.ascending": "Ascending",

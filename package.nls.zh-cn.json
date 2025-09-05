@@ -69,6 +69,12 @@
     "config.resourcesPanel.sortBy.availability.description": "根据节点和资源的可用性排序",
     "config.resourcesPanel.sortBy.description": "资源排序的键",
 
+    "config.groupBy.gres.description": "以GRES分组",
+    "config.groupBy.partition.description": "以分区分组",
+    "config.resourcesPanel.groupBy.description": "节点分组的键",
+    "config.label.gres": "GRES",
+    "config.label.partition": "分区",
+
     "config.sortDirection.ascending.description": "按升序排序",
     "config.sortDirection.descending.description": "按降序排序",
     "config.label.ascending": "升序",
