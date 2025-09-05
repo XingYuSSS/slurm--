@@ -36,6 +36,11 @@
     "slurm--.sortDescend.title": "Descending",
     "slurm--.sortingAscend.title": "✔ Ascending",
     "slurm--.sortingDescend.title": "✔ Descending",
+    
+    "slurm--.groupByGres.title": "Group By Gres",
+    "slurm--.groupByPartition.title": "Group By Partition",
+    "slurm--.groupingByGres.title": "✔ Group By Gres",
+    "slurm--.groupingByPartition.title": "✔ Group By Partition",
 
     "slurm--.showShortcutKey.title": "Show Shortcut Key",
     "slurm--.hideShortcutKey.title": "Hide Shortcut Key",

@@ -37,6 +37,11 @@
     "slurm--.sortingAscend.title": "✔ 升序",
     "slurm--.sortingDescend.title": "✔ 降序",
 
+    "slurm--.groupByGres.title": "以GRES分组",
+    "slurm--.groupByPartition.title": "以分区分组",
+    "slurm--.groupingByGres.title": "✔ 以GRES分组",
+    "slurm--.groupingByPartition.title": "✔ 以分区分组",
+
     "slurm--.showShortcutKey.title": "展示快捷键",
     "slurm--.hideShortcutKey.title": "隐藏快捷键",
 

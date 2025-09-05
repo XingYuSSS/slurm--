@@ -247,6 +247,26 @@
         "category": "slurm--"
       },
       {
+        "command": "slurm--.setResourceGroupByGres",
+        "title": "%slurm--.groupByGres.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedResourceGroupByGres",
+        "title": "%slurm--.groupingByGres.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setResourceGroupByPartition",
+        "title": "%slurm--.groupByPartition.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedResourceGroupByPartition",
+        "title": "%slurm--.groupingByPartition.title%",
+        "category": "slurm--"
+      },
+      {
         "command": "slurm--.showTaskShortcutKey",
         "title": "%slurm--.showShortcutKey.title%",
         "category": "slurm--"
@@ -420,6 +440,26 @@
           "command": "slurm--.settedResourceSortDescend",
           "when": "view == slurm--_resource_view && gresSortDirection == descending",
           "group": "sortDirection@2"
+        },
+        {
+          "command": "slurm--.setResourceGroupByGres",
+          "when": "view == slurm--_resource_view && gresGroupKey != gres",
+          "group": "groupby@1"
+        },
+        {
+          "command": "slurm--.settedResourceGroupByGres",
+          "when": "view == slurm--_resource_view && gresGroupKey == gres",
+          "group": "groupby@1"
+        },
+        {
+          "command": "slurm--.setResourceGroupByPartition",
+          "when": "view == slurm--_resource_view && gresGroupKey != partition",
+          "group": "groupby@2"
+        },
+        {
+          "command": "slurm--.settedResourceGroupByPartition",
+          "when": "view == slurm--_resource_view && gresGroupKey == partition",
+          "group": "groupby@2"
         },
         {
           "command": "slurm--.showTaskShortcutKey",

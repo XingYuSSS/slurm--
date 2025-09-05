@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { configService, GresSortKeys, SortDirection, TaskInfoConfig, TaskInfoConfigKeys, TaskSortKeys } from '../services';
+import { configService, GresGroupKeys, GresSortKeys, SortDirection, TaskInfoConfig, TaskInfoConfigKeys, TaskSortKeys } from '../services';
 import { taskViewDataProvider } from '../view/taskView';
 import { resourceViewDataProvider } from '../view/resourceView';
 
@@ -32,6 +32,11 @@ function setTaskSortDirection(direction: SortDirection) {
 
 function setResourceSortDirection(direction: SortDirection) {
     configService.gresSortDirection = direction;
+    resourceViewDataProvider.refresh();
+}
+
+function setResourcGroupKey(key: GresGroupKeys) {
+    configService.gresGroupKey = key;
     resourceViewDataProvider.refresh();
 }
 
@@ -81,6 +86,11 @@ export function initConfigCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setResourceSortDescend', () => setResourceSortDirection(SortDirection.DESCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceSortAscend', () => setResourceSortDirection(SortDirection.ASCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceSortDescend', () => setResourceSortDirection(SortDirection.DESCEND)));
+
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.setResourceGroupByGres', () => setResourcGroupKey(GresGroupKeys.GRES)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.setResourceGroupByPartition', () => setResourcGroupKey(GresGroupKeys.PARTITION)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceGroupByGres', () => setResourcGroupKey(GresGroupKeys.GRES)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceGroupByPartition', () => setResourcGroupKey(GresGroupKeys.PARTITION)));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.showTaskShortcutKey', () => setTaskShowShortcutKey(true)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.hideTaskShortcutKey', () => setTaskShowShortcutKey(false)));
