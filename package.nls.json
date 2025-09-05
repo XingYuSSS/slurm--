@@ -86,5 +86,7 @@
     "config.tasksPanel.displayInformation.description": "Configure display information for expanded task in tasksPanel",
 
     "config.tasksPanel.cacheTimeout.description": "The timeout of the task refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
-    "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly."
+    "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
+    
+    "config.launch.terminal.shellList.description": "A list of shells to be displayed as candidates when launching the terminal, shown in the specified order."
 }

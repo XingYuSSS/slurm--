@@ -86,5 +86,7 @@
     "config.tasksPanel.displayInformation.description": "设置任务展开后所展示的信息",
 
     "config.tasksPanel.cacheTimeout.description": "任务刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
-    "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。"
+    "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
+
+    "config.launch.terminal.shellList.description": "指定在启动终端时可供选择的 Shell，按列表顺序显示为候选选项。"
 }

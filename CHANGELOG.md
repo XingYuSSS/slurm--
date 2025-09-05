@@ -11,6 +11,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added "Sinfo Show All Clusters" option to include `-M all` in `sinfo` command for full GRES visibility ([#10](https://github.com/XingYuSSS/slurm--/issues/10))
 - Added support for custom arguments in `sinfo` ([#10](https://github.com/XingYuSSS/slurm--/issues/10))
 - Added grouping options for the menu of resource view ([#11](https://github.com/XingYuSSS/slurm--/issues/11))
+- Added configurable list of candidate shells for terminal launch, displayed in user-defined order
 
 ## [0.10.0][0.10.0] - 2025-07-10
 

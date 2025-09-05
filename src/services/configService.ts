@@ -48,6 +48,9 @@ class ConfigService {
     public get resourceCacheTimeout(): number {
         return vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('cacheTimeout') ?? 1000;
     }
+    public get terminalShellList(): Array<string> {
+        return vscode.workspace.getConfiguration('slurm--.launch.terminal').get('shellList') ?? ['bash', 'zsh', 'fish'];
+    }
 
     #taskSortKey!: string;
     public get taskSortKey(): TaskSortKeys {

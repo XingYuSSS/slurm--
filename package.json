@@ -863,6 +863,16 @@
           "type": "integer",
           "default": 1000,
           "markdownDescription": "%config.resourcesPanel.cacheTimeout.description%"
+        },
+        "slurm--.launch.terminal.shellList": {
+          "type": "array",
+          "default": ["bash", "zsh", "fish"],
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "description": "Shell command or path"
+          },
+          "markdownDescription": "%config.launch.terminal.shellList.description%"
         }
       }
     },
