@@ -187,7 +187,6 @@ export class TaskService {
     public getTask(): BaseTask[] {
         return [...this.taskMap.values()];
     }
-
 }
 
 export let taskService: TaskService;

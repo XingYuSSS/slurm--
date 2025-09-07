@@ -37,6 +37,11 @@
     "slurm--.sortingAscend.title": "✔ 升序",
     "slurm--.sortingDescend.title": "✔ 降序",
 
+    "slurm--.groupByGres.title": "以GRES分组",
+    "slurm--.groupByPartition.title": "以分区分组",
+    "slurm--.groupingByGres.title": "✔ 以GRES分组",
+    "slurm--.groupingByPartition.title": "✔ 以分区分组",
+
     "slurm--.showShortcutKey.title": "展示快捷键",
     "slurm--.hideShortcutKey.title": "隐藏快捷键",
 
@@ -52,6 +57,8 @@
     "config.tasksPanel.refreshInterval(ms).description": "任务自动刷新间隔 (单位毫秒，重启自动刷新后生效)",
     "config.resourcesPanel.refreshInterval(ms).description": "资源自动刷新间隔 (单位毫秒，重启自动刷新后生效)",
     "config.commands.user.description": "用于`squeue`命令的<user>参数，默认为`--me`。如果使用的slurm系统版本不支持`--me`参数，请设置为`--user <your_username>`。",
+    "config.commands.sinfoExtraArgs.description": "用于`sinfo`命令的额外参数。每个键值对表示一个参数，需包含前缀`-`或`--`。当开启`Sinfo Show All Clusters`选项时，请勿重复添加`-M`参数。",
+    "config.commands.sinfoShowAllClusters.description": "勾选时向 `sinfo` 命令添加`-M all`参数。当集群中的 GRES 资源显示不完整时，可尝试启用此选项。",
     "config.label.id": "Id",
     "config.label.name": "名称",
     "config.label.availability": "可用性",
@@ -61,6 +68,12 @@
     "config.resourcesPanel.sortBy.name.description": "根据节点名和资源名排序",
     "config.resourcesPanel.sortBy.availability.description": "根据节点和资源的可用性排序",
     "config.resourcesPanel.sortBy.description": "资源排序的键",
+
+    "config.groupBy.gres.description": "以GRES分组",
+    "config.groupBy.partition.description": "以分区分组",
+    "config.resourcesPanel.groupBy.description": "节点分组的键",
+    "config.label.gres": "GRES",
+    "config.label.partition": "分区",
 
     "config.sortDirection.ascending.description": "按升序排序",
     "config.sortDirection.descending.description": "按降序排序",
@@ -73,5 +86,7 @@
     "config.tasksPanel.displayInformation.description": "设置任务展开后所展示的信息",
 
     "config.tasksPanel.cacheTimeout.description": "任务刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
-    "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。"
+    "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
+
+    "config.launch.terminal.shellList.description": "指定在启动终端时可供选择的 Shell，按列表顺序显示为候选选项。"
 }

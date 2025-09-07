@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.11.0][0.11.0] - 2025-09-07
+
+### Added
+
+- Added "Sinfo Show All Clusters" option to include `-M all` in `sinfo` command for full GRES visibility ([#10](https://github.com/XingYuSSS/slurm--/issues/10))
+- Added support for custom arguments in `sinfo` ([#10](https://github.com/XingYuSSS/slurm--/issues/10))
+- Added grouping options for the menu of resource view ([#11](https://github.com/XingYuSSS/slurm--/issues/11))
+- Added configurable list of candidate shells for terminal launch, displayed in user-defined order
+
 ## [0.10.0][0.10.0] - 2025-07-10
 
 ### Added
@@ -327,7 +336,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.10.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/XingYuSSS/slurm--/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/XingYuSSS/slurm--/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/XingYuSSS/slurm--/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/XingYuSSS/slurm--/compare/v0.9.0...v0.9.1

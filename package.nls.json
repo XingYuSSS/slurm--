@@ -36,6 +36,11 @@
     "slurm--.sortDescend.title": "Descending",
     "slurm--.sortingAscend.title": "✔ Ascending",
     "slurm--.sortingDescend.title": "✔ Descending",
+    
+    "slurm--.groupByGres.title": "Group By Gres",
+    "slurm--.groupByPartition.title": "Group By Partition",
+    "slurm--.groupingByGres.title": "✔ Group By Gres",
+    "slurm--.groupingByPartition.title": "✔ Group By Partition",
 
     "slurm--.showShortcutKey.title": "Show Shortcut Key",
     "slurm--.hideShortcutKey.title": "Hide Shortcut Key",
@@ -52,6 +57,8 @@
     "config.tasksPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
     "config.resourcesPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
     "config.commands.user.description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`",
+    "config.commands.sinfoExtraArgs.description": "Additional arguments for the `sinfo` command. Each key-value pair represents one argument, which must include a leading `-` or `--`. When the `Sinfo Show All Clusters` option is enabled, do not add the -M option again.",
+    "config.commands.sinfoShowAllClusters.description": "When checked, adds the `-M all` argument to the `sinfo` command. Enable this option if GRES resources in the cluster are not fully displayed",
     "config.label.id": "Id",
     "config.label.name": "Name",
     "config.label.availability": "Availability",
@@ -61,6 +68,12 @@
     "config.resourcesPanel.sortBy.name.description": "Sort By Node and GRES Name",
     "config.resourcesPanel.sortBy.availability.description": "Sort By Node and GRES Availability",
     "config.resourcesPanel.sortBy.description": "The key which the resources sort by",
+
+    "config.groupBy.gres.description": "Group By GRES",
+    "config.groupBy.partition.description": "Group By Partition",
+    "config.resourcesPanel。groupBy.description": "The key which the nodes group by",
+    "config.label.gres": "GRES",
+    "config.label.partition": "Partition",
 
     "config.sortDirection.ascending.description": "Ascending Order",
     "config.sortDirection.descending.description": "Descending Order",
@@ -73,5 +86,7 @@
     "config.tasksPanel.displayInformation.description": "Configure display information for expanded task in tasksPanel",
 
     "config.tasksPanel.cacheTimeout.description": "The timeout of the task refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
-    "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly."
+    "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
+    
+    "config.launch.terminal.shellList.description": "A list of shells to be displayed as candidates when launching the terminal, shown in the specified order."
 }

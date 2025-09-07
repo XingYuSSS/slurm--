@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { executeCmd } from '../utils/utils';
 import { Script } from '../models';
 import { launcherViewDataProvider } from '../view/launcherView';
-import { scriptService } from '../services';
+import { configService, scriptService } from '../services';
 import { ScriptItem, ListItem, NodeItem, ArgItem } from '../view/components';
 
 async function refreshLauncher() {
@@ -89,7 +89,7 @@ async function launchTerminal(node: NodeItem) {
     }
     let shell = undefined;
     while (!shell) {
-        shell = await vscode.window.showQuickPick(['zsh', 'bash', vscode.l10n.t('Custom...')], { title: vscode.l10n.t('Choose shell') });
+        shell = await vscode.window.showQuickPick([...configService.terminalShellList, vscode.l10n.t('Custom...')], { title: vscode.l10n.t('Choose shell') });
         if (!shell) { return; }
         if (shell === vscode.l10n.t('Custom...')) {
             shell = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom shell') });

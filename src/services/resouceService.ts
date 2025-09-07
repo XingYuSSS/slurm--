@@ -23,18 +23,6 @@ export class ResourceService {
     public getNode(): Node[] {
         return this.nodeList;
     }
-
-    public groupByGres(): Map<String, Node[]> {
-        return this.nodeList.reduce((group, node) => {
-            const gresId = node.gres === null ? 'null': node.gres.toIdString();
-            if (!group.has(gresId)) {
-                group.set(gresId, []);
-            }
-            group.get(gresId)?.push(node);
-            return group;
-        }, new Map<String, Node[]>());
-    }
-
 }
 
 export const resourceService: ResourceService = ResourceService.getInstance();

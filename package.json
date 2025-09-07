@@ -247,6 +247,26 @@
         "category": "slurm--"
       },
       {
+        "command": "slurm--.setResourceGroupByGres",
+        "title": "%slurm--.groupByGres.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedResourceGroupByGres",
+        "title": "%slurm--.groupingByGres.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.setResourceGroupByPartition",
+        "title": "%slurm--.groupByPartition.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.settedResourceGroupByPartition",
+        "title": "%slurm--.groupingByPartition.title%",
+        "category": "slurm--"
+      },
+      {
         "command": "slurm--.showTaskShortcutKey",
         "title": "%slurm--.showShortcutKey.title%",
         "category": "slurm--"
@@ -420,6 +440,26 @@
           "command": "slurm--.settedResourceSortDescend",
           "when": "view == slurm--_resource_view && gresSortDirection == descending",
           "group": "sortDirection@2"
+        },
+        {
+          "command": "slurm--.setResourceGroupByGres",
+          "when": "view == slurm--_resource_view && gresGroupKey != gres",
+          "group": "groupby@1"
+        },
+        {
+          "command": "slurm--.settedResourceGroupByGres",
+          "when": "view == slurm--_resource_view && gresGroupKey == gres",
+          "group": "groupby@1"
+        },
+        {
+          "command": "slurm--.setResourceGroupByPartition",
+          "when": "view == slurm--_resource_view && gresGroupKey != partition",
+          "group": "groupby@2"
+        },
+        {
+          "command": "slurm--.settedResourceGroupByPartition",
+          "when": "view == slurm--_resource_view && gresGroupKey == partition",
+          "group": "groupby@2"
         },
         {
           "command": "slurm--.showTaskShortcutKey",
@@ -655,6 +695,21 @@
           "default": "--me",
           "markdownDescription": "%config.commands.user.description%"
         },
+        "slurm--.commands.sinfoExtraArgs": {
+          "type": "object",
+          "default": {},
+          "markdownDescription": "%config.commands.sinfoExtraArgs.description%",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          }
+        },
+        "slurm--.commands.sinfoShowAllClusters": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "%config.commands.sinfoShowAllClusters.description%"
+        },
         "slurm--.tasksPanel.displayInformation": {
           "type": "object",
           "markdownDescription": "%config.tasksPanel.displayInformation.description%",
@@ -782,6 +837,23 @@
           "default": "ascending",
           "markdownDescription": "%config.resourcesPanel.sortDirection.description%"
         },
+        "slurm--.resourcesPanel.groupBy": {
+          "type": "string",
+          "enum": [
+            "gres",
+            "partition"
+          ],
+          "markdownEnumDescriptions": [
+            "%config.groupBy.gres.description%",
+            "%config.groupBy.partition.description%"
+          ],
+          "enumItemLabels": [
+            "%config.label.gres%",
+            "%config.label.partition%"
+          ],
+          "default": "gres",
+          "markdownDescription": "%config.resourcesPanel.groupBy.description%"
+        },
         "slurm--.tasksPanel.cacheTimeout": {
           "type": "integer",
           "default": 1000,
@@ -791,6 +863,16 @@
           "type": "integer",
           "default": 1000,
           "markdownDescription": "%config.resourcesPanel.cacheTimeout.description%"
+        },
+        "slurm--.launch.terminal.shellList": {
+          "type": "array",
+          "default": ["bash", "zsh", "fish"],
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "description": "Shell command or path"
+          },
+          "markdownDescription": "%config.launch.terminal.shellList.description%"
         }
       }
     },

@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+import _ from 'lodash';
 
 import { Node, NodeState, ResourceGres } from '../models/';
 import { ListItem, NodeItem } from './components';
-import { configService, GresSortKeys, resourceService } from '../services';
+import { configService, GresSortKeys, GresGroupKeys, resourceService } from '../services';
 import { resignFn } from '../utils/utils';
 
 function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
@@ -22,8 +24,8 @@ const listSortFn = new Map([
     [GresSortKeys.AVAIL, (a: ResourceGres | null, b: ResourceGres | null) => a === null ? -1 : (b === null ? 1 : (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum))],
 ]);
 
-function getGroupedNode(): ListItem[] {
-    return [...resourceService.groupByGres().values()]
+function getNodeGroupedByGRES(): ListItem[] {
+    return Object.values(_.groupBy(resourceService.getNode(), node => node.gres?.toIdString() ?? 'null'))
         .map(nodes => {
             nodes = nodes.sort(resignFn(nodeSortFn.get(configService.gresSortKey)!, configService.gresSortAscending));
             if (nodes[0].gres === null) {
@@ -44,6 +46,31 @@ ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
         .sort((a, b) => resignFn(listSortFn.get(configService.gresSortKey)!, configService.gresSortAscending)(a[0] as ResourceGres | null, b[0] as ResourceGres | null))
         .map(item => item[1]) as ListItem[];
 }
+
+function getNodeGroupedByPartition(): ListItem[] {
+    return Object.values(_.groupBy(resourceService.getNode(), node => node.partition))
+        .map(nodes => {
+            nodes = nodes.sort(resignFn(nodeSortFn.get(configService.gresSortKey)!, configService.gresSortAscending));
+            const availNode = nodes.filter(v => v.isAvailableState && v.gres !== null);
+            const rgres = availNode.length === 0 ? ResourceGres.empty('') : ResourceGres.fromArray(availNode.map(v => v.gres!));
+
+            const item = new ListItem(`${nodes[0].partition} (${rgres.totalNum - rgres.usedNum}/${rgres.totalNum})`, nodes.map(v => new NodeItem(v)), vscode.l10n.t('${length} nodes'), gresIcon(rgres), 'gresList', false);
+            item.tooltip = new vscode.MarkdownString(`
+| nodeid | state | GRES (idle/total) | memory (i/t) | CPUs (i/t) |
+|:--:|:--:|:--:|:--:|:--:|
+${nodes.slice(0, 10).map(node => `| ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |`).join('\n')}
+${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
+            `);
+            return [rgres, item];
+        })
+        .sort((a, b) => resignFn(listSortFn.get(configService.gresSortKey)!, configService.gresSortAscending)(a[0] as ResourceGres | null, b[0] as ResourceGres | null))
+        .map(item => item[1]) as ListItem[];
+}
+
+const getGroupedNodeFn = {
+    [GresGroupKeys.GRES]: getNodeGroupedByGRES,
+    [GresGroupKeys.PARTITION]: getNodeGroupedByPartition,
+};
 
 export class ResourceViewDataProvider implements vscode.TreeDataProvider<NodeItem | ListItem> {
     private static _instance: ResourceViewDataProvider | null = null;
@@ -69,7 +96,7 @@ export class ResourceViewDataProvider implements vscode.TreeDataProvider<NodeIte
 
     getChildren(element?: NodeItem | ListItem): Thenable<ListItem[] | NodeItem[]> {
         if (!element) {
-            return Promise.resolve(getGroupedNode());
+            return Promise.resolve(getGroupedNodeFn[configService.gresGroupKey]());
         }
         if (element instanceof ListItem) {
             return Promise.resolve(element.children as NodeItem[]);

@@ -10,6 +10,11 @@ export enum GresSortKeys {
     AVAIL = 'availability',
 }
 
+export enum GresGroupKeys {
+    GRES = 'gres',
+    PARTITION = 'partition',
+}
+
 export enum SortDirection {
     ASCEND = 'ascending',
     DESCEND = 'descending'
@@ -31,11 +36,20 @@ class ConfigService {
     public get optionUser(): string {
         return vscode.workspace.getConfiguration('slurm--.commands').get('user') ?? '--me';
     }
+    public get sinfoExtraArgs(): object {
+        return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoExtraArgs') ?? {};
+    }
+    public get sinfoShowAllClusters(): boolean {
+        return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoShowAllClusters') ?? false;
+    }
     public get taskCacheTimeout(): number {
         return vscode.workspace.getConfiguration('slurm--.tasksPanel').get('cacheTimeout') ?? 1000;
     }
     public get resourceCacheTimeout(): number {
         return vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('cacheTimeout') ?? 1000;
+    }
+    public get terminalShellList(): Array<string> {
+        return vscode.workspace.getConfiguration('slurm--.launch.terminal').get('shellList') ?? ['bash', 'zsh', 'fish'];
     }
 
     #taskSortKey!: string;
@@ -113,6 +127,16 @@ class ConfigService {
         return (this.#gresSortDirection as SortDirection) === SortDirection.ASCEND;
     }
 
+    #gresGroupKey!: string;
+    public get gresGroupKey(): GresGroupKeys {
+        return this.#gresGroupKey as GresGroupKeys;
+    }
+    public set gresGroupKey(key: GresGroupKeys) {
+        vscode.workspace.getConfiguration('slurm--.resourcesPanel').update('groupBy', key);
+        vscode.commands.executeCommand('setContext', 'gresGroupKey', key);
+        this.#gresGroupKey = key;
+    }
+
 
     constructor(context: vscode.ExtensionContext) {
         const configurationChangeListener = vscode.workspace.onDidChangeConfiguration(this.onUpdateConfig, this);
@@ -122,6 +146,7 @@ class ConfigService {
     }
 
     private onUpdateConfig(event?: vscode.ConfigurationChangeEvent) {
+        this.#gresGroupKey = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('groupBy') as string ?? 'gres';
         this.#gresSortKey = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortBy') as string ?? 'name';
         this.#taskSortKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('sortBy') as string ?? 'id';
         this.#gresSortDirection = vscode.workspace.getConfiguration('slurm--.resourcesPanel').get('sortDirection') as string ?? 'ascending';
@@ -136,6 +161,7 @@ class ConfigService {
         vscode.commands.executeCommand('setContext', 'showFilenameOnly', this.#taskShowFilenameOnly);
         vscode.commands.executeCommand('setContext', 'gresSortDirection', this.#gresSortDirection);
         vscode.commands.executeCommand('setContext', 'gresSortKey', this.#gresSortKey);
+        vscode.commands.executeCommand('setContext', 'gresGroupKey', this.#gresGroupKey);
     }
 }
 
