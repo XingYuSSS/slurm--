@@ -67,11 +67,12 @@ async function refreshResources() {
     const showAll = configService.sinfoShowAllClusters;
     if ('-M' in argsObj && showAll) {
         vscode.window.showErrorMessage('Do not add the -M option when "Sinfo Show All Clusters" is enabled.');
+        return;
     }
 
     const args = Object.entries(argsObj)
         .map(([key, value]) => `${key} ${value}`)
-        .join(' ') + showAll ? ' -M all' : '';
+        .join(' ') + (showAll ? ' -M all' : '');
     
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
     const [out, err] = await executeCmd(`sinfo --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
