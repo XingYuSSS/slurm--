@@ -2,7 +2,7 @@
   "name": "slurm--extension",
   "displayName": "slurm--",
   "markdownDescription": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
     "vscode": "^1.89.0"
@@ -866,7 +866,11 @@
         },
         "slurm--.launch.terminal.shellList": {
           "type": "array",
-          "default": ["bash", "zsh", "fish"],
+          "default": [
+            "bash",
+            "zsh",
+            "fish"
+          ],
           "uniqueItems": true,
           "items": {
             "type": "string",
