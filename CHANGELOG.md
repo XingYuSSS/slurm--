@@ -6,6 +6,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Added global slurm scripts in launch view ([#12](https://github.com/XingYuSSS/slurm--/issues/12))
+- Added `add script file` and `add scripts from folder` command and button ([#12](https://github.com/XingYuSSS/slurm--/issues/12))
+- Added a configurable list of file extensions for automatically detecting Slurm scripts when adding or dragging folders
+
+### Changed
+
+- Dragging a folder to launch view now automatically scans it for scripts based on the configured extensions
+- Improved script path display by automatically switching between relative and absolute paths
+
 ## [0.11.0][0.11.0] - 2025-09-07
 
 ### Added

@@ -1,14 +1,35 @@
 import * as vscode from 'vscode';
 
-import { executeCmd } from '../utils/utils';
+import { executeCmd, findFiles } from '../utils/utils';
 import { Script } from '../models';
 import { launcherViewDataProvider } from '../view/launcherView';
-import { configService, scriptService } from '../services';
+import { configService, localScriptService, globalScriptService } from '../services';
 import { ScriptItem, ListItem, NodeItem, ArgItem } from '../view/components';
 
 async function refreshLauncher() {
-    scriptService.loadScript();
+    localScriptService?.loadScript();
+    globalScriptService.loadScript();
     launcherViewDataProvider.refresh();
+}
+
+async function extractScripts(uriList: vscode.Uri[]): Promise<vscode.Uri[]> {
+    return await vscode.window.withProgress(
+        {
+            location: vscode.ProgressLocation.Notification,
+            title: vscode.l10n.t('Extracting scripts...'),
+            cancellable: false
+        },
+        async (progress) => {
+            const scripts = uriList.map(async (uri) => {
+                const stat = await vscode.workspace.fs.stat(uri);
+                if (stat.type !== vscode.FileType.Directory) {
+                    return [uri];
+                }
+                return await findFiles(uri.path, configService.scriptsExtList);
+            });
+            return (await Promise.all(scripts)).flat();
+        }
+    );
 }
 
 async function launchScript(script: ScriptItem) {
@@ -23,19 +44,75 @@ async function launchScript(script: ScriptItem) {
 }
 
 async function removeScript(script: ScriptItem) {
+    const scriptService = script.script.isLocal ? localScriptService! : globalScriptService;
     scriptService.deleteScript(script.script);
     launcherViewDataProvider.refresh();
 }
 
-async function addScript(uriList: string[]) {
-    scriptService.addScript(...uriList.map(v => new Script(v)));
+async function addScript(uriList: vscode.Uri[], isLocal: boolean) {
+    const scriptService = isLocal ? localScriptService! : globalScriptService;
+
+    const scripts = await extractScripts(uriList);
+
+    if (scripts.length === 0) {
+        vscode.window.showWarningMessage(vscode.l10n.t('No scripts in selected folder, please check your "Extension List" setting'));
+        return;
+    }
+
+    if (scripts.length > 1) {
+        const result = await vscode.window.showWarningMessage(
+            vscode.l10n.t(`This will add {0} scripts below: `, scripts.length) + scripts.map(v => v.path).join('; '),
+            vscode.l10n.t('Yes'),
+            vscode.l10n.t('No')
+        );
+        if (result !== vscode.l10n.t('Yes')) { return; }
+    }
+
+    scriptService.addScript(...scripts.map(v => new Script(v, isLocal)));
     launcherViewDataProvider.refresh();
+}
+
+async function addScriptFile(isLocal: boolean) {
+    const uriList = await vscode.window.showOpenDialog({canSelectMany: true, title: 'script file'});
+    if (!uriList) { return; }
+
+    const scriptService = isLocal ? localScriptService! : globalScriptService;
+    scriptService.addScript(...uriList.map(v => new Script(v, isLocal)));
+    launcherViewDataProvider.refresh();
+}
+
+async function addScriptFolder(isLocal: boolean) {
+    const uriList = await vscode.window.showOpenDialog({
+        canSelectFolders: true,
+        title: 'script folder'
+    });
+    if (!uriList) { return; }
+
+    const scriptService = isLocal ? localScriptService! : globalScriptService;
+    const scripts = await extractScripts(uriList);
+
+    if (scripts.length === 0) {
+        vscode.window.showWarningMessage(vscode.l10n.t('No scripts in selected folder, please check your "Extension List" setting'));
+        return;
+    }
+
+    const result = await vscode.window.showWarningMessage(
+        vscode.l10n.t(`This will add {0} scripts below: `, scripts.length) + scripts.map(v => v.path).join('; '),
+        vscode.l10n.t('Yes'),
+        vscode.l10n.t('No')
+    );
+
+    if (result === vscode.l10n.t('Yes')) {
+        scriptService.addScript(...scripts.map(v => new Script(v, isLocal)));
+        launcherViewDataProvider.refresh();
+    }
 }
 
 async function addArg(script: Script) {
     const arg = await vscode.window.showInputBox({ prompt: vscode.l10n.t('new argument') });
     if (arg) {
         script.args.push(arg);
+        const scriptService = script.isLocal ? localScriptService! : globalScriptService;
         scriptService.saveScript();
     }
     launcherViewDataProvider.refresh();
@@ -43,6 +120,7 @@ async function addArg(script: Script) {
 
 async function deleteArg(arg: ArgItem) {
     arg.script.args.splice(arg.argIndex, 1);
+    const scriptService = arg.script.isLocal ? localScriptService! : globalScriptService;
     scriptService.saveScript();
     launcherViewDataProvider.refresh();
 }
@@ -51,6 +129,7 @@ async function changeArg(arg: ArgItem) {
     const newArg = await vscode.window.showInputBox({ prompt: vscode.l10n.t('change argument'), value: arg.script.args[arg.argIndex] });
     if (newArg) {
         arg.script.args[arg.argIndex] = newArg;
+        const scriptService = arg.script.isLocal ? localScriptService! : globalScriptService;
         scriptService.saveScript();
     }
     launcherViewDataProvider.refresh();
@@ -106,6 +185,11 @@ export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.launchScript', launchScript));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.removeScript', removeScript));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.addScript', addScript));
+
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.addLocalScriptFile', () => addScriptFile(true)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.addGlobalScriptFile', () => addScriptFile(false)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.addLocalScriptFolder', () => addScriptFolder(true)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.addGlobalScriptFolder', () => addScriptFolder(false)));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.addArg', addArg));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.deleteArg', deleteArg));

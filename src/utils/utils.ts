@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs';
+import FastGlob from 'fast-glob';
 
 const execAsync = promisify(childProcess.exec);
 
@@ -72,4 +73,24 @@ export function convertKeysToCamelCase(obj: Record<string, any>): Record<string,
     acc[camelKey] = obj[key];
     return acc;
   }, {} as Record<string, any>);
+}
+
+
+export async function findFiles(folderPath: string, extensions: string[], ignore?: string[]): Promise<vscode.Uri[]> {
+  const pattern = `**/*.{${extensions.join(',')}}`;
+  
+  try {
+    const files = await FastGlob(pattern, {
+      cwd: folderPath,
+      ignore: ignore,
+      onlyFiles: true,
+      absolute: true,
+      concurrency: 10
+    });
+    
+    return files.map(filePath => vscode.Uri.file(filePath));
+  } catch (error) {
+    vscode.window.showErrorMessage(`Fast-glob search failed: ${error}`);
+    return [];
+  }
 }
