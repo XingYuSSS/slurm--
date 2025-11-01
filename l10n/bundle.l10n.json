@@ -4,6 +4,9 @@
   "finished": "finished",
   "${length} nodes": "${length} nodes",
   "Drop a script to here": "Drop a script to here",
+  "${length} scripts": "${length} scripts",
+  "Workspace": "Workspace",
+  "Global": "Global",
   "Node has been allocated": "Node has been allocated",
   "Node not available due to state \"{0}\"": "Node not available due to state \"{0}\"",
   "{0} state: {1}": "{0} state: {1}",
@@ -18,6 +21,9 @@
   "This will cancel {0} tasks below: ": "This will cancel {0} tasks below: ",
   "This will cancel all {0} tasks below (unscaned tasks will not be canceled): ": "This will cancel all {0} tasks below (unscaned tasks will not be canceled): ",
   "Pend {0}, Run {1}, Done {2}": "Pend {0}, Run {1}, Done {2}",
+  "Extracting scripts...": "Extracting scripts...",
+  "No scripts in selected folder, please check your \"Extension List\" setting": "No scripts in selected folder, please check your \"Extension List\" setting",
+  "This will add {0} scripts below: ": "This will add {0} scripts below: ",
   "new argument": "new argument",
   "change argument": "change argument",
   "Choose number of GRES": "Choose number of GRES",
@@ -28,5 +34,6 @@
   "Custom time": "Custom time",
   "Choose shell": "Choose shell",
   "Custom shell": "Custom shell",
-  "Configure display information for expanded task in tasksPanel": "Configure display information for expanded task in tasksPanel"
+  "Configure display information for expanded task in tasksPanel": "Configure display information for expanded task in tasksPanel",
+  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost."
 }

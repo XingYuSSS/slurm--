@@ -137,6 +137,30 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "slurm--.addLocalScriptFile",
+        "title": "%slurm--.addScriptFile.title%",
+        "category": "slurm--",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "slurm--.addGlobalScriptFile",
+        "title": "%slurm--.addScriptFile.title%",
+        "category": "slurm--",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "slurm--.addLocalScriptFolder",
+        "title": "%slurm--.addScriptFolder.title%",
+        "category": "slurm--",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "slurm--.addGlobalScriptFolder",
+        "title": "%slurm--.addScriptFolder.title%",
+        "category": "slurm--",
+        "icon": "$(new-folder)"
+      },
+      {
         "command": "slurm--.launchScript",
         "title": "%slurm--.launchScript.title%",
         "category": "slurm--",
@@ -542,6 +566,26 @@
           "when": "view == slurm--_resource_view && viewItem == nodeItem"
         },
         {
+          "command": "slurm--.addLocalScriptFile",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == localScriptList"
+        },
+        {
+          "command": "slurm--.addGlobalScriptFile",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == globalScriptList"
+        },
+        {
+          "command": "slurm--.addLocalScriptFolder",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == localScriptList"
+        },
+        {
+          "command": "slurm--.addGlobalScriptFolder",
+          "group": "inline",
+          "when": "view == slurm--_launcher_view && viewItem == globalScriptList"
+        },
+        {
           "command": "slurm--.launchScript",
           "group": "inline",
           "when": "view == slurm--_launcher_view && viewItem == scriptItem"
@@ -877,6 +921,20 @@
             "description": "Shell command or path"
           },
           "markdownDescription": "%config.launch.terminal.shellList.description%"
+        },
+        "slurm--.launch.scripts.extensionList": {
+          "type": "array",
+          "default": [
+            "sh",
+            "slurm",
+            "sbatch"
+          ],
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "description": "File extension of scripts"
+          },
+          "markdownDescription": "%config.launch.scripts.extensionList.description%"
         }
       }
     },
@@ -932,6 +990,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "fast-glob": "^3.3.3",
     "lodash": "^4.17.21"
   }
 }

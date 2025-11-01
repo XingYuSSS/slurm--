@@ -4,6 +4,9 @@
   "${length} tasks": "${length} 任务",
   "${length} nodes": "${length} 节点",
   "Drop a script to here": "将slurm脚本拖到这里",
+  "${length} scripts": "${length} 脚本",
+  "Workspace": "工作区",
+  "Global": "全局",
   "Node has been allocated": "节点已被分配",
   "Node not available due to state \"{0}\"": "节点不可用 处于状态\"{0}\"",
   "{0} state: {1}": "{0} 状态: {1}",
@@ -18,6 +21,9 @@
   "This will cancel {0} tasks below: ": "将取消以下 {0} 个任务: ",
   "This will cancel all {0} tasks below (unscaned tasks will not be canceled): ": "将取消以下所有 {0} 个任务 (未扫描到的任务不会被取消): ",
   "Pend {0}, Run {1}, Done {2}": "等待 {0}, 运行 {1}, 结束 {2}",
+  "Extracting scripts...": "提取脚本中...",
+  "No scripts in selected folder, please check your \"Extension List\" setting": "所选文件夹中无脚本，请检查你的\"Extension List\"设置",
+  "This will add {0} scripts below: ": "将添加以下{0}个脚本: ",
   "new argument": "添加参数",
   "change argument": "修改参数",
   "Choose number of GRES": "选择GRES数量",
@@ -28,5 +34,6 @@
   "Custom time": "自定义时间",
   "Choose shell": "选择shell",
   "Custom shell": "自定义shell",
-  "Configure display information for expanded task in tasksPanel": "设置任务展开后所展示的信息"
+  "Configure display information for expanded task in tasksPanel": "设置任务展开后所展示的信息",
+  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "任务缓存文件似乎已损坏，已被自动删除。已完成的任务可能会丢失。"
 }

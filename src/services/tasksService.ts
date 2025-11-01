@@ -79,6 +79,9 @@ export class TaskService {
     private storagePath;
     private taskMap!: Map<number, BaseTask>;
 
+    private isSaving = false;
+    private pendingSave = false;
+
     private static _instance: TaskService | null = null;
     private constructor(context: vscode.ExtensionContext) {
         this.storagePath = path.join(context.globalStorageUri.fsPath, 'tasks.json');
@@ -101,27 +104,49 @@ export class TaskService {
         this.taskMap = new Map();
 
         if (fs.existsSync(this.storagePath)) {
-            let jsonData = fs.readFileSync(this.storagePath, 'utf8');
-            if (jsonData === '') { jsonData = '[]'; }
-            const saveMap = JSON.parse(jsonData);
-            const taskMap = new Map(saveMap) as Map<number, TaskObjTypes>;
+            try {
+                let jsonData = fs.readFileSync(this.storagePath, 'utf8');
+                if (jsonData === '') { jsonData = '[]'; }
+                const saveMap = JSON.parse(jsonData);
+                const taskMap = new Map(saveMap) as Map<number, TaskObjTypes>;
 
-            taskMap.forEach((v, k) => {
-                const loaded = loadObj(v);
-                if (loaded !== null) {
-                    this.taskMap.set(k, loaded);
-                }
-            });
+                taskMap.forEach((v, k) => {
+                    const loaded = loadObj(v);
+                    if (loaded !== null) {
+                        this.taskMap.set(k, loaded);
+                    }
+                });
+            } catch (err) {
+                fs.unlinkSync(this.storagePath);
+                vscode.window.showWarningMessage(vscode.l10n.t('The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.'));
+            }
         }
     }
 
     private async saveTask() {
-        const arrData = Array.from(this.taskMap.entries()).map(([key, task]) => ([
-            key,
-            task.toObj()
-        ]));
-        const jsonData = JSON.stringify(arrData);
-        fs.writeFileSync(this.storagePath, jsonData, 'utf8');
+        if (this.isSaving) {
+            this.pendingSave = true;
+            return;
+        }
+
+        try {
+            const arrData = Array.from(this.taskMap.entries()).map(([key, task]) => ([
+                key,
+                task.toObj()
+            ]));
+            const jsonData = JSON.stringify(arrData);
+
+            const tempPath = this.storagePath + '.tmp';
+            fs.writeFileSync(tempPath, jsonData, 'utf8');
+
+            fs.renameSync(tempPath, this.storagePath);
+        } finally {
+            this.isSaving = false;
+            if (this.pendingSave) {
+                this.pendingSave = false;
+                this.saveTask();
+            }
+        }
     }
 
     private async finishTask(taskId: string[]) {

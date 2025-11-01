@@ -8,22 +8,11 @@ export class ScriptService {
     private storagePath;
     private scriptList!: Script[];
 
-    private static _instance: ScriptService | null = null;
-    private constructor(context: vscode.ExtensionContext) {
-        this.storagePath = path.join(context.storageUri?.fsPath ?? context.globalStorageUri.fsPath, 'scripts.json');
+    public constructor(storagePath: string) {
+        this.storagePath = storagePath;
         const dir = path.dirname(this.storagePath);
         fs.mkdirSync(dir, { recursive: true });
         this.loadScript();
-    }
-
-    static getInstance(context?: vscode.ExtensionContext): ScriptService {
-        if (ScriptService._instance === null) {
-            if (context === undefined) {
-                throw new Error(`init ${this.name} failed.`);
-            }
-            ScriptService._instance = new ScriptService(context);
-        }
-        return ScriptService._instance;
     }
 
     public loadScript() {
@@ -40,7 +29,11 @@ export class ScriptService {
         const jsonData = JSON.stringify(this.scriptList, (k, v) => {
             return v;
         });
-        fs.writeFileSync(this.storagePath, jsonData, 'utf8');
+
+        const tempPath = this.storagePath + '.tmp';
+        fs.writeFileSync(tempPath, jsonData, 'utf8');
+
+        fs.renameSync(tempPath, this.storagePath);
     }
 
     public addScript(...scripts: Script[]) {
@@ -58,8 +51,15 @@ export class ScriptService {
     }
 }
 
-export let scriptService: ScriptService;
+export let localScriptService: ScriptService | null = null;
+export let globalScriptService: ScriptService;
 
 export function initScriptService(context: vscode.ExtensionContext) {
-    scriptService = ScriptService.getInstance(context);
+    if (context.storageUri) {
+        let localPath = path.join(context.storageUri.fsPath, 'scripts.json');
+        localScriptService = new ScriptService(localPath);
+    }
+
+    let globalPath = path.join(context.globalStorageUri.fsPath, 'scripts.json');
+    globalScriptService = new ScriptService(globalPath);
 }

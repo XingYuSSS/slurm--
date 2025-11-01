@@ -24,6 +24,9 @@
     "slurm--.changeArg.title": "修改参数",
     "slurm--.openConfig.title": "设置",
 
+    "slurm--.addScriptFile.title": "添加脚本文件",
+    "slurm--.addScriptFolder.title": "添加文件夹中的脚本",
+
     "slurm--.sortById.title": "以 Id 排序",
     "slurm--.sortByName.title": "以名称排序",
     "slurm--.sortByAvail.title": "以可用性排序",
@@ -88,5 +91,6 @@
     "config.tasksPanel.cacheTimeout.description": "任务刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
     "config.resourcesPanel.cacheTimeout.description": "资源刷新输出缓存的超时时间 (单位毫秒, 设置为0时关闭)。在多人共用同一主机且同时刷新，或刷新过快时起效。",
 
-    "config.launch.terminal.shellList.description": "指定在启动终端时可供选择的 Shell，按列表顺序显示为候选选项。"
+    "config.launch.terminal.shellList.description": "指定在启动终端时可供选择的 Shell，按列表顺序显示为候选选项。",
+    "config.launch.scripts.extensionList.description": "在添加或拖入文件夹时，自动搜索 Slurm 脚本所依据的文件扩展名."
 }
