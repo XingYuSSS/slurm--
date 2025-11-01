@@ -16,6 +16,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Dragging a folder to launch view now automatically scans it for scripts based on the configured extensions
 - Improved script path display by automatically switching between relative and absolute paths
+- Improved file-saving logic using concurrent locks and temporary files for better reliability.
+
+### Fixed
+
+- Fixed the extension failed to start after occasional task or cache save failures.
 
 ## [0.11.0][0.11.0] - 2025-09-07
 

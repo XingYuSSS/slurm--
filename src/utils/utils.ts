@@ -9,11 +9,13 @@ const execAsync = promisify(childProcess.exec);
 export async function executeCmd(cmd: string, cachePath?: string, cacheTimeout?: number): Promise<[string, string]> {
     if (cacheTimeout !== 0 && cachePath && fs.existsSync(cachePath)) {
         const jsonData = fs.readFileSync(cachePath, 'utf8');
-        const saveObject = JSON.parse(jsonData);
-        const now = Date.now();
-        if (now - saveObject.time < (cacheTimeout ?? 1000) && cmd === saveObject.cmd) {
-            return [saveObject.out.trim(), saveObject.err ? saveObject.err.trim() : ''];
-        }
+        try {
+            const saveObject = JSON.parse(jsonData);
+            const now = Date.now();
+            if (now - saveObject.time < (cacheTimeout ?? 1000) && cmd === saveObject.cmd) {
+                return [saveObject.out.trim(), saveObject.err ? saveObject.err.trim() : ''];
+            }
+        } catch (err) {}
     }
     const options: fs.ObjectEncodingOptions & childProcess.ExecOptions = {
         encoding: 'utf8',
@@ -93,4 +95,34 @@ export async function findFiles(folderPath: string, extensions: string[], ignore
     vscode.window.showErrorMessage(`Fast-glob search failed: ${error}`);
     return [];
   }
+}
+
+export async function withDelayedProgress<T>(
+    options: {
+        delayMs: number,
+        location: vscode.ProgressLocation;
+        title?: string;
+        cancellable?: boolean;
+    },
+    work: () => Promise<T>,
+): Promise<T> {
+    const workPromise = work();
+
+    const showProgress = await Promise.race([
+        workPromise.then(() => false),
+        new Promise<boolean>(resolve => setTimeout(() => resolve(true), options.delayMs))
+    ]);
+
+    if (!showProgress) {
+        return workPromise;
+    }
+
+    return vscode.window.withProgress(
+        {
+            location: options.location,
+            title: options?.title,
+            cancellable: options?.cancellable ?? false
+        },
+        () => workPromise
+    );
 }

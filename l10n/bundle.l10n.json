@@ -34,5 +34,6 @@
   "Custom time": "Custom time",
   "Choose shell": "Choose shell",
   "Custom shell": "Custom shell",
-  "Configure display information for expanded task in tasksPanel": "Configure display information for expanded task in tasksPanel"
+  "Configure display information for expanded task in tasksPanel": "Configure display information for expanded task in tasksPanel",
+  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost."
 }

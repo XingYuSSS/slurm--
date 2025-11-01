@@ -9,7 +9,7 @@ export class Script {
 
     readonly isLocal: boolean;
 
-    constructor(scrpitPath: string | vscode.Uri, isLocal: boolean, args?: string[], ) {
+    constructor(scrpitPath: string | vscode.Uri, isLocal: boolean, args?: string[],) {
         this.uri = scrpitPath instanceof vscode.Uri ? scrpitPath : vscode.Uri.file(scrpitPath);
 
         const workspacePath = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;

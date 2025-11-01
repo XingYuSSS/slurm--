@@ -34,5 +34,6 @@
   "Custom time": "自定义时间",
   "Choose shell": "选择shell",
   "Custom shell": "自定义shell",
-  "Configure display information for expanded task in tasksPanel": "设置任务展开后所展示的信息"
+  "Configure display information for expanded task in tasksPanel": "设置任务展开后所展示的信息",
+  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "任务缓存文件似乎已损坏，已被自动删除。已完成的任务可能会丢失。"
 }

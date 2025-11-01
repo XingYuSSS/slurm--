@@ -10,7 +10,7 @@ function getGroupdScripts(): ListItem[] {
     let globalScripts = globalScriptService.getScript().map(v => new ScriptItem(v));
     let grouped = [new ListItem(vscode.l10n.t('Global'), globalScripts, vscode.l10n.t('${length} scripts'), globalIcon, 'globalScriptList')];
 
-    if (localScriptService){
+    if (localScriptService) {
         let lcoalScripts = localScriptService.getScript().map(v => new ScriptItem(v));
         grouped.push(new ListItem(vscode.l10n.t('Workspace'), lcoalScripts, vscode.l10n.t('${length} scripts'), localIcon, 'localScriptList'));
     }
@@ -45,9 +45,11 @@ class FileDragAndDropController implements vscode.TreeDragAndDropController<Scri
             const pathList = lines
                 .filter(line => line.startsWith('file:///'))
                 .map(line => vscode.Uri.parse(line));
-            let isLocal = (target instanceof ListItem) ? (target.title === vscode.l10n.t('Workspace'))
-                : (target instanceof ScriptItem || target instanceof ArgItem || target instanceof AddArgItem) ? (target.script.isLocal)
-                : true;
+            let isLocal = (target instanceof ListItem)
+                ? (target.title === vscode.l10n.t('Workspace'))
+                : (target instanceof ScriptItem || target instanceof ArgItem || target instanceof AddArgItem)
+                    ? (target.script.isLocal)
+                    : true;
             vscode.commands.executeCommand('slurm--.addScript', pathList, isLocal);
         }
     }

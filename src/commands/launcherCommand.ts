@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { executeCmd, findFiles } from '../utils/utils';
+import { executeCmd, findFiles, withDelayedProgress } from '../utils/utils';
 import { Script } from '../models';
 import { launcherViewDataProvider } from '../view/launcherView';
 import { configService, localScriptService, globalScriptService } from '../services';
@@ -13,13 +13,14 @@ async function refreshLauncher() {
 }
 
 async function extractScripts(uriList: vscode.Uri[]): Promise<vscode.Uri[]> {
-    return await vscode.window.withProgress(
+    return await withDelayedProgress(
         {
+            delayMs: 500,
             location: vscode.ProgressLocation.Notification,
             title: vscode.l10n.t('Extracting scripts...'),
             cancellable: false
         },
-        async (progress) => {
+        async () => {
             const scripts = uriList.map(async (uri) => {
                 const stat = await vscode.workspace.fs.stat(uri);
                 if (stat.type !== vscode.FileType.Directory) {
@@ -73,7 +74,7 @@ async function addScript(uriList: vscode.Uri[], isLocal: boolean) {
 }
 
 async function addScriptFile(isLocal: boolean) {
-    const uriList = await vscode.window.showOpenDialog({canSelectMany: true, title: 'script file'});
+    const uriList = await vscode.window.showOpenDialog({ canSelectMany: true, title: 'script file' });
     if (!uriList) { return; }
 
     const scriptService = isLocal ? localScriptService! : globalScriptService;

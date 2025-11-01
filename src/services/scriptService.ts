@@ -29,7 +29,11 @@ export class ScriptService {
         const jsonData = JSON.stringify(this.scriptList, (k, v) => {
             return v;
         });
-        fs.writeFileSync(this.storagePath, jsonData, 'utf8');
+
+        const tempPath = this.storagePath + '.tmp';
+        fs.writeFileSync(tempPath, jsonData, 'utf8');
+
+        fs.renameSync(tempPath, this.storagePath);
     }
 
     public addScript(...scripts: Script[]) {
