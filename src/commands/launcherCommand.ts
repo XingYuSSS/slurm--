@@ -180,6 +180,43 @@ async function launchTerminal(node: NodeItem) {
     terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
 }
 
+async function runCurrentFile() {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showErrorMessage('No active file to run');
+        return;
+    }
+    
+    const document = editor.document;
+    const filePath = document.uri.fsPath;
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
+    
+    // Save the file if it has unsaved changes
+    if (document.isDirty) {
+        await document.save();
+    }
+    
+    // For .slurm and .sbatch files, use sbatch
+    if (fileExtension === '.slurm' || fileExtension === '.sbatch') { // should always be slurm files, as we present the option only for them, but still check
+        launchScript(new ScriptItem(new Script(document.uri, true)));
+    }else{
+        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm/sbatch script.'));
+    }
+
+}
+
+async function queueScript(uri: vscode.Uri) {
+    const filePath = uri.fsPath;
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
+    
+    // For .slurm and .sbatch files, use sbatch
+    if (fileExtension === '.slurm' || fileExtension === '.sbatch') { // should always be slurm files, as we present the option only for them, but still check
+        launchScript(new ScriptItem(new Script(filePath, true)));
+    }else{
+        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm/sbatch script.'));
+    }
+}
+
 
 export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshLauncher', refreshLauncher));
@@ -197,6 +234,8 @@ export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.changeArg', changeArg));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.launchTerminal', launchTerminal));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.runCurrentFile', runCurrentFile));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.queueScript', queueScript));
 
     vscode.commands.executeCommand('slurm--.refreshLauncher');
 }
