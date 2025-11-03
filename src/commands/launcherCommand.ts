@@ -180,40 +180,39 @@ async function launchTerminal(node: NodeItem) {
     terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
 }
 
-async function runCurrentFile() {
+async function enqueueCurrentFile() {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
-        vscode.window.showErrorMessage('No active file to run');
+        vscode.window.showErrorMessage('No active file to queue');
         return;
     }
-    
+
     const document = editor.document;
     const filePath = document.uri.fsPath;
-    const fileExtension = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
-    
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+
     // Save the file if it has unsaved changes
     if (document.isDirty) {
         await document.save();
     }
-    
-    // For .slurm and .sbatch files, use sbatch
-    if (fileExtension === '.slurm' || fileExtension === '.sbatch') { // should always be slurm files, as we present the option only for them, but still check
+
+    if (configService.scriptsExtList.includes(fileExtension)) {  // should always be slurm files, as we present the option only for them, but still check
+
         launchScript(new ScriptItem(new Script(document.uri, true)));
-    }else{
-        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm/sbatch script.'));
+    } else {
+        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm script.'));
     }
 
 }
 
-async function queueScript(uri: vscode.Uri) {
+async function enqueueScript(uri: vscode.Uri) {
     const filePath = uri.fsPath;
-    const fileExtension = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
-    
-    // For .slurm and .sbatch files, use sbatch
-    if (fileExtension === '.slurm' || fileExtension === '.sbatch') { // should always be slurm files, as we present the option only for them, but still check
+    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+
+    if (configService.scriptsExtList.includes(fileExtension)) {  // should always be slurm files, as we present the option only for them, but still check
         launchScript(new ScriptItem(new Script(filePath, true)));
-    }else{
-        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm/sbatch script.'));
+    } else {
+        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm script.'));
     }
 }
 
@@ -234,8 +233,8 @@ export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.changeArg', changeArg));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.launchTerminal', launchTerminal));
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.runCurrentFile', runCurrentFile));
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.queueScript', queueScript));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.enqueueCurrentFile', enqueueCurrentFile));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.enqueueScript', enqueueScript));
 
     vscode.commands.executeCommand('slurm--.refreshLauncher');
 }

@@ -167,14 +167,14 @@
         "icon": "$(run)"
       },
       {
-        "command": "slurm--.runCurrentFile",
-        "title": "Run Slurm Script",
+        "command": "slurm--.enqueueCurrentFile",
+        "title": "%slurm--.enqueueCurrentFile.title%",
         "category": "slurm--",
         "icon": "$(run)"
       },
       {
-        "command": "slurm--.queueScript",
-        "title": "%slurm--.queueScript.title%",
+        "command": "slurm--.enqueueScript",
+        "title": "%slurm--.enqueueScript.title%",
         "category": "slurm--",
         "icon": "$(list-ordered)"
       },
@@ -359,7 +359,7 @@
     "menus": {
       "editor/title/run": [
         {
-          "command": "slurm--.runCurrentFile",
+          "command": "slurm--.enqueueCurrentFile",
           "when": "resourceExtname == .slurm || resourceExtname == .sbatch",
           "group": "navigation"
         }
@@ -627,7 +627,7 @@
       ],
       "explorer/context": [
         {
-          "command": "slurm--.queueScript",
+          "command": "slurm--.enqueueScript",
           "when": "resourceExtname == .slurm || resourceExtname == .sbatch",
           "group": "slurm@1"
         }
