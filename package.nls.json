@@ -19,6 +19,8 @@
     "slurm--.launchTerminal.title": "launch terminal",
     "slurm--.refreshLauncher.title": "refresh launcher",
     "slurm--.launchScript.title": "launch script",
+    "slurm--.enqueueScript.title": "Enqueue Script (Slurm)",
+    "slurm--.enqueueCurrentFile.title": "Enqueue Current File (Slurm)",
     "slurm--.removeScript.title": "remove script",
     "slurm--.deleteArg.title": "remove argument",
     "slurm--.changeArg.title": "change argument",
@@ -74,7 +76,7 @@
 
     "config.groupBy.gres.description": "Group By GRES",
     "config.groupBy.partition.description": "Group By Partition",
-    "config.resourcesPanel。groupBy.description": "The key which the nodes group by",
+    "config.resourcesPanel.groupBy.description": "The key which the nodes group by",
     "config.label.gres": "GRES",
     "config.label.partition": "Partition",
 

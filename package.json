@@ -167,6 +167,18 @@
         "icon": "$(run)"
       },
       {
+        "command": "slurm--.enqueueCurrentFile",
+        "title": "%slurm--.enqueueCurrentFile.title%",
+        "category": "slurm--",
+        "icon": "$(run)"
+      },
+      {
+        "command": "slurm--.enqueueScript",
+        "title": "%slurm--.enqueueScript.title%",
+        "category": "slurm--",
+        "icon": "$(list-ordered)"
+      },
+      {
         "command": "slurm--.removeScript",
         "title": "%slurm--.removeScript.title%",
         "category": "slurm--",
@@ -345,6 +357,13 @@
       ]
     },
     "menus": {
+      "editor/title/run": [
+        {
+          "command": "slurm--.enqueueCurrentFile",
+          "when": "slurmFile",
+          "group": "navigation"
+        }
+      ],
       "view/title": [
         {
           "command": "slurm--.refreshUserTasks",
@@ -604,6 +623,13 @@
           "command": "slurm--.changeArg",
           "group": "inline",
           "when": "view == slurm--_launcher_view && viewItem == argItem"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "slurm--.enqueueScript",
+          "when": "resourceExtname == .slurm || resourceExtname == .sbatch || resourceExtname == .sh",
+          "group": "slurm@1"
         }
       ],
       "commandPalette": [
@@ -978,6 +1004,7 @@
     "@typescript-eslint/parser": "^8.3.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.6.2",
     "eslint": "^9.9.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",

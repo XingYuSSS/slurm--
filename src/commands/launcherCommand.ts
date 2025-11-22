@@ -180,6 +180,28 @@ async function launchTerminal(node: NodeItem) {
     terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
 }
 
+async function enqueueCurrentFile() {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showErrorMessage('No active file to queue');
+        return;
+    }
+
+    const document = editor.document;
+
+    if (document.isDirty) {
+        await document.save();
+    }
+
+    launchScript(new ScriptItem(new Script(document.uri, true)));
+}
+
+async function enqueueScript(uri: vscode.Uri) {
+    const filePath = uri.fsPath;
+
+    launchScript(new ScriptItem(new Script(filePath, true)));
+}
+
 
 export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshLauncher', refreshLauncher));
@@ -197,6 +219,8 @@ export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.changeArg', changeArg));
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.launchTerminal', launchTerminal));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.enqueueCurrentFile', enqueueCurrentFile));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.enqueueScript', enqueueScript));
 
     vscode.commands.executeCommand('slurm--.refreshLauncher');
 }

@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
 
 export enum TaskSortKeys {
@@ -143,7 +144,9 @@ class ConfigService {
 
     constructor(context: vscode.ExtensionContext) {
         const configurationChangeListener = vscode.workspace.onDidChangeConfiguration(this.onUpdateConfig, this);
-        context.subscriptions.push(configurationChangeListener);
+        const editorChangeListener = vscode.window.onDidChangeActiveTextEditor(this.onChangeEditor, this);
+
+        context.subscriptions.push(configurationChangeListener, editorChangeListener);
 
         this.onUpdateConfig();
     }
@@ -157,7 +160,7 @@ class ConfigService {
         this.#taskShowShortcutKey = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showShortcutKey') as boolean ?? true;
         this.#taskShowFilenameOnly = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('showFilenameOnly') as boolean ?? true;
         this.#taskDisplayInfo = vscode.workspace.getConfiguration('slurm--.tasksPanel').get('displayInformation') as TaskInfoConfig;
-        
+
         vscode.commands.executeCommand('setContext', 'taskSortKey', this.#taskSortKey);
         vscode.commands.executeCommand('setContext', 'taskSortDirection', this.#taskSortDirection);
         vscode.commands.executeCommand('setContext', 'taskShowShortcutKey', this.#taskShowShortcutKey);
@@ -165,6 +168,18 @@ class ConfigService {
         vscode.commands.executeCommand('setContext', 'gresSortDirection', this.#gresSortDirection);
         vscode.commands.executeCommand('setContext', 'gresSortKey', this.#gresSortKey);
         vscode.commands.executeCommand('setContext', 'gresGroupKey', this.#gresGroupKey);
+
+        this.updateFileContext();
+    }
+
+    private onChangeEditor(editor?: vscode.TextEditor) {
+        this.updateFileContext();
+    }
+
+    private updateFileContext() {
+        const editor = vscode.window.activeTextEditor;
+        const isSlurmFile = editor ? this.scriptsExtList.includes(path.extname(editor.document.fileName).slice(1)) : false;
+        vscode.commands.executeCommand('setContext', 'slurmFile', isSlurmFile);
     }
 }
 

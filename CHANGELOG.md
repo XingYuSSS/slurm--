@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+ - Explorer view "Enqueue" option
+ - Top Ribbon "Enqueue" button
+
 ## [0.12.0][0.12.0] - 2025-11-01
 
 ### Added
