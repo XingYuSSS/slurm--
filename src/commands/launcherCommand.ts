@@ -188,32 +188,18 @@ async function enqueueCurrentFile() {
     }
 
     const document = editor.document;
-    const filePath = document.uri.fsPath;
-    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
 
-    // Save the file if it has unsaved changes
     if (document.isDirty) {
         await document.save();
     }
 
-    if (configService.scriptsExtList.includes(fileExtension)) {  // should always be slurm files, as we present the option only for them, but still check
-
-        launchScript(new ScriptItem(new Script(document.uri, true)));
-    } else {
-        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm script.'));
-    }
-
+    launchScript(new ScriptItem(new Script(document.uri, true)));
 }
 
 async function enqueueScript(uri: vscode.Uri) {
     const filePath = uri.fsPath;
-    const fileExtension = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
 
-    if (configService.scriptsExtList.includes(fileExtension)) {  // should always be slurm files, as we present the option only for them, but still check
-        launchScript(new ScriptItem(new Script(filePath, true)));
-    } else {
-        vscode.window.showErrorMessage(vscode.l10n.t('The selected file is not a slurm script.'));
-    }
+    launchScript(new ScriptItem(new Script(filePath, true)));
 }
 
 

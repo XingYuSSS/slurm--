@@ -360,7 +360,7 @@
       "editor/title/run": [
         {
           "command": "slurm--.enqueueCurrentFile",
-          "when": "resourceExtname == .slurm || resourceExtname == .sbatch",
+          "when": "slurmFile",
           "group": "navigation"
         }
       ],
@@ -628,7 +628,7 @@
       "explorer/context": [
         {
           "command": "slurm--.enqueueScript",
-          "when": "resourceExtname == .slurm || resourceExtname == .sbatch",
+          "when": "resourceExtname == .slurm || resourceExtname == .sbatch || resourceExtname == .sh",
           "group": "slurm@1"
         }
       ],

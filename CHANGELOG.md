@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+ - Explorer view "Enqueue" option
+ - Top Ribbon "Enqueue" button
+
 ## [0.12.0][0.12.0] - 2025-11-01
 
 ### Added
@@ -353,11 +358,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add GRES
 - Add auto refresh
 - Add runBash in `utils`
-
-
-### Added
- - Explorer view "Enqueue" option
- - Top Ribbon "Enqueue" button
 
 [unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.12.0...HEAD
 [0.12.0]: https://github.com/XingYuSSS/slurm--/compare/v0.11.0...v0.12.0

@@ -19,6 +19,8 @@
     "slurm--.launchTerminal.title": "启动终端",
     "slurm--.refreshLauncher.title": "刷新启动器",
     "slurm--.launchScript.title": "启动脚本",
+    "slurm--.enqueueScript.title": "提交脚本(Slurm)",
+    "slurm--.enqueueCurrentFile.title": "提交当前文件(Slurm)",
     "slurm--.removeScript.title": "删除脚本",
     "slurm--.deleteArg.title": "删除参数",
     "slurm--.changeArg.title": "修改参数",
