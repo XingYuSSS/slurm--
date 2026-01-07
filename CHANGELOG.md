@@ -10,10 +10,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Explorer view "Enqueue" option
 - Top Ribbon "Enqueue" button
+- Added a status bar for task status ([#15](https://github.com/XingYuSSS/slurm--/issues/15))
 
 ### Fixed
 
 - Fixed `ERR_CHILD_PROCESS_STDIO_MAXBUFFER` caused by `child_process.exec`, replaced by `spawn` ([#14](https://github.com/XingYuSSS/slurm--/issues/14))
+- Removed unused code logic.
 
 ## [0.12.0][0.12.0] - 2025-11-01
 

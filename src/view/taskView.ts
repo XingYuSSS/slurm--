@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { taskService, configService, TaskSortKeys } from '../services';
-import { BaseTask, Task, TaskArray } from '../models/';
+import { BaseTask, Task, TaskArray, TaskState } from '../models/';
 import { FinishedTaskArrayItem, FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskArrayItem, TaskItem } from './components';
 import { resignFn } from '../utils/utils';
 
@@ -63,18 +63,12 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<AllItem | undefined | null | void> = new vscode.EventEmitter<AllItem | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<AllItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
-    private expandedItems = new Set<string>();
-
     refresh(): void {
         this._onDidChangeTreeData.fire();
+        updateTaskBar();
     }
 
     getTreeItem(element: AllItem): vscode.TreeItem {
-        if (element.id) {
-            element.collapsibleState = this.expandedItems.has(element.id!)
-            ? vscode.TreeItemCollapsibleState.Expanded
-            : vscode.TreeItemCollapsibleState.Collapsed;
-        }
         return element;
     }
 
@@ -96,15 +90,6 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
 
         return Promise.resolve([]);
     }
-
-    setExpandedState(item: AllItem, isExpanded: boolean) {
-        if (isExpanded) {
-            this.expandedItems.add(item.id!);
-        } else {
-            this.expandedItems.delete(item.id!);
-        }
-    }
-
 }
 
 export const taskViewDataProvider = TaskViewDataProvider.getInstance();
@@ -119,15 +104,26 @@ export function initTasksView(context: vscode.ExtensionContext) {
             selectedTaskItems = e.selection.filter(v => v instanceof TaskItem || v instanceof TaskArrayItem);
         }
     });
-
     context.subscriptions.push(disposable);
 
-    const expandListener = vscode.commands.registerCommand('myTreeViewId.expand', (item) => {
-        taskViewDataProvider.setExpandedState(item, true);
-    });
-    
-    const collapseListener = vscode.commands.registerCommand('myTreeViewId.collapse', (item) => {
-        taskViewDataProvider.setExpandedState(item, false);
-    });
+    initTasksBar(context);
+}
 
+
+export let taskBarItem: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
+
+export function initTasksBar(context: vscode.ExtensionContext) {
+    taskBarItem.command = 'slurm--_tasks_view.focus';
+    taskBarItem.show();
+    context.subscriptions.push(taskBarItem);
+}
+
+export function updateTaskBar(): void {
+    const tasks = taskService.getTask();
+    const pending = tasks.filter(t => t.state === TaskState.PD).length;
+    const running = tasks.filter(t => t.state === TaskState.R).length;
+    const done = tasks.length - pending - running;
+
+    taskBarItem.text = `$(watch) ${pending} $(run-all) ${running} $(pass) ${done}`;
+    taskBarItem.tooltip = vscode.l10n.t('Pend {0}, Run {1}, Done {2}', pending, running, done);
 }

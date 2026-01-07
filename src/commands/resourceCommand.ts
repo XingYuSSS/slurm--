@@ -115,7 +115,6 @@ export function initResourceCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.copyGres', copyGres));
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
-    vscode.commands.executeCommand('slurm--.refreshResources');
 
     cachePath = path.join(context.globalStorageUri.fsPath, 'resources_cache.json');
 }

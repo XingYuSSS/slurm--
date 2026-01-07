@@ -108,6 +108,7 @@ async function refreshUserTasks() {
     }
     const taskList = buildTaskArray(extractTask(out));
     await taskService.updateTask(...taskList);
+
     taskView.taskViewDataProvider.refresh();
 }
 
@@ -247,7 +248,6 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStderr', openStderr));
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
-    vscode.commands.executeCommand('slurm--.refreshUserTasks');
 
     cachePath = path.join(context.globalStorageUri.fsPath, 'tasks_cache.json');
 }
