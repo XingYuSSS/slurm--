@@ -8,8 +8,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
- - Explorer view "Enqueue" option
- - Top Ribbon "Enqueue" button
+- Explorer view "Enqueue" option
+- Top Ribbon "Enqueue" button
+
+### Fixed
+
+- Fixed `ERR_CHILD_PROCESS_STDIO_MAXBUFFER` caused by `child_process.exec`, replaced by `spawn` ([#14](https://github.com/XingYuSSS/slurm--/issues/14))
 
 ## [0.12.0][0.12.0] - 2025-11-01
 

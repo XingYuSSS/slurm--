@@ -4,12 +4,14 @@ import { promisify } from 'util';
 import * as fs from 'fs';
 import FastGlob from 'fast-glob';
 
-const execAsync = promisify(childProcess.exec);
-
-export async function executeCmd(cmd: string, cachePath?: string, cacheTimeout?: number): Promise<[string, string]> {
+export async function executeCmd(
+  cmd: string,
+  cachePath?: string,
+  cacheTimeout?: number
+): Promise<[string, string]> {
     if (cacheTimeout !== 0 && cachePath && fs.existsSync(cachePath)) {
-        const jsonData = fs.readFileSync(cachePath, 'utf8');
         try {
+            const jsonData = fs.readFileSync(cachePath, 'utf8');
             const saveObject = JSON.parse(jsonData);
             const now = Date.now();
             if (now - saveObject.time < (cacheTimeout ?? 1000) && cmd === saveObject.cmd) {
@@ -17,27 +19,46 @@ export async function executeCmd(cmd: string, cachePath?: string, cacheTimeout?:
             }
         } catch (err) {}
     }
-    const options: fs.ObjectEncodingOptions & childProcess.ExecOptions = {
-        encoding: 'utf8',
-        timeout: 30000,
-        maxBuffer: 1024 * 1024,
-    };
-    try {
-        const { stdout, stderr } = await execAsync(cmd, options);
-        if (cacheTimeout !== 0 && cachePath) {
-            const saveObject = {
-                'time': Date.now(),
-                'cmd': cmd,
-                'out': stdout,
-                'err': stderr,
-            };
-            const jsonData = JSON.stringify(saveObject);
-            fs.writeFileSync(cachePath, jsonData, 'utf8');
-        }
-        return [stdout.trim(), stderr ? stderr.trim() : ''];
-    } catch (error) {
-        return ['', `${error}`];
-    }
+
+  return new Promise((resolve) => {
+    let stdout = '';
+    let stderr = '';
+
+    const child = childProcess.spawn(cmd, [], {
+      shell: true,
+      timeout: 30000,
+    });
+
+    child.stdout?.setEncoding('utf8');
+    child.stderr?.setEncoding('utf8');
+
+    child.stdout?.on('data', (data) => {
+      stdout += data.toString();
+    });
+
+    child.stderr?.on('data', ( data) => {
+      stderr += data.toString();
+    });
+
+    child.on('error', (error) => {
+      resolve(['', `${error}`]);
+    });
+
+    child.on('close', (code, signal) => {
+      if (cacheTimeout !== 0 && cachePath) {
+        const saveObject = {
+          time: Date.now(),
+          cmd,
+          out: stdout,
+          err: stderr,
+        };
+        try {
+          fs.writeFileSync(cachePath, JSON.stringify(saveObject), 'utf8');
+        } catch (writeErr) {}
+      }
+      resolve([stdout.trim(), stderr.trim()]);
+    });
+  });
 }
 
 export function resignFn<T extends (...args: any[]) => number>(fn: T, sign: boolean): T {
