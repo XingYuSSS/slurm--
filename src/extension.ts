@@ -24,6 +24,9 @@ export function activate(context: vscode.ExtensionContext) {
 	initResourceView(context);
 	initLauncherView(context);
 
+	vscode.commands.executeCommand('slurm--.refreshUserTasks');
+	vscode.commands.executeCommand('slurm--.refreshResources');
+	vscode.commands.executeCommand('slurm--.refreshLauncher');
 }
 
-export function deactivate() {}
+export function deactivate() { }

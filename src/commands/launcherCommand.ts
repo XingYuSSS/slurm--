@@ -221,6 +221,4 @@ export function initLauncherCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.launchTerminal', launchTerminal));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.enqueueCurrentFile', enqueueCurrentFile));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.enqueueScript', enqueueScript));
-
-    vscode.commands.executeCommand('slurm--.refreshLauncher');
 }
