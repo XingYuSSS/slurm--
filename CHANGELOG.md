@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Changed
+
+- Refactored `resourceService`
+  - Add `GresGroup` structure and node grouping by GRES, partition and partition&GRES
+  - Add cache for grouped node
+- Refactored `resourceView` for better and cleaner code
+  - Add `GresItem` to replace common `ListItem`
+- Refactored `taskView` for better and cleaner code
+- Replace manual `replace` with `l10n.t` in `ListItem` and some text
+
 ## [0.13.0][0.13.0] - 2026-01-08
 
 ### Added

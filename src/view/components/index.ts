@@ -6,6 +6,7 @@ export * from './taskItem';
 export * from './finishedTaskItem';
 
 export * from './nodeItem';
+export * from './gresItem';
 
 export * from './scriptItem';
 export * from './argItem';

@@ -1,10 +1,10 @@
 {
   "running": "运行中",
   "finished": "已结束",
-  "${length} tasks": "${length} 任务",
-  "${length} nodes": "${length} 节点",
+  "{length} tasks": "{length} 任务",
+  "{length} nodes": "{length} 节点",
   "Drop a script to here": "将slurm脚本拖到这里",
-  "${length} scripts": "${length} 脚本",
+  "{length} scripts": "{length} 脚本",
   "Workspace": "工作区",
   "Global": "全局",
   "Node has been allocated": "节点已被分配",
