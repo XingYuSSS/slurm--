@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- `slurm.injection` syntax update
+  - Added support for options without values
+  - Allowed short options to be followed directly by values without a space (e.g., `-Jmyjob`)
+  - Fixed parsing of mixed strings like `aaa"#123"aaa`
+  - Properly handle escaped characters and highlight them separately
+
 ### Changed
 
 - Refactored `resourceService`
