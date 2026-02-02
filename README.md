@@ -1,10 +1,10 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.13.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.13.0/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.14.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.14.0/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
-slurm-- is a multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.
+slurm-- is a multifunctional tool for SLURM syntax highlight&completion, manage tasks, view resource, and launch tasks.
 
 We are continuously developing this extension, if there is a feature you would like to see added or if you encounter a bug, please feel free to give us feedback in [github](https://github.com/XingYuSSS/slurm--)!
 
@@ -15,6 +15,18 @@ We are continuously developing this extension, if there is a feature you would l
 - Support for shell-like scripts, including `.sh`, `.slrum` or `.sbatch` files, etc.
 
 ![highlight](assets/pics/highlight.png)
+
+### sbatch completion
+
+We add `sbatch completion` at version `0.14.0`!
+
+- Support parameters completion for 8 common params
+
+![comp_param](assets/pics/completion_param.jpg)
+
+- Support auto value completion for `partition`, `gres` and `nodelist`
+
+![comp_gres](assets/pics/completion_gres.jpg)
 
 ### task manager
 

@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.14.0][0.14.0] - 2026-02-02
+
 ### Added
 
 - `slurm.injection` syntax update
@@ -395,7 +397,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/XingYuSSS/slurm--/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/XingYuSSS/slurm--/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/XingYuSSS/slurm--/compare/v0.10.0...v0.11.0
