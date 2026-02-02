@@ -1018,6 +1018,6 @@
   "license": "MIT",
   "dependencies": {
     "fast-glob": "^3.3.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.23"
   }
 }
