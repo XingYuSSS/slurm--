@@ -8,11 +8,11 @@ const localIcon = new vscode.ThemeIcon('folder');
 
 function getGroupdScripts(): ListItem[] {
     let globalScripts = globalScriptService.getScript().map(v => new ScriptItem(v));
-    let grouped = [new ListItem(vscode.l10n.t('Global'), globalScripts, vscode.l10n.t('${length} scripts'), globalIcon, 'globalScriptList')];
+    let grouped = [new ListItem(vscode.l10n.t('Global'), globalScripts, vscode.l10n.t('{length} scripts', {length: globalScripts.length}), globalIcon, 'globalScriptList')];
 
     if (localScriptService) {
         let lcoalScripts = localScriptService.getScript().map(v => new ScriptItem(v));
-        grouped.push(new ListItem(vscode.l10n.t('Workspace'), lcoalScripts, vscode.l10n.t('${length} scripts'), localIcon, 'localScriptList'));
+        grouped.push(new ListItem(vscode.l10n.t('Workspace'), lcoalScripts, vscode.l10n.t('{length} scripts', {length: lcoalScripts.length}), localIcon, 'localScriptList'));
     }
 
     return grouped;

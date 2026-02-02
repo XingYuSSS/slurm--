@@ -20,15 +20,19 @@ function nodeIcon(node: Node): vscode.ThemeIcon | undefined {
     return new vscode.ThemeIcon('close', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'));
 }
 
+function nodeTooltip(node: Node): vscode.MarkdownString {
+    return new vscode.MarkdownString(`
+| nodeid | state | GRES (idle/total) | memory (i/t) | CPUs (i/t) |
+|:--:|:--:|:--:|:--:|:--:|
+| ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |
+    `);
+}
+
 export class NodeItem extends vscode.TreeItem {
     constructor(public readonly node: Node) {
         super(node.nodeid, vscode.TreeItemCollapsibleState.None);
         this.description = nodeDescription(node);
-        this.tooltip = new vscode.MarkdownString(`
-| nodeid | state | GRES (idle/total) | memory (i/t) | CPUs (i/t) |
-|:--:|:--:|:--:|:--:|:--:|
-| ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |
-            `);
+        this.tooltip = nodeTooltip(node);
         this.iconPath = nodeIcon(node);
         this.contextValue = (node.state === NodeState.IDLE || node.state === NodeState.MIXED) ? 'nodeItem' : 'unavailNodeItem';
     }

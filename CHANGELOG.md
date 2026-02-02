@@ -6,6 +6,36 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.14.0][0.14.0] - 2026-02-02
+
+### Added
+
+- `slurm.injection` syntax update
+  - Added support for options without values
+  - Allowed short options to be followed directly by values without a space (e.g., `-Jmyjob`)
+  - Fixed parsing of mixed strings like `aaa"#123"aaa`
+  - Properly handle escaped characters and highlight them separately
+- Added auto `#SBATCH` prefix continuation on new lines in shell scripts
+- Added completion for `#SBATCH` part in shell scripts
+  - Added constants for record parameters
+  - Added `sbatchModel` to parse sbatch file 
+  - Added `contextService` to manage sbatch context
+  - Added parameters completion for 8 common params
+  - Added auto value completion for `partition`, `gres` and `nodelist`
+- Added `wordPattern` for shell scripts to have better completion behavior
+
+### Changed
+
+- Refactored `resourceService`
+  - Add `GresGroup` structure and node grouping by GRES, partition and partition&GRES
+  - Add cache for grouped node
+- Refactored `resourceView` for better and cleaner code
+  - Add `GresItem` to replace common `ListItem`
+- Refactored `taskView` for better and cleaner code
+- Replace manual `replace` with `l10n.t` in `ListItem` and some text
+- Changed `unquoted string` token to variable
+- Refactored `ConfigService`
+
 ## [0.13.0][0.13.0] - 2026-01-08
 
 ### Added
@@ -367,7 +397,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/XingYuSSS/slurm--/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/XingYuSSS/slurm--/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/XingYuSSS/slurm--/compare/v0.10.0...v0.11.0

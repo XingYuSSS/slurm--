@@ -1,5 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { Node, ResourceGres } from '../models';
+import { compWithNull, resignFn } from '../utils/utils';
 
 export enum TaskSortKeys {
     NAME = 'name',
@@ -129,6 +131,27 @@ class ConfigService {
     }
     public get gresSortAscending(): boolean {
         return (this.#gresSortDirection as SortDirection) === SortDirection.ASCEND;
+    }
+
+    public get gresSortFN(): (a: ResourceGres | null, b: ResourceGres | null) => number {
+        let fn;
+        switch (this.gresSortKey) {
+            case GresSortKeys.NAME:
+                fn = (a: ResourceGres, b: ResourceGres) => a.toIdString().localeCompare(b.toIdString(), undefined, { sensitivity: 'base' });
+            case GresSortKeys.AVAIL:
+                fn = (a: ResourceGres, b: ResourceGres) => (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum);
+        }
+        return resignFn(compWithNull(fn), this.gresSortAscending);
+    }
+    public get nodeSortFN(): (a: Node, b: Node) => number {
+        let fn;
+        switch (this.gresSortKey) {
+            case GresSortKeys.NAME:
+                fn = (a: Node, b: Node) => a.nodeid.localeCompare(b.nodeid, undefined, { sensitivity: 'base' });
+            case GresSortKeys.AVAIL:
+                fn = (a: Node, b: Node) => a.gres === null || b.gres === null ? 0 : (!a.isAvailableState ? -1 : (!b.isAvailableState ? 1 : (a.gres.totalNum - a.gres.usedNum) - (b.gres.totalNum - b.gres.usedNum)));
+        }
+        return resignFn(fn, this.gresSortAscending);
     }
 
     #gresGroupKey!: string;

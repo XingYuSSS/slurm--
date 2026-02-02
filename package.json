@@ -13,7 +13,9 @@
     "Data Science",
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "extensionKind": [
     "workspace"
@@ -984,6 +986,12 @@
           "source.shell"
         ]
       }
+    ],
+    "languages": [
+      {
+        "id": "shellscript",
+        "configuration": "./syntaxes/slurm.language-configuration.json"
+      }
     ]
   },
   "scripts": {
@@ -1017,7 +1025,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@types/shell-quote": "^1.7.5",
     "fast-glob": "^3.3.3",
-    "lodash": "^4.17.23"
+    "lodash": "^4.17.23",
+    "shell-quote": "^1.8.3"
   }
 }

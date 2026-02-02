@@ -3,7 +3,7 @@
   "injectionSelector": "L:source.shell",
   "patterns": [
     {
-      "begin": "^#SBATCH\\s+",
+      "begin": "^#SBATCH(?=\\s|--|-|$)",
       "end": "\\n",
       "name": "meta.slurm.injection",
       "beginCaptures": {
@@ -26,8 +26,8 @@
   ],
   "repository": {
     "option-long": {
-      "begin": "(--[a-zA-Z0-9_-]+)(?:(=)|(\\s+))",
-      "end": "(?=\\s+(--|-|#|\\n|$))",
+      "begin": "(--[a-zA-Z][a-zA-Z0-9_-]*)((=)|(?=\\s|$|[#\\n]))",
+      "end": "(?=#|\\s+(?:--|-|#|\\n)|$)",
       "name": "meta.option.long.slurm.injection",
       "beginCaptures": {
         "1": {
@@ -35,50 +35,26 @@
         },
         "2": {
           "name": "punctuation.separator.equals.slurm.injection"
-        },
-        "3": {
-          "name": "punctuation.separator.spaces.slurm.injection"
         }
       },
       "patterns": [
         {
-          "include": "#string-value"
-        },
-        {
-          "include": "#time-value"
-        },
-        {
-          "include": "#numeric-value"
-        },
-        {
-          "include": "#unquoted-string-value"
+          "include": "#value-content"
         }
       ]
     },
     "option-short": {
-      "begin": "(-[a-zA-Z])(\\s+)",
-      "end": "(?=\\s+(--|-|#|\\n|$))",
+      "begin": "(-[a-zA-Z])",
+      "end": "(?=#|\\s+(?:--|-|#|\\n)|$)",
       "name": "meta.option.short.slurm.injection",
       "beginCaptures": {
         "1": {
           "name": "keyword.option.short.slurm.injection"
-        },
-        "2": {
-          "name": "punctuation.separator.spaces.slurm.injection"
         }
       },
       "patterns": [
         {
-          "include": "#string-value"
-        },
-        {
-          "include": "#time-value"
-        },
-        {
-          "include": "#numeric-value"
-        },
-        {
-          "include": "#unquoted-string-value"
+          "include": "#value-content"
         }
       ]
     },
@@ -86,28 +62,87 @@
       "match": "#.*$",
       "name": "comment.line.number-sign.slurm.injection"
     },
-    "string-value": {
-      "match": "(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")|('[^'\\\\]*(?:\\\\.[^'\\\\]*)*')",
-      "captures": {
-        "1": {
-          "name": "string.quoted.double.slurm.injection"
+    "escape-sequence": {
+      "match": "\\\\.",
+      "name": "constant.character.escape.slurm.injection"
+    },
+    "quoted-string": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.slurm.injection",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.slurm.injection"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.slurm.injection"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#escape-sequence"
+            },
+            {
+              "match": "[^\"\\\\]+"
+            }
+          ]
         },
-        "2": {
-          "name": "string.quoted.single.slurm.injection"
+        {
+          "begin": "'",
+          "end": "'",
+          "name": "string.quoted.single.slurm.injection",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.slurm.injection"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.slurm.injection"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#escape-sequence"
+            },
+            {
+              "match": "[^'\\\\]+"
+            }
+          ]
         }
-      }
+      ]
+    },
+    "value-content": {
+      "patterns": [
+        {
+          "include": "#quoted-string"
+        },
+        {
+          "include": "#time-value"
+        },
+        {
+          "include": "#numeric-value"
+        },
+        {
+          "match": "[^\\s#\\\\\"']+",
+          "name": "variable.parameter.slurm.injection"
+        },
+        {
+          "include": "#escape-sequence"
+        }
+      ]
     },
     "time-value": {
-      "match": "(?:\\d-)?\\d+:[0-5]?\\d:[0-5]?\\d(?=\\s)",
+      "match": "(?:\\d+-)?\\d+:[0-5]?\\d:[0-5]?\\d(?=\\s|$)",
       "name": "variable.other.constant.time.slurm.injection"
     },
     "numeric-value": {
-      "match": "\\d+(?=\\s)",
+      "match": "(?<=\\s|=|(-[a-zA-Z]))\\d+(?=\\s|$)",
       "name": "constant.numeric.slurm.injection"
-    },
-    "unquoted-string-value": {
-      "match": "\\S+",
-      "name": "string.unquoted.option.value.long.slurm.injection"
     }
   }
 }

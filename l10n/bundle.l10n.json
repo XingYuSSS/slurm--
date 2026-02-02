@@ -1,10 +1,10 @@
 {
   "running": "running",
-  "${length} tasks": "${length} tasks",
+  "{length} tasks": "{length} tasks",
   "finished": "finished",
-  "${length} nodes": "${length} nodes",
+  "{length} nodes": "{length} nodes",
   "Drop a script to here": "Drop a script to here",
-  "${length} scripts": "${length} scripts",
+  "{length} scripts": "{length} scripts",
   "Workspace": "Workspace",
   "Global": "Global",
   "Node has been allocated": "Node has been allocated",

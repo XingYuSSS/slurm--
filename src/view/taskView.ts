@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { taskService, configService, TaskSortKeys } from '../services';
-import { BaseTask, Task, TaskArray, TaskState } from '../models/';
+import { BaseTask, Task, TaskArray, TaskState } from '../models';
 import { FinishedTaskArrayItem, FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskArrayItem, TaskItem } from './components';
 import { resignFn } from '../utils/utils';
 
@@ -27,20 +27,24 @@ const sortFn: Record<TaskSortKeys, (a: BaseTask, b: BaseTask) => number> = {
 };
 
 function getGroupedTask(tasks: BaseTask[]): ListItem[] {
-    let running = tasks.filter(v => !v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
-    let finished = tasks.filter(v => v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+    const running = tasks.filter(v => !v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+    const finished = tasks.filter(v => v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+
+    const runningItem = running.map((value) => { return value instanceof TaskArray ? new TaskArrayItem(value) : new TaskItem(value as Task); });
+    const finishedItem = finished.map((value) => { return value instanceof TaskArray ? new FinishedTaskArrayItem(value) : new FinishedTaskItem(value as Task); });
+
     return [
         new ListItem(
             vscode.l10n.t('running'),
-            running.map((value) => { return value instanceof TaskArray ? new TaskArrayItem(value) : new TaskItem(value as Task); }),
-            vscode.l10n.t('${length} tasks'),
+            runningItem,
+            vscode.l10n.t('{length} tasks', {length: runningItem.length}),
             undefined,
             'taskList'
         ),
         new ListItem(
             vscode.l10n.t('finished'),
-            finished.map((value) => { return value instanceof TaskArray ? new FinishedTaskArrayItem(value) : new FinishedTaskItem(value as Task); }),
-            vscode.l10n.t('${length} tasks'),
+            finishedItem,
+            vscode.l10n.t('{length} tasks', {length: finishedItem.length}),
             undefined,
             'finishedTaskList'
         ),
