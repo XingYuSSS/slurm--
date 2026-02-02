@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import { taskService, configService, TaskSortKeys } from '../services';
-import { BaseTask, Task, TaskArray, TaskState } from '../models/';
+import { BaseTask, Task, TaskArray, TaskState } from '../models';
 import { FinishedTaskArrayItem, FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskArrayItem, TaskItem } from './components';
 import { resignFn } from '../utils/utils';
 

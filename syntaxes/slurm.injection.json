@@ -3,7 +3,7 @@
   "injectionSelector": "L:source.shell",
   "patterns": [
     {
-      "begin": "^#SBATCH\\s+",
+      "begin": "^#SBATCH(?=\\s|--|-|$)",
       "end": "\\n",
       "name": "meta.slurm.injection",
       "beginCaptures": {
@@ -59,7 +59,7 @@
       ]
     },
     "comment": {
-      "match": "(?<!\\\\)(?:\\\\\\\\)*#.*$",
+      "match": "#.*$",
       "name": "comment.line.number-sign.slurm.injection"
     },
     "escape-sequence": {
@@ -129,7 +129,7 @@
         },
         {
           "match": "[^\\s#\\\\\"']+",
-          "name": "string.unquoted.option.value.slurm.injection"
+          "name": "variable.parameter.slurm.injection"
         },
         {
           "include": "#escape-sequence"
@@ -141,7 +141,7 @@
       "name": "variable.other.constant.time.slurm.injection"
     },
     "numeric-value": {
-      "match": "\\d+(?=\\s|$)",
+      "match": "(?<=\\s|=|(-[a-zA-Z]))\\d+(?=\\s|$)",
       "name": "constant.numeric.slurm.injection"
     }
   }

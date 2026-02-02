@@ -2,27 +2,13 @@ import * as vscode from 'vscode';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import _ from 'lodash';
 
-import { Node, NodeState, ResourceGres } from '../models/';
+import { Node, NodeState, ResourceGres } from '../models';
 import { GresItem, NodeItem } from './components';
 import { configService, GresSortKeys, GresGroupKeys, resourceService } from '../services';
-import { resignFn } from '../utils/utils';
-
-
-const nodeSortFnMap = new Map([
-    [GresSortKeys.NAME, (a: Node, b: Node) => a.nodeid.localeCompare(b.nodeid, undefined, { sensitivity: 'base' })],
-    [GresSortKeys.AVAIL, (a: Node, b: Node) => a.gres === null || b.gres === null ? 0 : (!a.isAvailableState ? -1 : (!b.isAvailableState ? 1 : (a.gres.totalNum - a.gres.usedNum) - (b.gres.totalNum - b.gres.usedNum)))],
-]);
-
-const gresSortFnMap = new Map([
-    [GresSortKeys.NAME, (a: ResourceGres | null, b: ResourceGres | null) => a === null ? -1 : (b === null ? 1 : a.toIdString().localeCompare(b.toIdString(), undefined, { sensitivity: 'base' }))],
-    [GresSortKeys.AVAIL, (a: ResourceGres | null, b: ResourceGres | null) => a === null ? -1 : (b === null ? 1 : (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum))],
-]);
 
 function getNodeGroupedByGres(): GresItem[] {
     const gresNode = resourceService.getNodesByGres();
-
-    const gresSortFn = resignFn(gresSortFnMap.get(configService.gresSortKey)!, configService.gresSortAscending);
-    const sortedMap = [...gresNode].sort((a, b) => gresSortFn(a[1].gres, b[1].gres));
+    const sortedMap = [...gresNode].sort((a, b) => configService.gresSortFN(a[1].gres, b[1].gres));
 
     return sortedMap.map(([gresId, group]) => {
         return new GresItem(group.gres, group.nodes);
@@ -31,10 +17,7 @@ function getNodeGroupedByGres(): GresItem[] {
 
 function getNodeGroupedByPartition(): GresItem[] {
     const partitionNode = resourceService.getNodeByPartition();
-
-    const gresSortFn = resignFn(gresSortFnMap.get(configService.gresSortKey)!, configService.gresSortAscending);
-
-    const sortedMap = [...partitionNode].sort((a, b) => gresSortFn(a[1].gres, b[1].gres));
+    const sortedMap = [...partitionNode].sort((a, b) => configService.gresSortFN(a[1].gres, b[1].gres));
 
     return sortedMap.map(([partition, group]) => {
         return new GresItem(group.gres, group.nodes, `${partition} (${group.gres!.totalNum - group.gres!.usedNum}/${group.gres!.totalNum})`);
@@ -73,8 +56,7 @@ export class ResourceViewDataProvider implements vscode.TreeDataProvider<NodeIte
             return Promise.resolve(getGroupedNodeFn[configService.gresGroupKey]());
         }
         if (element instanceof GresItem) {
-            const nodeSortFn = resignFn(nodeSortFnMap.get(configService.gresSortKey)!, configService.gresSortAscending);
-            return Promise.resolve(element.nodes.sort(nodeSortFn).map(v => new NodeItem(v)));
+            return Promise.resolve(element.nodes.sort(configService.nodeSortFN).map(v => new NodeItem(v)));
         }
         return Promise.resolve([]);
     }

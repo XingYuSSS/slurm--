@@ -13,6 +13,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Allowed short options to be followed directly by values without a space (e.g., `-Jmyjob`)
   - Fixed parsing of mixed strings like `aaa"#123"aaa`
   - Properly handle escaped characters and highlight them separately
+- Added auto `#SBATCH` prefix continuation on new lines in shell scripts
+- Added completion for `#SBATCH` part in shell scripts
+  - Added constants for record parameters
+  - Added `sbatchModel` to parse sbatch file 
+  - Added `contextService` to manage sbatch context
+  - Added parameters completion for 8 common params
+  - Added auto value completion for `partition`, `gres` and `nodelist`
+- Added `wordPattern` for shell scripts to have better completion behavior
 
 ### Changed
 
@@ -23,6 +31,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Add `GresItem` to replace common `ListItem`
 - Refactored `taskView` for better and cleaner code
 - Replace manual `replace` with `l10n.t` in `ListItem` and some text
+- Changed `unquoted string` token to variable
+- Refactored `ConfigService`
 
 ## [0.13.0][0.13.0] - 2026-01-08
 
