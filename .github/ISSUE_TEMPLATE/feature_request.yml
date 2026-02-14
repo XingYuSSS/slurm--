@@ -1,0 +1,60 @@
+name: Feature Request
+description: Suggest an idea for this project.
+title: "[FEATURE] <title>"
+labels: ["enhancement"]
+assignees:
+  - XingYuSSS
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in improving this project!
+        Please fill out the form below to help us understand your suggestion.
+
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue or PR for this?
+      description: Please search to see if someone has already suggested something similar.
+      options:
+        - label: I have searched the existing issues and pull requests
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Problem Statement
+      description: What problem are you trying to solve? Or what's missing?
+      placeholder: |
+        I find it difficult to...
+        Currently, there's no way to...
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see. Be as specific as possible.
+      placeholder: |
+        Add a new command `xxx` that does...
+        Improve the UI by showing...
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative approaches? Why is your proposal better?
+      placeholder: |
+        I tried using [existing feature], but it doesn't support...
+        Another option would be..., but it has drawbacks like...
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Additional Context
+      description: |
+        Any other information that might help—use cases, screenshots, related projects, etc.
+        
+        Tip: You can drag and drop images or files here!
+    validations:
+      required: false
