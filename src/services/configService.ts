@@ -134,22 +134,36 @@ class ConfigService {
     }
 
     public get gresSortFN(): (a: ResourceGres | null, b: ResourceGres | null) => number {
-        let fn;
+        let fn: (a: ResourceGres, b: ResourceGres) => number;
         switch (this.gresSortKey) {
             case GresSortKeys.NAME:
-                fn = (a: ResourceGres, b: ResourceGres) => a.toIdString().localeCompare(b.toIdString(), undefined, { sensitivity: 'base' });
+                fn = (a: ResourceGres, b: ResourceGres) => a.toIdString().localeCompare(b.toIdString(), undefined, { sensitivity: 'base' }); break;
             case GresSortKeys.AVAIL:
-                fn = (a: ResourceGres, b: ResourceGres) => (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum);
+                fn = (a: ResourceGres, b: ResourceGres) => (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum); break;
         }
         return resignFn(compWithNull(fn), this.gresSortAscending);
     }
-    public get nodeSortFN(): (a: Node, b: Node) => number {
-        let fn;
+    public getNodeSortFN(contextGres: ResourceGres | null): (a: Node, b: Node) => number {
+        let fn: (a: Node, b: Node) => number;
         switch (this.gresSortKey) {
             case GresSortKeys.NAME:
                 fn = (a: Node, b: Node) => a.nodeid.localeCompare(b.nodeid, undefined, { sensitivity: 'base' });
+                break;
             case GresSortKeys.AVAIL:
-                fn = (a: Node, b: Node) => a.gres === null || b.gres === null ? 0 : (!a.isAvailableState ? -1 : (!b.isAvailableState ? 1 : (a.gres.totalNum - a.gres.usedNum) - (b.gres.totalNum - b.gres.usedNum)));
+                const gresId = contextGres?.toIdString();
+                fn = (a: Node, b: Node) => {
+                    if (!a.isAvailableState) { return -1; }
+                    if (!b.isAvailableState) { return 1; }
+                    const idle = (n: Node): number => {
+                        if (!gresId) {
+                            return n.gresList.reduce((s, g) => s + (g.totalNum - g.usedNum), 0);
+                        }
+                        const g = n.gresList.find((x) => x.toIdString() === gresId);
+                        return g ? g.totalNum - g.usedNum : 0;
+                    };
+                    return idle(a) - idle(b);
+                };
+                break;
         }
         return resignFn(fn, this.gresSortAscending);
     }

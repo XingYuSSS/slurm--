@@ -6,6 +6,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Support multiple GRES types on a single node
+  - Use `gresList` instead of `gres`
+  - Sort node by availability uses `getNodeSortFN(contextGres)` so idle count follows the expanded GRES (or partition) group
+  - Add quick pick to choose GRES type in `launch terminal` when a node has more than one
+
+### Fixed
+
+- Fixed missing translations
+
 ## [0.14.0][0.14.0] - 2026-02-02
 
 ### Added

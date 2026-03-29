@@ -25,7 +25,7 @@ export class Node {
     public available: string;
     readonly memory: number;
     allocMemory: number;
-    readonly gres: ResourceGres | null;
+    readonly gresList: ResourceGres[];
     readonly partition: string;
     readonly state: NodeState;
     readonly cpu: number;
@@ -41,12 +41,11 @@ export class Node {
         this.available = param.available;
         this.memory = (typeof param.memory === "string" ? parseInt(param.memory) : param.memory) / 1000;
         this.allocMemory = (typeof param.allocMemory === "string" ? parseInt(param.allocMemory) : param.allocMemory) / 1000;
-        this.gres = param.gres === '(null)' ? null : new ResourceGres(param.usedGres, param.gres);
+        this.gresList = param.gres === '(null)' ? [] : ResourceGres.parseList(param.usedGres, param.gres);
         this.partition = param.partition.endsWith('*') ? param.partition.slice(0, -1) : param.partition;
         this.state = (param.state.endsWith('*') ? param.state.slice(0, -1) : param.state) as NodeState;
         [this.allocCpu, this.idleCpu, this.otherCpu, this.cpu] = param.cpuState.split('/').map(v => parseInt(v));
     }
 
     get isAvailableState(): boolean { return this.state === NodeState.MIXED || this.state === NodeState.IDLE; }
-
 }

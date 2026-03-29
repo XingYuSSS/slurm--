@@ -1,7 +1,7 @@
 {
   "name": "slurm--extension",
   "displayName": "slurm--",
-  "markdownDescription": "A multifunctional tool for SLURM syntax highlight, manage tasks, view resource, and launch tasks.",
+  "markdownDescription": "A multifunctional tool for SLURM syntax highlight&completion, manage tasks, view resource, and launch tasks.",
   "version": "0.14.0",
   "icon": "assets/icons/extension-icon.png",
   "engines": {
@@ -12,6 +12,13 @@
     "Programming Languages",
     "Data Science",
     "Other"
+  ],
+  "keywords": [
+    "slurm",
+    "hpc",
+    "workload",
+    "cluster",
+    "sbatch"
   ],
   "activationEvents": [
     "onStartupFinished"

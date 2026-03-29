@@ -7,7 +7,7 @@ export class Gres {
     readonly other: string | null = null;
     readonly num: number;
     constructor(gres: string) {
-        const slicedGres = gres.replace(/^gres:/, '').replace(/\(.*\)$/, '').split(":");
+        const slicedGres = gres.replace(/^gres:/, '').replace(/\([^)]*\)\s*$/, '').split(":");
         this.type = slicedGres[0];
         this.name = slicedGres.length > 2 ? slicedGres[1] : null;
         this.other = slicedGres.length > 3 ? slicedGres.slice(2, -1).join(":") : null;
@@ -59,6 +59,22 @@ export class ResourceGres extends Gres {
 
     static empty(id: string): ResourceGres {
         return new ResourceGres(`${id}:0`, `${id}:0`);
+    }
+
+    static parseList(usedGresRaw: string, totalGresRaw: string): ResourceGres[] {
+        const totalParts = totalGresRaw.split(',').map((s) => s.trim()).filter(v => v.length > 0);
+        const usedParts = usedGresRaw.split(',').map((s) => s.trim()).filter(v => v.length > 0);
+
+        const usedById = new Map<string, string>();
+        for (const u of usedParts) {
+            usedById.set(new Gres(u).toIdString(), u);
+        }
+
+        return totalParts.map(totalStr => {
+            const id = new Gres(totalStr).toIdString();
+            const usedStr = usedById.get(id) ?? `${id}:0`;
+            return new ResourceGres(usedStr, totalStr);
+        });
     }
 }
 
