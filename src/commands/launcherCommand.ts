@@ -138,10 +138,17 @@ async function changeArg(arg: ArgItem) {
 
 async function launchTerminal(node: NodeItem) {
     let gresArg = '';
-    if (node.node.gres) {
-        const gresNum = await vscode.window.showQuickPick(Array.from({ length: node.node.gres.totalNum - node.node.gres.usedNum + 1 }, (_, i) => i).map(v => v.toString()), { title: vscode.l10n.t('Choose number of GRES') });
+    const glist = node.node.gresList;
+    if (glist.length > 0) {
+        let pick = glist[0];
+        if (glist.length > 1) {
+            const choice = await vscode.window.showQuickPick(glist.map((g) => ({ label: g.toIdString(), g })),{ title: vscode.l10n.t('Choose GRES type') });
+            if (!choice) { return; }
+            pick = choice.g;
+        }
+        const gresNum = await vscode.window.showQuickPick(Array.from({ length: pick.totalNum - pick.usedNum + 1 }, (_, i) => i).map(v => v.toString()), { title: vscode.l10n.t('Choose number of GRES') });
         if (!gresNum) { return; }
-        gresArg = "--gres=" + node.node.gres.toIdString() + ":" + gresNum;
+        gresArg = "--gres=" + pick.toIdString() + ":" + gresNum;
     }
     let mem = undefined;
     while (!mem) {

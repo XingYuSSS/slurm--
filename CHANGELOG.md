@@ -6,6 +6,19 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.15.0][0.15.0] - 2026-03-29
+
+### Added
+
+- Support multiple GRES types on a single node
+  - Use `gresList` instead of `gres`
+  - Sort node by availability uses `getNodeSortFN(contextGres)` so idle count follows the expanded GRES (or partition) group
+  - Add quick pick to choose GRES type in `launch terminal` when a node has more than one
+
+### Fixed
+
+- Fixed missing translations
+
 ## [0.14.0][0.14.0] - 2026-02-02
 
 ### Added
@@ -397,7 +410,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/XingYuSSS/slurm--/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/XingYuSSS/slurm--/compare/v0.11.0...v0.12.0

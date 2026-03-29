@@ -40,11 +40,20 @@ export class ResourceService {
     private _groupNodeByGres(nodes: Node[]): Map<string | null, GresGroup> {
         const map = new Map<string | null, GresGroup>();
         nodes.forEach(node => {
-            let gres = node.gres?.toIdString() ?? null;
-            if (!map.has(gres)) {
-                map.set(gres, { nodes: [], gres: null });
+            if (node.gresList.length === 0) {
+                if (!map.has(null)) {
+                    map.set(null, { nodes: [], gres: null });
+                }
+                map.get(null)!.nodes.push(node);
+                return;
             }
-            map.get(gres)!.nodes.push(node);
+            for (const rg of node.gresList) {
+                const gresId = rg.toIdString();
+                if (!map.has(gresId)) {
+                    map.set(gresId, { nodes: [], gres: null });
+                }
+                map.get(gresId)!.nodes.push(node);
+            }
         });
 
         [...map]
@@ -53,7 +62,7 @@ export class ResourceService {
                 const availNode = group.nodes.filter(v => v.isAvailableState);
                 const gres = availNode.length === 0
                     ? ResourceGres.empty(gresId!)
-                    : ResourceGres.fromArray(availNode.map(v => v.gres!));
+                    : ResourceGres.fromArray(availNode.map((v) => v.gresList.find((g) => g.toIdString() === gresId)!));
                 group.gres = gres;
             });
         return map;
@@ -84,10 +93,10 @@ export class ResourceService {
 
             const pmap = new Map<string, GresGroup>(
                 [...map].map(([partition, nodes]) => {
-                    const availNode = nodes.filter(v => v.isAvailableState && v.gres !== null);
+                    const availNode = nodes.filter(v => v.isAvailableState && v.gresList.length !== 0);
                     const gres = availNode.length === 0
                         ? ResourceGres.empty('')
-                        : ResourceGres.fromArray(availNode.map(v => v.gres!));
+                        : ResourceGres.fromArray(availNode.map(v => v.gresList.reduce((a, b) => a.add(b), ResourceGres.empty(''))));
                     return [partition, { nodes: nodes, gres: gres }];
                 }));
             this.partitionMap = pmap;

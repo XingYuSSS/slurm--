@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 
 import { Node, NodeState, SbatchArgument, SbatchParsedArgs } from '../models';
+import { nodeGresDisplay } from '../view/components/nodeItem';
 import { resourceService, contextManager } from '../services';
-import { SBATCH_PARAMS } from "../constants";
+import { SBATCH_PARAMS, SBATCH_SHORT_TO_LONG } from "../constants";
 
 
 type CompletionRange = vscode.Range | {
@@ -52,7 +53,7 @@ export class SbatchCompletionProvider implements vscode.CompletionItemProvider {
         return new vscode.MarkdownString(`
 | nodeid | state | GRES (idle/total) | memory (i/t) | CPUs (i/t) |
 |:--:|:--:|:--:|:--:|:--:|
-${nodes.slice(0, 10).map(node => `| ${node.nodeid} | ${node.state} | ${node.gres ?? 'No GRES'} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |`).join('\n')}
+${nodes.slice(0, 10).map(node => `| ${node.nodeid} | ${node.state} | ${nodeGresDisplay(node)} | ${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB | ${node.idleCpu} / ${node.cpu} |`).join('\n')}
 ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
     `);
     }
@@ -93,7 +94,7 @@ ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
     private getNodeDetail(node: Node): string {
         if (node.state === NodeState.ALLOC) { return vscode.l10n.t(`Node has been allocated`); }
         if (node.state === NodeState.IDLE || node.state === NodeState.MIXED) {
-            return `${node.gres ?? 'No GRES'} \t${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB \t${node.idleCpu} / ${node.cpu} CPUs`;
+            return `${nodeGresDisplay(node)} \t${Math.round((node.memory - node.allocMemory) * 1000) / 1000}GB / ${node.memory}GB \t${node.idleCpu} / ${node.cpu} CPUs`;
         }
         return vscode.l10n.t(`Node not available due to state "{0}"`, node.state);
     }
@@ -101,7 +102,7 @@ ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
     private getNodeCompletions(context: SbatchParsedArgs, range?: CompletionRange): vscode.CompletionItem[] {
         const nodes = resourceService.getNode()
             .filter(n => !context.partition || n.partition === context.partition)
-            .filter(n => !context.gres || n.gres?.toIdString() === context.gres.toIdString());
+            .filter(n => !context.gres || n.gresList.some((g) => g.toIdString() === context.gres!.toIdString()));
 
         return [...nodes].map(node => {
             const item = new vscode.CompletionItem(node.nodeid, vscode.CompletionItemKind.Variable);

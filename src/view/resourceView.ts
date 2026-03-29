@@ -56,7 +56,7 @@ export class ResourceViewDataProvider implements vscode.TreeDataProvider<NodeIte
             return Promise.resolve(getGroupedNodeFn[configService.gresGroupKey]());
         }
         if (element instanceof GresItem) {
-            return Promise.resolve(element.nodes.sort(configService.nodeSortFN).map(v => new NodeItem(v)));
+            return Promise.resolve(element.nodes.sort(configService.getNodeSortFN(element.gres)).map(v => new NodeItem(v)));
         }
         return Promise.resolve([]);
     }
