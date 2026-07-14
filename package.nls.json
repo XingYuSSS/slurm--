@@ -12,6 +12,8 @@
     "slurm--.openFile.title": "open file",
     "slurm--.openStdout.title": "open stdout file",
     "slurm--.openStderr.title": "open stderr file",
+    "slurm--.enterTaskAllocation.title": "enter allocation",
+    "slurm--.enterTaskAllocationWithOverlap.title": "enter allocation with overlap",
     "slurm--.refreshResources.title": "refresh resources",
     "slurm--.autoRefreshRes.title": "start auto refresh",
     "slurm--.unautoRefreshRes.title": "stop auto refresh",
@@ -41,6 +43,8 @@
     "slurm--.sortDescend.title": "Descending",
     "slurm--.sortingAscend.title": "✔ Ascending",
     "slurm--.sortingDescend.title": "✔ Descending",
+
+    "slurm--.setFinishedTaskFilter.title": "Filter Finished Tasks...",
     
     "slurm--.groupByGres.title": "Group By Gres",
     "slurm--.groupByPartition.title": "Group By Partition",
@@ -62,6 +66,13 @@
     "config.tasksPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
     "config.resourcesPanel.refreshInterval(ms).description": "The interval of auto refresh in millisecond (works after restart auto refresh)",
     "config.commands.user.description": "The <user> argument in `squeue`, defaults to `--me`. If your slurm system doesn't support `--me`, please set to `--user <your_username>`",
+    "config.commands.binaries.description": "Command names or absolute paths for Slurm binaries. Use this when a cluster wrapper earlier in PATH changes command behavior.",
+    "config.commands.binaries.squeue.description": "Command name or path used for `squeue`.",
+    "config.commands.binaries.sinfo.description": "Command name or path used for `sinfo`.",
+    "config.commands.binaries.sacct.description": "Command name or path used for `sacct`.",
+    "config.commands.binaries.sbatch.description": "Command name or path used for `sbatch`.",
+    "config.commands.binaries.scancel.description": "Command name or path used for `scancel`.",
+    "config.commands.binaries.srun.description": "Command name or path used for `srun`.",
     "config.commands.sinfoExtraArgs.description": "Additional arguments for the `sinfo` command. Each key-value pair represents one argument, which must include a leading `-` or `--`. When the `Sinfo Show All Clusters` option is enabled, do not add the -M option again.",
     "config.commands.sinfoShowAllClusters.description": "When checked, adds the `-M all` argument to the `sinfo` command. Enable this option if GRES resources in the cluster are not fully displayed",
     "config.label.id": "Id",
@@ -94,5 +105,6 @@
     "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
     
     "config.launch.terminal.shellList.description": "A list of shells to be displayed as candidates when launching the terminal, shown in the specified order.",
+    "config.launch.terminal.overlapExistingAllocation.description": "Add `--overlap` when opening an interactive shell inside an existing Slurm allocation.",
     "config.launch.scripts.extensionList.description": "File extensions used to automatically detect Slurm scripts when adding or dragging in folders."
 }

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import * as shellQuote from 'shell-quote';
 import { Node, ResourceGres } from '../models';
 import { compWithNull, resignFn } from '../utils/utils';
 
@@ -23,6 +24,23 @@ export enum SortDirection {
     DESCEND = 'descending'
 }
 
+export enum FinishedTaskFilter {
+    ALL = 'all',
+    SUCCESSFUL = 'successful',
+    FAILED = 'failed'
+}
+
+export type SlurmCommandName = 'squeue' | 'sinfo' | 'sacct' | 'sbatch' | 'scancel' | 'srun';
+
+const DEFAULT_SLURM_COMMAND_BINARIES: Record<SlurmCommandName, string> = {
+    squeue: 'squeue',
+    sinfo: 'sinfo',
+    sacct: 'sacct',
+    sbatch: 'sbatch',
+    scancel: 'scancel',
+    srun: 'srun',
+};
+
 export const TaskInfoConfigKeys = ["id", "nodelist", "GRES", "command", "stdout", "stderr", "submit", "start", "finish"];
 
 export type TaskInfoConfig = {
@@ -39,6 +57,11 @@ class ConfigService {
     public get optionUser(): string {
         return vscode.workspace.getConfiguration('slurm--.commands').get('user') ?? '--me';
     }
+    public getSlurmCommand(command: SlurmCommandName): string {
+        const binaries = vscode.workspace.getConfiguration('slurm--.commands').get<Partial<Record<SlurmCommandName, string>>>('binaries') ?? {};
+        const binary = binaries[command]?.trim() || DEFAULT_SLURM_COMMAND_BINARIES[command];
+        return shellQuote.quote([binary]);
+    }
     public get sinfoExtraArgs(): object {
         return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoExtraArgs') ?? {};
     }
@@ -53,6 +76,9 @@ class ConfigService {
     }
     public get terminalShellList(): Array<string> {
         return vscode.workspace.getConfiguration('slurm--.launch.terminal').get('shellList') ?? ['bash', 'zsh', 'fish'];
+    }
+    public get overlapExistingAllocation(): boolean {
+        return vscode.workspace.getConfiguration('slurm--.launch.terminal').get('overlapExistingAllocation') ?? false;
     }
     public get scriptsExtList(): Array<string> {
         return vscode.workspace.getConfiguration('slurm--.launch.scripts').get('extensionList') ?? ['sh', 'slurm', 'sbatch'];
@@ -79,6 +105,15 @@ class ConfigService {
     }
     public get taskSortAscending(): boolean {
         return (this.#taskSortDirection as SortDirection) === SortDirection.ASCEND;
+    }
+
+    #finishedTaskFilter: FinishedTaskFilter = FinishedTaskFilter.ALL;
+    public get finishedTaskFilter(): FinishedTaskFilter {
+        return this.#finishedTaskFilter;
+    }
+    public set finishedTaskFilter(filter: FinishedTaskFilter) {
+        vscode.commands.executeCommand('setContext', 'finishedTaskFilter', filter);
+        this.#finishedTaskFilter = filter;
     }
 
     #taskShowShortcutKey!: boolean;
@@ -139,7 +174,7 @@ class ConfigService {
             case GresSortKeys.NAME:
                 fn = (a: ResourceGres, b: ResourceGres) => a.toIdString().localeCompare(b.toIdString(), undefined, { sensitivity: 'base' }); break;
             case GresSortKeys.AVAIL:
-                fn = (a: ResourceGres, b: ResourceGres) => (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum); break;
+                fn = (a: ResourceGres, b: ResourceGres) => a.availableNum - b.availableNum; break;
         }
         return resignFn(compWithNull(fn), this.gresSortAscending);
     }
@@ -156,10 +191,10 @@ class ConfigService {
                     if (!b.isAvailableState) { return 1; }
                     const idle = (n: Node): number => {
                         if (!gresId) {
-                            return n.gresList.reduce((s, g) => s + (g.totalNum - g.usedNum), 0);
+                            return n.gresList.reduce((s, g) => s + g.availableNum, 0);
                         }
                         const g = n.gresList.find((x) => x.toIdString() === gresId);
-                        return g ? g.totalNum - g.usedNum : 0;
+                        return g ? g.availableNum : 0;
                     };
                     return idle(a) - idle(b);
                 };
@@ -200,6 +235,7 @@ class ConfigService {
 
         vscode.commands.executeCommand('setContext', 'taskSortKey', this.#taskSortKey);
         vscode.commands.executeCommand('setContext', 'taskSortDirection', this.#taskSortDirection);
+        vscode.commands.executeCommand('setContext', 'finishedTaskFilter', this.#finishedTaskFilter);
         vscode.commands.executeCommand('setContext', 'taskShowShortcutKey', this.#taskShowShortcutKey);
         vscode.commands.executeCommand('setContext', 'showFilenameOnly', this.#taskShowFilenameOnly);
         vscode.commands.executeCommand('setContext', 'gresSortDirection', this.#gresSortDirection);

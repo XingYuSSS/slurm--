@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { configService, GresGroupKeys, GresSortKeys, SortDirection, TaskInfoConfig, TaskInfoConfigKeys, TaskSortKeys } from '../services';
+import { configService, FinishedTaskFilter, GresGroupKeys, GresSortKeys, SortDirection, TaskInfoConfig, TaskInfoConfigKeys, TaskSortKeys } from '../services';
 import { taskViewDataProvider } from '../view/taskView';
 import { resourceViewDataProvider } from '../view/resourceView';
 
@@ -28,6 +28,44 @@ function setResourceSortKey(key: GresSortKeys) {
 function setTaskSortDirection(direction: SortDirection) {
     configService.taskSortDirection = direction;
     taskViewDataProvider.refresh();
+}
+
+function updateFinishedTaskFilter(filter: FinishedTaskFilter) {
+    configService.finishedTaskFilter = filter;
+    taskViewDataProvider.refresh();
+}
+
+function getFinishedTaskFilterPickItems(): Array<vscode.QuickPickItem & { filter: FinishedTaskFilter }> {
+    const current = configService.finishedTaskFilter;
+    return [
+        {
+            label: `${current === FinishedTaskFilter.ALL ? '$(check) ' : ''}${vscode.l10n.t('All')}`,
+            description: vscode.l10n.t('Show all finished tasks'),
+            filter: FinishedTaskFilter.ALL,
+        },
+        {
+            label: `${current === FinishedTaskFilter.SUCCESSFUL ? '$(check) ' : ''}${vscode.l10n.t('Successful')}`,
+            description: vscode.l10n.t('Show successful finished tasks'),
+            filter: FinishedTaskFilter.SUCCESSFUL,
+        },
+        {
+            label: `${current === FinishedTaskFilter.FAILED ? '$(check) ' : ''}${vscode.l10n.t('Failed')}`,
+            description: vscode.l10n.t('Show failed finished tasks'),
+            filter: FinishedTaskFilter.FAILED,
+        },
+    ];
+}
+
+async function setFinishedTaskFilter() {
+    const selected = await vscode.window.showQuickPick(
+        getFinishedTaskFilterPickItems(),
+        {
+            title: vscode.l10n.t('Filter finished tasks'),
+            placeHolder: vscode.l10n.t('Choose which finished tasks to show'),
+        }
+    );
+    if (selected === undefined) { return; }
+    updateFinishedTaskFilter(selected.filter);
 }
 
 function setResourceSortDirection(direction: SortDirection) {
@@ -82,6 +120,8 @@ export function initConfigCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedTaskSortAscend', () => setTaskSortDirection(SortDirection.ASCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedTaskSortDescend', () => setTaskSortDirection(SortDirection.DESCEND)));
 
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.setFinishedTaskFilter', setFinishedTaskFilter));
+
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setResourceSortAscend', () => setResourceSortDirection(SortDirection.ASCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setResourceSortDescend', () => setResourceSortDirection(SortDirection.DESCEND)));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.settedResourceSortAscend', () => setResourceSortDirection(SortDirection.ASCEND)));
@@ -97,4 +137,3 @@ export function initConfigCmd(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.setTaskDisplayInfo', setTaskDisplayInfo));
 }
-

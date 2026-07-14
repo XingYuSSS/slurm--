@@ -20,7 +20,7 @@ function getNodeGroupedByPartition(): GresItem[] {
     const sortedMap = [...partitionNode].sort((a, b) => configService.gresSortFN(a[1].gres, b[1].gres));
 
     return sortedMap.map(([partition, group]) => {
-        return new GresItem(group.gres, group.nodes, `${partition} (${group.gres!.totalNum - group.gres!.usedNum}/${group.gres!.totalNum})`);
+        return new GresItem(group.gres, group.nodes, `${partition} (${group.gres!.availableNum}/${group.gres!.totalNum})`);
     });
 }
 

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { taskService, configService, TaskSortKeys } from '../services';
+import { taskService, configService, FinishedTaskFilter, TaskSortKeys } from '../services';
 import { BaseTask, Task, TaskArray, TaskState } from '../models';
 import { FinishedTaskArrayItem, FinishedTaskItem, InfoItem, ListItem, LogFileItem, TaskArrayItem, TaskItem } from './components';
 import { resignFn } from '../utils/utils';
@@ -26,12 +26,69 @@ const sortFn: Record<TaskSortKeys, (a: BaseTask, b: BaseTask) => number> = {
     [TaskSortKeys.NAME]: (a: BaseTask, b: BaseTask) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
 };
 
+function matchesFinishedTaskFilter(task: Task): boolean {
+    switch (configService.finishedTaskFilter) {
+        case FinishedTaskFilter.SUCCESSFUL:
+            return task.isSuccessful() === true;
+        case FinishedTaskFilter.FAILED:
+            return task.isSuccessful() === false;
+        case FinishedTaskFilter.ALL:
+            return true;
+    }
+}
+
+function getFilteredFinishedSubTasks(taskArray: TaskArray): Task[] {
+    return taskArray.getSubTasks().filter(matchesFinishedTaskFilter);
+}
+
+function matchesFinishedTaskArrayFilter(taskArray: TaskArray): boolean {
+    return getFilteredFinishedSubTasks(taskArray).length > 0;
+}
+
+function matchesFinishedTaskListFilter(task: BaseTask): boolean {
+    if (configService.finishedTaskFilter === FinishedTaskFilter.ALL) {
+        return true;
+    }
+    if (task instanceof TaskArray) {
+        return matchesFinishedTaskArrayFilter(task);
+    }
+    return matchesFinishedTaskFilter(task as Task);
+}
+
+function getFinishedTaskDescription(visibleCount: number, totalCount: number): string {
+    switch (configService.finishedTaskFilter) {
+        case FinishedTaskFilter.SUCCESSFUL:
+            return vscode.l10n.t('{filtered} successful / {total} tasks', {filtered: visibleCount, total: totalCount});
+        case FinishedTaskFilter.FAILED:
+            return vscode.l10n.t('{filtered} failed / {total} tasks', {filtered: visibleCount, total: totalCount});
+        case FinishedTaskFilter.ALL:
+            return vscode.l10n.t('{length} tasks', {length: totalCount});
+    }
+}
+
+function getFinishedTaskTotalCount(task: BaseTask): number {
+    return task instanceof TaskArray ? task.getSubTasks().length : 1;
+}
+
+function getVisibleFinishedTaskCount(task: BaseTask): number {
+    if (configService.finishedTaskFilter === FinishedTaskFilter.ALL) {
+        return getFinishedTaskTotalCount(task);
+    }
+    if (task instanceof TaskArray) {
+        return getFilteredFinishedSubTasks(task).length;
+    }
+    return matchesFinishedTaskFilter(task as Task) ? 1 : 0;
+}
+
 function getGroupedTask(tasks: BaseTask[]): ListItem[] {
     const running = tasks.filter(v => !v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
     const finished = tasks.filter(v => v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+    const filteredFinished = finished.filter(matchesFinishedTaskListFilter);
+    const totalFinishedTaskCount = finished.reduce((sum, value) => sum + getFinishedTaskTotalCount(value), 0);
+    const visibleFinishedTaskCount = filteredFinished.reduce((sum, value) => sum + getVisibleFinishedTaskCount(value), 0);
 
     const runningItem = running.map((value) => { return value instanceof TaskArray ? new TaskArrayItem(value) : new TaskItem(value as Task); });
-    const finishedItem = finished.map((value) => { return value instanceof TaskArray ? new FinishedTaskArrayItem(value) : new FinishedTaskItem(value as Task); });
+    const finishedItem = filteredFinished.map((value) => { return value instanceof TaskArray ? new FinishedTaskArrayItem(value) : new FinishedTaskItem(value as Task); });
 
     return [
         new ListItem(
@@ -44,14 +101,14 @@ function getGroupedTask(tasks: BaseTask[]): ListItem[] {
         new ListItem(
             vscode.l10n.t('finished'),
             finishedItem,
-            vscode.l10n.t('{length} tasks', {length: finishedItem.length}),
+            getFinishedTaskDescription(visibleFinishedTaskCount, totalFinishedTaskCount),
             undefined,
             'finishedTaskList'
         ),
     ];
 }
 
-type AllItem = TaskItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem
+type AllItem = TaskItem | TaskArrayItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem | FinishedTaskArrayItem
 
 export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
     private static _instance: TaskViewDataProvider | null = null;
@@ -86,7 +143,7 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
         } else if (element instanceof TaskArrayItem) {
             return Promise.resolve(element.taskArray.getSubTasks().map(v => new TaskItem(v)));
         } else if (element instanceof FinishedTaskArrayItem) {
-            return Promise.resolve(element.taskArray.getSubTasks().map(v => new FinishedTaskItem(v)));
+            return Promise.resolve(getFilteredFinishedSubTasks(element.taskArray).map(v => new FinishedTaskItem(v)));
 
         } else if (element instanceof ListItem) {
             return Promise.resolve(element.children);

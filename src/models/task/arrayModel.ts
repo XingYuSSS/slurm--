@@ -11,7 +11,6 @@ export interface TaskArrayObj {
 export class TaskArray implements BaseTask {
     readonly subTasks: Record<number, Task>;
     readonly jobid: number;
-    readonly jobArrayId: string[];
 
     finished: boolean;
 
@@ -21,8 +20,11 @@ export class TaskArray implements BaseTask {
             return acc;
         }, {});
         this.jobid = subTasks[0].jobid;
-        this.jobArrayId = subTasks.map(v => v.jobArrayId);
         this.finished = this.getSubTasks().every(v => v.finished);
+    }
+
+    public get jobArrayId(): string[] {
+        return this.getSubTasks().map(v => v.jobArrayId);
     }
 
 
@@ -45,13 +47,21 @@ export class TaskArray implements BaseTask {
 
     public update(array: TaskArray) {
         for (const [key, value] of Object.entries(array.subTasks)) {
-            this.subTasks[Number(key)].update(value);
+            const taskId = Number(key);
+            if (this.subTasks[taskId]) {
+                this.subTasks[taskId].update(value);
+            } else {
+                this.subTasks[taskId] = value;
+            }
         }
     }
 
     public finish(endTimes: Record<number, string>, exitCodes: Record<number, string>, states: Record<number, string>) {
         for (const [key, value] of Object.entries(endTimes)) {
-            this.subTasks[Number(key)].finish(value, exitCodes[Number(key)], states[Number(key)]);
+            const task = this.subTasks[Number(key)];
+            if (task) {
+                task.finish(value, exitCodes[Number(key)], states[Number(key)]);
+            }
         }
         this.finished = this.getSubTasks().every(v => v.finished);
     }

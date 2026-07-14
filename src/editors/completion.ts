@@ -74,7 +74,7 @@ ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
 
     private getGresCompletions(context: SbatchParsedArgs, range?: CompletionRange): vscode.CompletionItem[] {
         const gresMap = context.partition
-            ? resourceService.getNodeByPartitionGres().get(context.partition)!
+            ? resourceService.getNodeByPartitionGres().get(context.partition) ?? new Map()
             : resourceService.getNodesByGres();
 
         return [...gresMap]
@@ -84,7 +84,7 @@ ${nodes.length > 10 ? '|...|...|...|...|...|' : ''}
 
                 item.detail = vscode.l10n.t('{length} nodes', { length: nodes.length });
                 item.documentation = this.getNodesDoc(nodes);
-                item.insertText = new vscode.SnippetString().appendText(gres!.toIdString() + ':').appendChoice(Array.from({ length: 9 }, (_, i) => i).map(v => v.toString()));
+                item.insertText = new vscode.SnippetString().appendText(gres!.toIdString() + ':').appendChoice(Array.from({ length: Math.min(Math.max(0, gres!.availableNum), 8) + 1 }, (_, i) => i).map(v => v.toString()));
                 item.range = range;
 
                 return item;

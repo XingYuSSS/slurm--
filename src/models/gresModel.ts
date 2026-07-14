@@ -6,8 +6,14 @@ export class Gres {
     readonly name: string | null = null;
     readonly other: string | null = null;
     readonly num: number;
+    readonly detail: string | null = null;
+
     constructor(gres: string) {
-        const slicedGres = gres.replace(/^gres:/, '').replace(/\([^)]*\)\s*$/, '').split(":");
+        const normalizedGres = gres.trim().replace(/^gres:/, '');
+        const detailMatch = normalizedGres.match(/\(([^)]*)\)\s*$/);
+        this.detail = detailMatch ? detailMatch[1] : null;
+
+        const slicedGres = normalizedGres.replace(/\([^)]*\)\s*$/, '').split(":");
         this.type = slicedGres[0];
         this.name = slicedGres.length > 2 ? slicedGres[1] : null;
         this.other = slicedGres.length > 3 ? slicedGres.slice(2, -1).join(":") : null;
@@ -26,16 +32,18 @@ export class Gres {
 export class ResourceGres extends Gres {
     public usedNum: number = 0;
     public totalNum: number = 0;
+    public availableNum: number = 0;
 
     constructor(usedGres: string, totalGres: string) {
         super(totalGres);
         const used = new Gres(usedGres);
         this.usedNum = used.num;
         this.totalNum = this.num;
+        this.availableNum = ResourceGres.getAvailableNum(used.detail, this.totalNum, this.usedNum);
     }
 
     toString() {
-        return this.type + (this.name ? ':' + this.name : '') + (this.other ? ':' + this.other : '') + ` (${this.totalNum - this.usedNum}/${this.totalNum})`;
+        return this.type + (this.name ? ':' + this.name : '') + (this.other ? ':' + this.other : '') + ` (${this.availableNum}/${this.totalNum})`;
     }
 
     is(rgres: ResourceGres): boolean {
@@ -45,6 +53,7 @@ export class ResourceGres extends Gres {
     add(rgres: ResourceGres): ResourceGres {
         this.usedNum += rgres.usedNum;
         this.totalNum += rgres.totalNum;
+        this.availableNum += rgres.availableNum;
         return this;
     }
 
@@ -62,8 +71,8 @@ export class ResourceGres extends Gres {
     }
 
     static parseList(usedGresRaw: string, totalGresRaw: string): ResourceGres[] {
-        const totalParts = totalGresRaw.split(',').map((s) => s.trim()).filter(v => v.length > 0);
-        const usedParts = usedGresRaw.split(',').map((s) => s.trim()).filter(v => v.length > 0);
+        const totalParts = splitGresList(totalGresRaw);
+        const usedParts = splitGresList(usedGresRaw);
 
         const usedById = new Map<string, string>();
         for (const u of usedParts) {
@@ -76,5 +85,69 @@ export class ResourceGres extends Gres {
             return new ResourceGres(usedStr, totalStr);
         });
     }
+
+    private static getAvailableNum(detail: string | null, totalNum: number, usedNum: number): number {
+        const sharedAvailable = ResourceGres.getSharedAvailableNum(detail);
+        if (sharedAvailable !== null) {
+            return sharedAvailable;
+        }
+        return Math.max(0, totalNum - usedNum);
+    }
+
+    private static getSharedAvailableNum(detail: string | null): number | null {
+        if (!detail || !detail.includes('/')) {
+            return null;
+        }
+
+        let available = 0;
+        let matched = false;
+
+        for (const part of detail.split(',').map(v => v.trim()).filter(v => v.length > 0)) {
+            const unavailableMatch = /^-\/(\d+)$/.exec(part);
+            if (unavailableMatch) {
+                matched = true;
+                continue;
+            }
+
+            const usageMatch = /^(\d+)\/(\d+)$/.exec(part);
+            if (!usageMatch) {
+                return null;
+            }
+
+            const used = parseInt(usageMatch[1]);
+            const total = parseInt(usageMatch[2]);
+            if (isNaN(used) || isNaN(total)) {
+                return null;
+            }
+            available += Math.max(0, total - used);
+            matched = true;
+        }
+
+        return matched ? available : null;
+    }
 }
 
+function splitGresList(gresListRaw: string): string[] {
+    if (!gresListRaw || gresListRaw === '(null)' || gresListRaw === 'N/A') {
+        return [];
+    }
+
+    const parts: string[] = [];
+    let depth = 0;
+    let start = 0;
+
+    for (let i = 0; i < gresListRaw.length; i++) {
+        const char = gresListRaw[i];
+        if (char === '(') {
+            depth += 1;
+        } else if (char === ')' && depth > 0) {
+            depth -= 1;
+        } else if (char === ',' && depth === 0) {
+            parts.push(gresListRaw.slice(start, i).trim());
+            start = i + 1;
+        }
+    }
+
+    parts.push(gresListRaw.slice(start).trim());
+    return parts.filter(v => v.length > 0);
+}

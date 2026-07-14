@@ -16,12 +16,19 @@ export class ScriptService {
     }
 
     public loadScript() {
+        this.scriptList = [];
         if (fs.existsSync(this.storagePath)) {
-            const jsonData = fs.readFileSync(this.storagePath, 'utf8');
-            this.scriptList = [...JSON.parse(jsonData)];
-            this.scriptList = this.scriptList.map(v => Script.fromObject(v));
-        } else {
-            this.scriptList = [];
+            try {
+                let jsonData = fs.readFileSync(this.storagePath, 'utf8');
+                if (jsonData === '') { jsonData = '[]'; }
+                this.scriptList = [...JSON.parse(jsonData)];
+                this.scriptList = this.scriptList.map(v => Script.fromObject(v));
+            } catch (err) {
+                try { fs.unlinkSync(this.storagePath); } catch {
+                    // The cache may have already been removed by another process.
+                }
+                vscode.window.showWarningMessage(vscode.l10n.t('The script cache file appears to be corrupted and has been automatically removed.'));
+            }
         }
     }
 

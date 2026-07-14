@@ -6,6 +6,30 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.16.0][0.16.0] - 2026-07-14
+
+### Added
+
+- Added a QuickPick finished task filter in the TASKS view to show all, successful, or failed finished tasks, with filtered and total counts displayed in the finished group ([#21](https://github.com/XingYuSSS/slurm--/issues/21))
+- Added configurable Slurm command binaries for `squeue`, `sinfo`, `sacct`, `sbatch`, `scancel`, and `srun` ([#22](https://github.com/XingYuSSS/slurm--/issues/22))
+- Added task actions to open an interactive shell inside a running Slurm allocation, with an explicit overlap variant
+
+### Changed
+
+- Improved GRES parsing to handle shared GRES usage details such as `shard:8(-/5,5/5,3/5,0/5)`, and use true available counts when displaying resources or launching terminals
+- Improved GRES availability sorting and partition group counts to use the parsed available counts
+- Improved job array finish parsing to support mixed task lists, ranges, and stepped ranges
+
+### Fixed
+
+- Fixed finished task filter counts for task arrays to count subtasks instead of only visible group items
+- Fixed stale partition/GRES completion data after refreshing resources
+- Fixed batch task cancellation removing tasks locally before `scancel` completed
+- Fixed `launch terminal` when a selected node has no idle CPUs or less than 50GB free memory
+- Fixed corrupted script cache files causing launcher refresh failures
+- Fixed stale `#SBATCH` completion context after deleting or replacing directive lines
+- Fixed copying GRES names from resource groups
+
 ## [0.15.0][0.15.0] - 2026-03-29
 
 ### Added
@@ -410,7 +434,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.15.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/XingYuSSS/slurm--/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/XingYuSSS/slurm--/compare/v0.12.0...v0.13.0

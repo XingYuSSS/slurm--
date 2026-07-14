@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as shellQuote from 'shell-quote';
 
 import { executeCmd, findFiles, withDelayedProgress } from '../utils/utils';
 import { Script } from '../models';
@@ -34,8 +35,9 @@ async function extractScripts(uriList: vscode.Uri[]): Promise<vscode.Uri[]> {
 }
 
 async function launchScript(script: ScriptItem) {
-    const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
-    const [out, err] = await executeCmd(`cd ${workspacePath}\nsbatch ${script.script.uri.path} ${script.script.args.join(' ')}`);
+    const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.fsPath ?? process.env.HOME ?? '~';
+    const scriptArgs = shellQuote.quote([script.script.uri.fsPath, ...script.script.args]);
+    const [out, err] = await executeCmd(`cd ${shellQuote.quote([workspacePath])}\n${configService.getSlurmCommand('sbatch')} ${scriptArgs}`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
@@ -146,13 +148,14 @@ async function launchTerminal(node: NodeItem) {
             if (!choice) { return; }
             pick = choice.g;
         }
-        const gresNum = await vscode.window.showQuickPick(Array.from({ length: pick.totalNum - pick.usedNum + 1 }, (_, i) => i).map(v => v.toString()), { title: vscode.l10n.t('Choose number of GRES') });
+        const gresNum = await vscode.window.showQuickPick(Array.from({ length: Math.max(0, pick.availableNum) + 1 }, (_, i) => i).map(v => v.toString()), { title: vscode.l10n.t('Choose number of GRES') });
         if (!gresNum) { return; }
         gresArg = "--gres=" + pick.toIdString() + ":" + gresNum;
     }
     let mem = undefined;
     while (!mem) {
-        mem = await vscode.window.showQuickPick(Array.from({ length: Math.floor((node.node.memory - node.node.allocMemory) / 50) }, (_, i) => (i + 1) * 50).map(v => `${v}G`).concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose memory to alloc') });
+        const memoryChoices = Array.from({ length: Math.max(0, Math.floor((node.node.memory - node.node.allocMemory) / 50)) }, (_, i) => (i + 1) * 50).map(v => `${v}G`);
+        mem = await vscode.window.showQuickPick(memoryChoices.concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose memory to alloc') });
         if (!mem) { return; }
         if (mem === vscode.l10n.t('Custom...')) {
             mem = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom memory') });
@@ -160,7 +163,10 @@ async function launchTerminal(node: NodeItem) {
     }
     let cpu = undefined;
     while (!cpu) {
-        cpu = await vscode.window.showQuickPick(Array.from({ length: Math.floor(Math.log2(node.node.idleCpu)) + 1 }, (_, i) => (2 ** i)).map(v => `${v}`).concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose CPUs to alloc') });
+        const cpuChoices = node.node.idleCpu > 0
+            ? Array.from({ length: Math.floor(Math.log2(node.node.idleCpu)) + 1 }, (_, i) => (2 ** i)).map(v => `${v}`)
+            : [];
+        cpu = await vscode.window.showQuickPick(cpuChoices.concat([vscode.l10n.t('Custom...')]), { title: vscode.l10n.t('Choose CPUs to alloc') });
         if (!cpu) { return; }
         if (cpu === vscode.l10n.t('Custom...')) {
             cpu = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom CPU') });
@@ -184,7 +190,7 @@ async function launchTerminal(node: NodeItem) {
     }
     const terminal = vscode.window.createTerminal();
     terminal.show();
-    terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
+    terminal.sendText(`${configService.getSlurmCommand('srun')} ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
 }
 
 async function enqueueCurrentFile() {
