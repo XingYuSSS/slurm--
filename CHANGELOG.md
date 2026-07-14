@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.16.0][0.16.0] - 2026-07-14
+
 ### Added
 
 - Added a QuickPick finished task filter in the TASKS view to show all, successful, or failed finished tasks, with filtered and total counts displayed in the finished group ([#21](https://github.com/XingYuSSS/slurm--/issues/21))
@@ -432,7 +434,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.15.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/XingYuSSS/slurm--/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/XingYuSSS/slurm--/compare/v0.12.0...v0.13.0

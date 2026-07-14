@@ -1,6 +1,6 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.15.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.15.0/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.16.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.16.0/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
@@ -44,6 +44,9 @@ We add `sbatch completion` at version `0.14.0`!
 
 - cancel all running tasks
 
+- open an interactive shell inside a running allocation
+> Click `enter allocation` on a running task, or use `enter allocation with overlap` from the context menu when your cluster requires `srun --overlap`
+
 - [`job array` support](#job-array-support)
 
 ![task](assets/pics/task.png)
@@ -56,6 +59,8 @@ We add `sbatch completion` at version `0.14.0`!
 
 - launch terminal with chosen GRES
 
+- copy GRES names from resource groups
+
 ![resource](assets/pics/resource.png)
 
 ### script launcher
@@ -66,6 +71,18 @@ We add `sbatch completion` at version `0.14.0`!
 
 > Drop a script from Explorer to launcher panel  
 > Click on script to open the file
+
+### Slurm command binaries
+
+If your cluster wraps Slurm commands such as `squeue`, configure `slurm--.commands.binaries` to point the extension to the real binaries:
+
+```json
+"slurm--.commands.binaries": {
+  "squeue": "/path/to/real/squeue"
+}
+```
+
+Unset commands continue to use their default names.
 
 ## language support
 
