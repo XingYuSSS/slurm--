@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import * as shellQuote from 'shell-quote';
 import { Node, ResourceGres } from '../models';
 import { compWithNull, resignFn } from '../utils/utils';
 
@@ -29,6 +30,17 @@ export enum FinishedTaskFilter {
     FAILED = 'failed'
 }
 
+export type SlurmCommandName = 'squeue' | 'sinfo' | 'sacct' | 'sbatch' | 'scancel' | 'srun';
+
+const DEFAULT_SLURM_COMMAND_BINARIES: Record<SlurmCommandName, string> = {
+    squeue: 'squeue',
+    sinfo: 'sinfo',
+    sacct: 'sacct',
+    sbatch: 'sbatch',
+    scancel: 'scancel',
+    srun: 'srun',
+};
+
 export const TaskInfoConfigKeys = ["id", "nodelist", "GRES", "command", "stdout", "stderr", "submit", "start", "finish"];
 
 export type TaskInfoConfig = {
@@ -44,6 +56,11 @@ class ConfigService {
     }
     public get optionUser(): string {
         return vscode.workspace.getConfiguration('slurm--.commands').get('user') ?? '--me';
+    }
+    public getSlurmCommand(command: SlurmCommandName): string {
+        const binaries = vscode.workspace.getConfiguration('slurm--.commands').get<Partial<Record<SlurmCommandName, string>>>('binaries') ?? {};
+        const binary = binaries[command]?.trim() || DEFAULT_SLURM_COMMAND_BINARIES[command];
+        return shellQuote.quote([binary]);
     }
     public get sinfoExtraArgs(): object {
         return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoExtraArgs') ?? {};
@@ -154,7 +171,7 @@ class ConfigService {
             case GresSortKeys.NAME:
                 fn = (a: ResourceGres, b: ResourceGres) => a.toIdString().localeCompare(b.toIdString(), undefined, { sensitivity: 'base' }); break;
             case GresSortKeys.AVAIL:
-                fn = (a: ResourceGres, b: ResourceGres) => (a.totalNum - a.usedNum) - (b.totalNum - b.usedNum); break;
+                fn = (a: ResourceGres, b: ResourceGres) => a.availableNum - b.availableNum; break;
         }
         return resignFn(compWithNull(fn), this.gresSortAscending);
     }
@@ -171,10 +188,10 @@ class ConfigService {
                     if (!b.isAvailableState) { return 1; }
                     const idle = (n: Node): number => {
                         if (!gresId) {
-                            return n.gresList.reduce((s, g) => s + (g.totalNum - g.usedNum), 0);
+                            return n.gresList.reduce((s, g) => s + g.availableNum, 0);
                         }
                         const g = n.gresList.find((x) => x.toIdString() === gresId);
-                        return g ? g.totalNum - g.usedNum : 0;
+                        return g ? g.availableNum : 0;
                     };
                     return idle(a) - idle(b);
                 };

@@ -4,6 +4,7 @@ import * as path from 'path';
 
 import { BaseTask, loadObj, TaskArray, TaskObjTypes } from '../models';
 import { executeCmd } from '../utils/utils';
+import { configService } from './configService';
 
 
 function parseJobarrayId(jobIdStr: string): string[] {
@@ -64,7 +65,7 @@ interface TaskFinishInfo {
 async function getTaskFinishInfo(taskId: string[]): Promise<Map<string, TaskFinishInfo>> {
     if (taskId.length === 0) { return new Map(); }
 
-    const [out, err] = await executeCmd(`sacct -n -X -P -j ${taskId.join(',')} --format=JobID,End,ExitCode,State`);
+    const [out, err] = await executeCmd(`${configService.getSlurmCommand('sacct')} -n -X -P -j ${taskId.join(',')} --format=JobID,End,ExitCode,State`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return new Map();

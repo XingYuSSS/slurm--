@@ -9,10 +9,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Added a QuickPick finished task filter in the TASKS view to show all, successful, or failed finished tasks, with filtered and total counts displayed in the finished group ([#21](https://github.com/XingYuSSS/slurm--/issues/21))
+- Added configurable Slurm command binaries for `squeue`, `sinfo`, `sacct`, `sbatch`, `scancel`, and `srun` ([#22](https://github.com/XingYuSSS/slurm--/issues/22))
 
 ### Changed
 
 - Improved GRES parsing to handle shared GRES usage details such as `shard:8(-/5,5/5,3/5,0/5)`, and use true available counts when displaying resources or launching terminals
+- Improved GRES availability sorting and partition group counts to use the parsed available counts
 - Improved job array finish parsing to support mixed task lists, ranges, and stepped ranges
 
 ### Fixed

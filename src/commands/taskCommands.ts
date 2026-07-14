@@ -101,7 +101,7 @@ async function refreshUserTasks() {
         }
     }
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`squeue ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
+    const [out, err] = await executeCmd(`${configService.getSlurmCommand('squeue')} ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
@@ -120,7 +120,7 @@ async function cancelTask(task: TaskItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`scancel ${task.task.jobArrayId}`);
+        const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.task.jobArrayId}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
@@ -137,7 +137,7 @@ async function cancelTaskArray(taskArray: TaskArrayItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`scancel ${taskArray.taskArray.jobid}`);
+        const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${taskArray.taskArray.jobid}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
@@ -159,7 +159,7 @@ async function cancelSelectedTasks() {
     if (result === vscode.l10n.t('Yes')) {
         for (const task of tasks) {
             const cancelId = task.jobArrayId instanceof Array ? task.jobid : task.jobArrayId;
-            const [out, err] = await executeCmd(`scancel ${cancelId}`);
+            const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${cancelId}`);
             if (err) {
                 vscode.window.showErrorMessage(err);
                 continue;
@@ -180,7 +180,7 @@ async function cancelAllTasks() {
     );
     if (result === vscode.l10n.t('Yes')) {
         for (const task of tasks) {
-            const [out, err] = await executeCmd(`scancel ${task.jobid}`);
+            const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.jobid}`);
             if (err) {
                 vscode.window.showErrorMessage(err);
                 continue;
@@ -258,4 +258,3 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
 
     cachePath = path.join(context.globalStorageUri.fsPath, 'tasks_cache.json');
 }
-

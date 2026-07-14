@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as shellQuote from 'shell-quote';
 
 import { executeCmd, findFiles, withDelayedProgress } from '../utils/utils';
 import { Script } from '../models';
@@ -34,8 +35,9 @@ async function extractScripts(uriList: vscode.Uri[]): Promise<vscode.Uri[]> {
 }
 
 async function launchScript(script: ScriptItem) {
-    const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path ?? '~/';
-    const [out, err] = await executeCmd(`cd ${workspacePath}\nsbatch ${script.script.uri.path} ${script.script.args.join(' ')}`);
+    const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.fsPath ?? process.env.HOME ?? '~';
+    const scriptArgs = shellQuote.quote([script.script.uri.fsPath, ...script.script.args]);
+    const [out, err] = await executeCmd(`cd ${shellQuote.quote([workspacePath])}\n${configService.getSlurmCommand('sbatch')} ${scriptArgs}`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;
@@ -188,7 +190,7 @@ async function launchTerminal(node: NodeItem) {
     }
     const terminal = vscode.window.createTerminal();
     terminal.show();
-    terminal.sendText(`srun ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
+    terminal.sendText(`${configService.getSlurmCommand('srun')} ${gresArg} -p ${node.node.partition} --nodelist=${node.node.nodeid} --mem ${mem} -t ${time} --cpus-per-task ${cpu} --pty ${shell} -i`);
 }
 
 async function enqueueCurrentFile() {

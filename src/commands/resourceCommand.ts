@@ -75,7 +75,7 @@ async function refreshResources() {
         .join(' ') + (showAll ? ' -M all' : '');
     
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`sinfo --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
+    const [out, err] = await executeCmd(`${configService.getSlurmCommand('sinfo')} --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;

@@ -785,6 +785,51 @@
           "default": "--me",
           "markdownDescription": "%config.commands.user.description%"
         },
+        "slurm--.commands.binaries": {
+          "type": "object",
+          "default": {
+            "squeue": "squeue",
+            "sinfo": "sinfo",
+            "sacct": "sacct",
+            "sbatch": "sbatch",
+            "scancel": "scancel",
+            "srun": "srun"
+          },
+          "markdownDescription": "%config.commands.binaries.description%",
+          "properties": {
+            "squeue": {
+              "type": "string",
+              "default": "squeue",
+              "markdownDescription": "%config.commands.binaries.squeue.description%"
+            },
+            "sinfo": {
+              "type": "string",
+              "default": "sinfo",
+              "markdownDescription": "%config.commands.binaries.sinfo.description%"
+            },
+            "sacct": {
+              "type": "string",
+              "default": "sacct",
+              "markdownDescription": "%config.commands.binaries.sacct.description%"
+            },
+            "sbatch": {
+              "type": "string",
+              "default": "sbatch",
+              "markdownDescription": "%config.commands.binaries.sbatch.description%"
+            },
+            "scancel": {
+              "type": "string",
+              "default": "scancel",
+              "markdownDescription": "%config.commands.binaries.scancel.description%"
+            },
+            "srun": {
+              "type": "string",
+              "default": "srun",
+              "markdownDescription": "%config.commands.binaries.srun.description%"
+            }
+          },
+          "additionalProperties": false
+        },
         "slurm--.commands.sinfoExtraArgs": {
           "type": "object",
           "default": {},
