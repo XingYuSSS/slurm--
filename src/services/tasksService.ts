@@ -22,27 +22,37 @@ function parseJobarrayId(jobIdStr: string): string[] {
         const jobId = bracketMatch[1];
         const content = bracketMatch[2];
 
-        const rangeMatch = /^(\d+)-(\d+)$/.exec(content);
-        if (rangeMatch) {
-            const start = parseInt(rangeMatch[1], 10);
-            const end = parseInt(rangeMatch[2], 10);
-            if (!isNaN(start) && !isNaN(end) && start <= end) {
-                const result: string[] = [];
-                for (let i = start; i <= end; i++) {
-                    result.push(`${jobId}_${i}`);
-                }
-                return result;
-            }
-        }
-
-        const listMatch = /^(\d+(?:,\d+)*)$/.exec(content);
-        if (listMatch) {
-            const values = listMatch[1].split(',').map(Number);
+        const values = parseArrayTaskSpec(content);
+        if (values.length > 0) {
             return values.map((v) => `${jobId}_${v}`);
         }
     }
 
     return [];
+}
+
+function parseArrayTaskSpec(content: string): number[] {
+    const result: number[] = [];
+
+    for (const part of content.split(',')) {
+        const match = /^(\d+)(?:-(\d+)(?::(\d+))?)?$/.exec(part);
+        if (!match) {
+            return [];
+        }
+
+        const start = parseInt(match[1], 10);
+        const end = match[2] ? parseInt(match[2], 10) : start;
+        const step = match[3] ? parseInt(match[3], 10) : 1;
+        if (isNaN(start) || isNaN(end) || isNaN(step) || start > end || step <= 0) {
+            return [];
+        }
+
+        for (let i = start; i <= end; i += step) {
+            result.push(i);
+        }
+    }
+
+    return result;
 }
 
 interface TaskFinishInfo {
@@ -129,6 +139,7 @@ export class TaskService {
             return;
         }
 
+        this.isSaving = true;
         try {
             const arrData = Array.from(this.taskMap.entries()).map(([key, task]) => ([
                 key,

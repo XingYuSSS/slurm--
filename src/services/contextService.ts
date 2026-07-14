@@ -24,20 +24,7 @@ class ContextService {
         if (e.document.languageId !== 'shellscript') { return; }
 
         const uri = e.document.uri.toString();
-        if (!this.contextMap.has(uri)) { return; }
-
-        for (const change of e.contentChanges) {
-            const startLine = e.document.positionAt(change.rangeOffset).line;
-            const endLine = e.document.positionAt(change.rangeOffset + change.rangeLength).line;
-
-            for (let i = startLine; i <= endLine; i++) {
-                const line = e.document.lineAt(i).text;
-                if (line.startsWith('#SBATCH')) {
-                    this.contextMap.delete(uri);
-                    return;
-                }
-            }
-        }
+        this.contextMap.delete(uri);
     }
 
     private onDidCloseTextDocument(doc: vscode.TextDocument) {

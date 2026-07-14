@@ -1,6 +1,8 @@
 {
   "running": "running",
   "{length} tasks": "{length} tasks",
+  "{filtered} successful / {total} tasks": "{filtered} successful / {total} tasks",
+  "{filtered} failed / {total} tasks": "{filtered} failed / {total} tasks",
   "finished": "finished",
   "{length} nodes": "{length} nodes",
   "Drop a script to here": "Drop a script to here",
@@ -38,5 +40,14 @@
   "Choose shell": "Choose shell",
   "Custom shell": "Custom shell",
   "Configure display information for expanded task in tasksPanel": "Configure display information for expanded task in tasksPanel",
-  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost."
+  "Filter finished tasks": "Filter finished tasks",
+  "Choose which finished tasks to show": "Choose which finished tasks to show",
+  "All": "All",
+  "Successful": "Successful",
+  "Failed": "Failed",
+  "Show all finished tasks": "Show all finished tasks",
+  "Show successful finished tasks": "Show successful finished tasks",
+  "Show failed finished tasks": "Show failed finished tasks",
+  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.",
+  "The script cache file appears to be corrupted and has been automatically removed.": "The script cache file appears to be corrupted and has been automatically removed."
 }

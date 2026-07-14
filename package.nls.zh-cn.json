@@ -42,6 +42,8 @@
     "slurm--.sortingAscend.title": "✔ 升序",
     "slurm--.sortingDescend.title": "✔ 降序",
 
+    "slurm--.setFinishedTaskFilter.title": "筛选已完成任务...",
+
     "slurm--.groupByGres.title": "以GRES分组",
     "slurm--.groupByPartition.title": "以分区分组",
     "slurm--.groupingByGres.title": "✔ 以GRES分组",

@@ -41,6 +41,8 @@
     "slurm--.sortDescend.title": "Descending",
     "slurm--.sortingAscend.title": "✔ Ascending",
     "slurm--.sortingDescend.title": "✔ Descending",
+
+    "slurm--.setFinishedTaskFilter.title": "Filter Finished Tasks...",
     
     "slurm--.groupByGres.title": "Group By Gres",
     "slurm--.groupByPartition.title": "Group By Partition",

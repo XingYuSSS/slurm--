@@ -5,8 +5,8 @@ import { nodeGresDisplay } from './nodeItem';
 
 function gresIcon(gres: ResourceGres): vscode.ThemeIcon {
     if (gres.totalNum === 0) { return new vscode.ThemeIcon('close', new vscode.ThemeColor('gitDecoration.deletedResourceForeground')); }
-    if (gres.usedNum === 0) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.addedResourceForeground')); }
-    if (gres.usedNum < gres.totalNum) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground')); }
+    if (gres.usedNum === 0 && gres.availableNum === gres.totalNum) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.addedResourceForeground')); }
+    if (gres.availableNum > 0) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground')); }
     return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'));
 }
 

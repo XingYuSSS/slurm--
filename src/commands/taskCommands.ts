@@ -157,12 +157,16 @@ async function cancelSelectedTasks() {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        tasks.forEach(v => {
-            executeCmd(`scancel ${v.jobArrayId instanceof Array ? v.jobid : v.jobArrayId}`);
-            taskService.deleteTask(v.jobid, v.arrayid);
-        });
+        for (const task of tasks) {
+            const cancelId = task.jobArrayId instanceof Array ? task.jobid : task.jobArrayId;
+            const [out, err] = await executeCmd(`scancel ${cancelId}`);
+            if (err) {
+                vscode.window.showErrorMessage(err);
+                continue;
+            }
+            taskService.deleteTask(task.jobid, task.arrayid);
+        }
         taskView.taskViewDataProvider.refresh();
-    } else if (result === vscode.l10n.t('No')) {
     }
 }
 
@@ -175,12 +179,15 @@ async function cancelAllTasks() {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        tasks.forEach(v => {
-            executeCmd(`scancel ${v.jobid}`);
-            taskService.deleteTask(v.jobid);
-        });
+        for (const task of tasks) {
+            const [out, err] = await executeCmd(`scancel ${task.jobid}`);
+            if (err) {
+                vscode.window.showErrorMessage(err);
+                continue;
+            }
+            taskService.deleteTask(task.jobid);
+        }
         taskView.taskViewDataProvider.refresh();
-    } else if (result === vscode.l10n.t('No')) {
     }
 }
 
@@ -251,5 +258,4 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
 
     cachePath = path.join(context.globalStorageUri.fsPath, 'tasks_cache.json');
 }
-
 

@@ -23,6 +23,12 @@ export enum SortDirection {
     DESCEND = 'descending'
 }
 
+export enum FinishedTaskFilter {
+    ALL = 'all',
+    SUCCESSFUL = 'successful',
+    FAILED = 'failed'
+}
+
 export const TaskInfoConfigKeys = ["id", "nodelist", "GRES", "command", "stdout", "stderr", "submit", "start", "finish"];
 
 export type TaskInfoConfig = {
@@ -79,6 +85,15 @@ class ConfigService {
     }
     public get taskSortAscending(): boolean {
         return (this.#taskSortDirection as SortDirection) === SortDirection.ASCEND;
+    }
+
+    #finishedTaskFilter: FinishedTaskFilter = FinishedTaskFilter.ALL;
+    public get finishedTaskFilter(): FinishedTaskFilter {
+        return this.#finishedTaskFilter;
+    }
+    public set finishedTaskFilter(filter: FinishedTaskFilter) {
+        vscode.commands.executeCommand('setContext', 'finishedTaskFilter', filter);
+        this.#finishedTaskFilter = filter;
     }
 
     #taskShowShortcutKey!: boolean;
@@ -200,6 +215,7 @@ class ConfigService {
 
         vscode.commands.executeCommand('setContext', 'taskSortKey', this.#taskSortKey);
         vscode.commands.executeCommand('setContext', 'taskSortDirection', this.#taskSortDirection);
+        vscode.commands.executeCommand('setContext', 'finishedTaskFilter', this.#finishedTaskFilter);
         vscode.commands.executeCommand('setContext', 'taskShowShortcutKey', this.#taskShowShortcutKey);
         vscode.commands.executeCommand('setContext', 'showFilenameOnly', this.#taskShowFilenameOnly);
         vscode.commands.executeCommand('setContext', 'gresSortDirection', this.#gresSortDirection);

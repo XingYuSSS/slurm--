@@ -17,8 +17,8 @@ function nodeIcon(node: Node): vscode.ThemeIcon | undefined {
     if (node.gresList.length === 0) { return undefined; }
     if (node.state === NodeState.ALLOC) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.deletedResourceForeground')); }
     if (node.state === NodeState.IDLE || node.state === NodeState.MIXED) {
-        const anyFree = node.gresList.some((g) => g.usedNum < g.totalNum);
-        const allUnused = node.gresList.every((g) => g.usedNum === 0);
+        const anyFree = node.gresList.some((g) => g.availableNum > 0);
+        const allUnused = node.gresList.every((g) => g.usedNum === 0 && g.availableNum === g.totalNum);
         if (allUnused) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.addedResourceForeground')); }
         if (anyFree) { return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.modifiedResourceForeground')); }
         return new vscode.ThemeIcon('circle-filled', new vscode.ThemeColor('gitDecoration.deletedResourceForeground'));

@@ -30,6 +30,7 @@ export class ResourceService {
 
         this.gresMap = null;
         this.partitionMap = null;
+        this.partitionGresMap = null;
     }
 
     public getNode(): Node[] {
@@ -120,4 +121,3 @@ export class ResourceService {
 }
 
 export const resourceService: ResourceService = ResourceService.getInstance();
-

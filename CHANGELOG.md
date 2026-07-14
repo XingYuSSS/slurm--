@@ -6,6 +6,24 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Added a QuickPick finished task filter in the TASKS view to show all, successful, or failed finished tasks, with filtered and total counts displayed in the finished group ([#21](https://github.com/XingYuSSS/slurm--/issues/21))
+
+### Changed
+
+- Improved GRES parsing to handle shared GRES usage details such as `shard:8(-/5,5/5,3/5,0/5)`, and use true available counts when displaying resources or launching terminals
+- Improved job array finish parsing to support mixed task lists, ranges, and stepped ranges
+
+### Fixed
+
+- Fixed finished task filter counts for task arrays to count subtasks instead of only visible group items
+- Fixed stale partition/GRES completion data after refreshing resources
+- Fixed batch task cancellation removing tasks locally before `scancel` completed
+- Fixed `launch terminal` when a selected node has no idle CPUs or less than 50GB free memory
+- Fixed corrupted script cache files causing launcher refresh failures
+- Fixed stale `#SBATCH` completion context after deleting or replacing directive lines
+
 ## [0.15.0][0.15.0] - 2026-03-29
 
 ### Added

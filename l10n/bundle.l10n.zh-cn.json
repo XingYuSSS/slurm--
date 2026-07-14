@@ -2,6 +2,8 @@
   "running": "运行中",
   "finished": "已结束",
   "{length} tasks": "{length} 任务",
+  "{filtered} successful / {total} tasks": "{filtered} 成功 / {total} 任务",
+  "{filtered} failed / {total} tasks": "{filtered} 失败 / {total} 任务",
   "{length} nodes": "{length} 节点",
   "Drop a script to here": "将slurm脚本拖到这里",
   "{length} scripts": "{length} 脚本",
@@ -38,5 +40,14 @@
   "Choose shell": "选择shell",
   "Custom shell": "自定义shell",
   "Configure display information for expanded task in tasksPanel": "设置任务展开后所展示的信息",
-  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "任务缓存文件似乎已损坏，已被自动删除。已完成的任务可能会丢失。"
+  "Filter finished tasks": "筛选已完成任务",
+  "Choose which finished tasks to show": "选择要展示的已完成任务",
+  "All": "全部",
+  "Successful": "成功",
+  "Failed": "失败",
+  "Show all finished tasks": "展示所有已完成任务",
+  "Show successful finished tasks": "展示成功的已完成任务",
+  "Show failed finished tasks": "展示失败的已完成任务",
+  "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "任务缓存文件似乎已损坏，已被自动删除。已完成的任务可能会丢失。",
+  "The script cache file appears to be corrupted and has been automatically removed.": "脚本缓存文件似乎已损坏，已被自动删除。"
 }
