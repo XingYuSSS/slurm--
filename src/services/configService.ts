@@ -77,6 +77,9 @@ class ConfigService {
     public get terminalShellList(): Array<string> {
         return vscode.workspace.getConfiguration('slurm--.launch.terminal').get('shellList') ?? ['bash', 'zsh', 'fish'];
     }
+    public get overlapExistingAllocation(): boolean {
+        return vscode.workspace.getConfiguration('slurm--.launch.terminal').get('overlapExistingAllocation') ?? false;
+    }
     public get scriptsExtList(): Array<string> {
         return vscode.workspace.getConfiguration('slurm--.launch.scripts').get('extensionList') ?? ['sh', 'slurm', 'sbatch'];
     }

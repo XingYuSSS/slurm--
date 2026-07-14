@@ -20,7 +20,7 @@ export class TaskItem extends vscode.TreeItem {
         this.description = taskDescription(task);
         this.tooltip = taskTooltip(task);
         this.iconPath = taskStateIconMap[task.state] ?? unknownStateIcon;
-        this.contextValue = 'taskItem';
+        this.contextValue = task.state === TaskState.R ? 'runningTaskItem' : 'taskItem';
         this.id = task.jobArrayId;
     }
 }

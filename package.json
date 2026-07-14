@@ -111,6 +111,18 @@
         "icon": "$(question)"
       },
       {
+        "command": "slurm--.enterTaskAllocation",
+        "title": "%slurm--.enterTaskAllocation.title%",
+        "category": "slurm--",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "slurm--.enterTaskAllocationWithOverlap",
+        "title": "%slurm--.enterTaskAllocationWithOverlap.title%",
+        "category": "slurm--",
+        "icon": "$(terminal)"
+      },
+      {
         "command": "slurm--.refreshResources",
         "title": "%slurm--.refreshResources.title%",
         "category": "slurm--",
@@ -554,11 +566,21 @@
         {
           "command": "slurm--.cancelTask",
           "group": "inline@5",
-          "when": "view == slurm--_tasks_view && viewItem == taskItem"
+          "when": "view == slurm--_tasks_view && (viewItem == taskItem || viewItem == runningTaskItem)"
+        },
+        {
+          "command": "slurm--.enterTaskAllocation",
+          "group": "inline@3",
+          "when": "view == slurm--_tasks_view && viewItem == runningTaskItem"
+        },
+        {
+          "command": "slurm--.enterTaskAllocationWithOverlap",
+          "group": "navigation@4",
+          "when": "view == slurm--_tasks_view && viewItem == runningTaskItem"
         },
         {
           "command": "slurm--.cancelSelectedTasks",
-          "when": "view == slurm--_tasks_view && viewItem == taskItem"
+          "when": "view == slurm--_tasks_view && (viewItem == taskItem || viewItem == runningTaskItem)"
         },
         {
           "command": "slurm--.cancelAllTasks",
@@ -588,12 +610,12 @@
         {
           "command": "slurm--.openStdout",
           "group": "inline@1",
-          "when": "view == slurm--_tasks_view && taskShowShortcutKey && (viewItem == taskItem || viewItem == finishedTaskItem)"
+          "when": "view == slurm--_tasks_view && taskShowShortcutKey && (viewItem == taskItem || viewItem == runningTaskItem || viewItem == finishedTaskItem)"
         },
         {
           "command": "slurm--.openStderr",
           "group": "inline@2",
-          "when": "view == slurm--_tasks_view && taskShowShortcutKey && (viewItem == taskItem || viewItem == finishedTaskItem)"
+          "when": "view == slurm--_tasks_view && taskShowShortcutKey && (viewItem == taskItem || viewItem == runningTaskItem || viewItem == finishedTaskItem)"
         },
         {
           "command": "slurm--.copyGres",
@@ -735,6 +757,14 @@
         },
         {
           "command": "slurm--.openStderr",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.enterTaskAllocation",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.enterTaskAllocationWithOverlap",
           "when": "false"
         },
         {
@@ -1012,6 +1042,11 @@
             "description": "Shell command or path"
           },
           "markdownDescription": "%config.launch.terminal.shellList.description%"
+        },
+        "slurm--.launch.terminal.overlapExistingAllocation": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "%config.launch.terminal.overlapExistingAllocation.description%"
         },
         "slurm--.launch.scripts.extensionList": {
           "type": "array",

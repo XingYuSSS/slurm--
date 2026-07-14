@@ -12,6 +12,8 @@
     "slurm--.openFile.title": "open file",
     "slurm--.openStdout.title": "open stdout file",
     "slurm--.openStderr.title": "open stderr file",
+    "slurm--.enterTaskAllocation.title": "enter allocation",
+    "slurm--.enterTaskAllocationWithOverlap.title": "enter allocation with overlap",
     "slurm--.refreshResources.title": "refresh resources",
     "slurm--.autoRefreshRes.title": "start auto refresh",
     "slurm--.unautoRefreshRes.title": "stop auto refresh",
@@ -103,5 +105,6 @@
     "config.resourcesPanel.cacheTimeout.description": "The timeout of the resource refresh output cache in millisecond (off when set to 0). This will take effect when multiple people share the host and refresh at the same time, when refresh operations occur too rapidly.",
     
     "config.launch.terminal.shellList.description": "A list of shells to be displayed as candidates when launching the terminal, shown in the specified order.",
+    "config.launch.terminal.overlapExistingAllocation.description": "Add `--overlap` when opening an interactive shell inside an existing Slurm allocation.",
     "config.launch.scripts.extensionList.description": "File extensions used to automatically detect Slurm scripts when adding or dragging in folders."
 }

@@ -4,7 +4,7 @@ import { executeCmd } from '../utils/utils';
 import { Node } from '../models';
 import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
-import { ListItem, NodeItem } from '../view/components';
+import { GresItem, NodeItem } from '../view/components';
 import * as path from 'path';
 
 let autoRefreshTimer: NodeJS.Timeout;
@@ -98,10 +98,16 @@ async function unautoRefreshRes() {
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', false);
 }
 
-async function copyGres() {
-    const selected = resourceTreeView.selection[0];
-    if (selected instanceof ListItem) {
-        const gresString = selected.title.replace(/\s*\(.*\)$/, '');
+function getTreeItemLabel(item: vscode.TreeItem): string {
+    const label = item.label;
+    return typeof label === 'string' ? label : label?.label ?? '';
+}
+
+async function copyGres(item?: GresItem | NodeItem) {
+    const selected = item ?? resourceTreeView.selection[0];
+    if (selected instanceof GresItem) {
+        const gresId = selected.gres?.toIdString();
+        const gresString = gresId && gresId.length > 0 ? gresId : getTreeItemLabel(selected).replace(/\s*\(.*\)$/, '');
         vscode.env.clipboard.writeText(gresString);
     } else if (selected instanceof NodeItem) {
         vscode.env.clipboard.writeText(selected.node.nodeid);

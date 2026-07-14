@@ -10,6 +10,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Added a QuickPick finished task filter in the TASKS view to show all, successful, or failed finished tasks, with filtered and total counts displayed in the finished group ([#21](https://github.com/XingYuSSS/slurm--/issues/21))
 - Added configurable Slurm command binaries for `squeue`, `sinfo`, `sacct`, `sbatch`, `scancel`, and `srun` ([#22](https://github.com/XingYuSSS/slurm--/issues/22))
+- Added task actions to open an interactive shell inside a running Slurm allocation, with an explicit overlap variant
 
 ### Changed
 
@@ -25,6 +26,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Fixed `launch terminal` when a selected node has no idle CPUs or less than 50GB free memory
 - Fixed corrupted script cache files causing launcher refresh failures
 - Fixed stale `#SBATCH` completion context after deleting or replacing directive lines
+- Fixed copying GRES names from resource groups
 
 ## [0.15.0][0.15.0] - 2026-03-29
 

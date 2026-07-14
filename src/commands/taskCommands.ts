@@ -236,6 +236,37 @@ async function openStderr(task: TaskItem) {
     task.task.errPath.open();
 }
 
+async function enterTaskAllocation(task: TaskItem, overlap: boolean) {
+    if (task.task.state !== TaskState.R) {
+        vscode.window.showWarningMessage(vscode.l10n.t('Task is not running.'));
+        return;
+    }
+
+    let shell = undefined;
+    while (!shell) {
+        shell = await vscode.window.showQuickPick([...configService.terminalShellList, vscode.l10n.t('Custom...')], { title: vscode.l10n.t('Choose shell') });
+        if (!shell) { return; }
+        if (shell === vscode.l10n.t('Custom...')) {
+            shell = await vscode.window.showInputBox({ prompt: vscode.l10n.t('Custom shell') });
+        }
+    }
+
+    const overlapArg = overlap ? '--overlap ' : '';
+    const command = `${configService.getSlurmCommand('srun')} ${overlapArg}--jobid=${task.task.jobArrayId} --pty ${shell} -i`;
+    const terminal = vscode.window.createTerminal(vscode.l10n.t('Slurm Allocation {0}', task.task.jobArrayId));
+    terminal.show();
+
+    terminal.sendText(command);
+}
+
+async function enterTaskAllocationDefault(task: TaskItem) {
+    return enterTaskAllocation(task, configService.overlapExistingAllocation);
+}
+
+async function enterTaskAllocationWithOverlap(task: TaskItem) {
+    return enterTaskAllocation(task, true);
+}
+
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', AsyncOnce(refreshUserTasks)));
@@ -253,6 +284,8 @@ export function initTaskCmd(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openFile', openFile));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStdout', openStdout));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.openStderr', openStderr));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.enterTaskAllocation', enterTaskAllocationDefault));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.enterTaskAllocationWithOverlap', enterTaskAllocationWithOverlap));
 
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', false);
 

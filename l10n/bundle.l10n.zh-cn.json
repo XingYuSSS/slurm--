@@ -49,5 +49,7 @@
   "Show successful finished tasks": "展示成功的已完成任务",
   "Show failed finished tasks": "展示失败的已完成任务",
   "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "任务缓存文件似乎已损坏，已被自动删除。已完成的任务可能会丢失。",
-  "The script cache file appears to be corrupted and has been automatically removed.": "脚本缓存文件似乎已损坏，已被自动删除。"
+  "The script cache file appears to be corrupted and has been automatically removed.": "脚本缓存文件似乎已损坏，已被自动删除。",
+  "Task is not running.": "任务不在运行中。",
+  "Slurm Allocation {0}": "Slurm Allocation {0}"
 }

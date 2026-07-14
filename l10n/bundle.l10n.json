@@ -49,5 +49,7 @@
   "Show successful finished tasks": "Show successful finished tasks",
   "Show failed finished tasks": "Show failed finished tasks",
   "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.": "The task cache file appears to be corrupted and has been automatically removed. Finished tasks may be lost.",
-  "The script cache file appears to be corrupted and has been automatically removed.": "The script cache file appears to be corrupted and has been automatically removed."
+  "The script cache file appears to be corrupted and has been automatically removed.": "The script cache file appears to be corrupted and has been automatically removed.",
+  "Task is not running.": "Task is not running.",
+  "Slurm Allocation {0}": "Slurm Allocation {0}"
 }
