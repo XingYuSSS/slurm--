@@ -5,6 +5,7 @@ import * as path from 'path';
 import { BaseTask, loadObj, TaskArray, TaskObjTypes } from '../models';
 import { executeCmd } from '../utils/utils';
 import { configService } from './configService';
+import { ensureSlurmCommand } from './commandAvailability';
 
 
 function parseJobarrayId(jobIdStr: string): string[] {
@@ -62,8 +63,9 @@ interface TaskFinishInfo {
     state: string;
 }
 
-async function getTaskFinishInfo(taskId: string[]): Promise<Map<string, TaskFinishInfo>> {
+async function getTaskFinishInfo(taskId: string[], background: boolean): Promise<Map<string, TaskFinishInfo>> {
     if (taskId.length === 0) { return new Map(); }
+    if (!await ensureSlurmCommand('sacct', background)) { return new Map(); }
 
     const [out, err] = await executeCmd(`${configService.getSlurmCommand('sacct')} -n -X -P -j ${taskId.join(',')} --format=JobID,End,ExitCode,State`);
     if (err) {
@@ -161,9 +163,9 @@ export class TaskService {
         }
     }
 
-    private async finishTask(taskId: string[]) {
+    private async finishTask(taskId: string[], background: boolean) {
         if (taskId.length === 0) { return; }
-        const finishInfoMap = await getTaskFinishInfo(taskId);
+        const finishInfoMap = await getTaskFinishInfo(taskId, background);
         finishInfoMap.forEach((info, jobArrayId) => {
             const [jobid, arrid] = jobArrayId.split('_');
             if (arrid !== undefined) {
@@ -183,7 +185,7 @@ export class TaskService {
         this.saveTask();
     }
 
-    public async updateTask(...tasks: BaseTask[]) {
+    public async updateTask(tasks: BaseTask[], background = false) {
         this.loadTask();
         const newId = tasks.map(value => value.jobid);
         const oldId = [...this.taskMap.values()].filter(v => !v.finished).map(v => v.jobid);
@@ -202,7 +204,7 @@ export class TaskService {
         const updateArrId = newArrId.filter(value => oldArrId.includes(value));
         const dropArrId = oldArrId.filter(value => !updateArrId.includes(value));
 
-        await this.finishTask(dropArrId);
+        await this.finishTask(dropArrId, background);
 
         this.saveTask();
     }

@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Fixed
+
+- Fixed startup notifications on machines without Slurm by skipping automatic queries when default commands are unavailable; invalid custom binary paths and missing commands on manual refresh still show a warning with a settings shortcut ([#23](https://github.com/XingYuSSS/slurm--/issues/23))
+- Fixed overlapping task/resource refreshes and manual refresh warnings being suppressed by an in-progress background refresh
+- Fixed entering running job array subtasks by resolving their numeric allocation IDs before launching `srun`; both regular and overlap actions verify the task is still running and start a single shell task
+
 ## [0.16.0][0.16.0] - 2026-07-14
 
 ### Added

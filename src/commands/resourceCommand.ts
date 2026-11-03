@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
-import { executeCmd } from '../utils/utils';
+import { createRefreshHandler, executeCmd } from '../utils/utils';
+import { ensureSlurmCommand } from '../services/commandAvailability';
 import { Node } from '../models';
 import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
@@ -62,7 +63,11 @@ function extractNodes(nodeString: string): Node[] {
     return nodeList;
 }
 
-async function refreshResources() {
+async function refreshResources(background = false) {
+    if (!await ensureSlurmCommand('sinfo', background)) {
+        await unautoRefreshRes();
+        return;
+    }
     const argsObj = configService.sinfoExtraArgs;
     const showAll = configService.sinfoShowAllClusters;
     if ('-M' in argsObj && showAll) {
@@ -87,8 +92,12 @@ async function refreshResources() {
 
 async function autoRefreshRes() {
     clearInterval(autoRefreshTimer);
+    if (!await ensureSlurmCommand('sinfo')) {
+        await unautoRefreshRes();
+        return;
+    }
     autoRefreshTimer = setInterval(() => {
-        vscode.commands.executeCommand('slurm--.refreshResources');
+        vscode.commands.executeCommand('slurm--.refreshResources', true);
     }, configService.resourceRefreshInterval_ms);
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', true);
 }
@@ -115,7 +124,8 @@ async function copyGres(item?: GresItem | NodeItem) {
 }
 
 export function initResourceCmd(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', refreshResources));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', createRefreshHandler(refreshResources)));
+    context.subscriptions.push({ dispose: () => clearInterval(autoRefreshTimer) });
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshRes', autoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshRes', unautoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.copyGres', copyGres));

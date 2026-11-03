@@ -101,6 +101,23 @@ export function AsyncOnce<T extends (...args: any[]) => Promise<any>>(fn: T, key
     }) as unknown as T;
 }
 
+export function createRefreshHandler(refresh: (background: boolean) => Promise<void>) {
+    let pending: Promise<void> | undefined;
+    return (background?: unknown): Promise<void> => {
+        const automatic = background === true;
+        if (automatic && pending) { return pending; }
+
+        // Manual requests must retain their notification policy after a background refresh.
+        const run = () => refresh(automatic);
+        const next = pending ? pending.then(run, run) : run();
+        const result = next.finally(() => {
+            if (pending === result) { pending = undefined; }
+        });
+        pending = result;
+        return result;
+    };
+}
+
 
 export function convertKeysToCamelCase(obj: Record<string, any>): Record<string, any> {
     return Object.keys(obj).reduce((acc, key) => {

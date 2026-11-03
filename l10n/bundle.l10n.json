@@ -1,4 +1,6 @@
 {
+  "Configured Slurm command \"{0}\" is not available. Check its path and executable permissions in Slurm command binaries.": "Configured Slurm command \"{0}\" is not available. Check its path and executable permissions in Slurm command binaries.",
+  "Slurm command \"{0}\" is not available in the extension environment. Check your Slurm installation, PATH, or command binaries settings.": "Slurm command \"{0}\" is not available in the extension environment. Check your Slurm installation, PATH, or command binaries settings.",
   "running": "running",
   "{length} tasks": "{length} tasks",
   "{filtered} successful / {total} tasks": "{filtered} successful / {total} tasks",

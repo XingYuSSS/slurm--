@@ -26,8 +26,8 @@ export function activate(context: vscode.ExtensionContext) {
 	initResourceView(context);
 	initLauncherView(context);
 
-	vscode.commands.executeCommand('slurm--.refreshUserTasks');
-	vscode.commands.executeCommand('slurm--.refreshResources');
+	vscode.commands.executeCommand('slurm--.refreshUserTasks', true);
+	vscode.commands.executeCommand('slurm--.refreshResources', true);
 	vscode.commands.executeCommand('slurm--.refreshLauncher');
 
 	initCompletion(context);
