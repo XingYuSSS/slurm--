@@ -11,6 +11,7 @@ import * as path from 'path';
 import * as shellQuote from 'shell-quote';
 import { ensureSlurmCommand } from '../services/commandAvailability';
 import { reportQuery } from '../services/queryStatus';
+import { findTask } from './searchCommand';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -295,6 +296,7 @@ async function enterTaskAllocationWithOverlap(task: TaskItem) {
 
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.findTask', findTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', createRefreshHandler(refreshUserTasks)));
     context.subscriptions.push({ dispose: () => clearInterval(autoRefreshTimer) });
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));

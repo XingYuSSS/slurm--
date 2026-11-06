@@ -102,7 +102,9 @@ function getGroupedTask(tasks: BaseTask[]): ListItem[] {
         ...(waiting.length ? [new ListItem(
             vscode.l10n.t('Awaiting completion information'),
             waiting.map(value => value instanceof TaskArray ? new TaskArrayItem(value) : new TaskItem(value as Task)),
-            vscode.l10n.t('{length} tasks', { length: waiting.reduce((sum, value) => sum + (value instanceof TaskArray ? value.getSubTasks().filter(task => task.state === TaskState.AWAITING_ACCOUNTING).length : 1), 0) })
+            vscode.l10n.t('{length} tasks', { length: waiting.reduce((sum, value) => sum + (value instanceof TaskArray ? value.getSubTasks().filter(task => task.state === TaskState.AWAITING_ACCOUNTING).length : 1), 0) }),
+            undefined,
+            'awaitingTaskList'
         )] : []),
         new ListItem(
             vscode.l10n.t('finished'),
@@ -111,7 +113,10 @@ function getGroupedTask(tasks: BaseTask[]): ListItem[] {
             undefined,
             'finishedTaskList'
         ),
-    ];
+    ].map(group => {
+        group.id = `slurm--.${group.contextValue}`;
+        return group;
+    });
 }
 
 type AllItem = TaskItem | TaskArrayItem | InfoItem | ListItem | LogFileItem | FinishedTaskItem | FinishedTaskArrayItem
@@ -119,6 +124,8 @@ type AllItem = TaskItem | TaskArrayItem | InfoItem | ListItem | LogFileItem | Fi
 export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
     private static _instance: TaskViewDataProvider | null = null;
     private constructor() { }
+    private children = new Map<AllItem | undefined, AllItem[]>();
+    private parents = new WeakMap<AllItem, AllItem>();
 
     static getInstance() {
         if (TaskViewDataProvider._instance === null) {
@@ -131,6 +138,8 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
     readonly onDidChangeTreeData: vscode.Event<AllItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     refresh(): void {
+        this.children.clear();
+        this.parents = new WeakMap();
         this._onDidChangeTreeData.fire();
         updateTaskBar();
     }
@@ -139,28 +148,59 @@ export class TaskViewDataProvider implements vscode.TreeDataProvider<AllItem> {
         return element;
     }
 
-    getChildren(element?: AllItem): Thenable<AllItem[]> {
+    getParent(element: AllItem): AllItem | undefined {
+        return this.parents.get(element);
+    }
+
+    getChildren(element?: AllItem): AllItem[] {
+        const cached = this.children.get(element);
+        if (cached) { return cached; }
+        const children = this.buildChildren(element);
+        this.children.set(element, children);
+        if (element) {
+            children.forEach(child => this.parents.set(child, element));
+        }
+        return children;
+    }
+
+    findTask(jobArrayId: string): TaskItem | FinishedTaskItem | undefined {
+        for (const group of this.getChildren()) {
+            for (const item of this.getChildren(group)) {
+                if ((item instanceof TaskItem || item instanceof FinishedTaskItem) && item.task.jobArrayId === jobArrayId) {
+                    return item;
+                }
+                if (item instanceof TaskArrayItem || item instanceof FinishedTaskArrayItem) {
+                    if (!item.taskArray.getSubTasks().some(task => task.jobArrayId === jobArrayId)) { continue; }
+                    return this.getChildren(item).find((child): child is TaskItem | FinishedTaskItem =>
+                        (child instanceof TaskItem || child instanceof FinishedTaskItem) && child.task.jobArrayId === jobArrayId);
+                }
+            }
+        }
+        return undefined;
+    }
+
+    private buildChildren(element?: AllItem): AllItem[] {
         if (!element) {
-            return Promise.resolve(getGroupedTask(taskService.getTask()));
+            return getGroupedTask(taskService.getTask());
         }
         if (element instanceof TaskItem || element instanceof FinishedTaskItem) {
-            return Promise.resolve(getTaskInfoItems(element.task));
+            return getTaskInfoItems(element.task);
 
         } else if (element instanceof TaskArrayItem) {
-            return Promise.resolve(element.taskArray.getSubTasks().map(v => new TaskItem(v)));
+            return element.taskArray.getSubTasks().map(v => new TaskItem(v));
         } else if (element instanceof FinishedTaskArrayItem) {
-            return Promise.resolve(getFilteredFinishedSubTasks(element.taskArray).map(v => new FinishedTaskItem(v)));
+            return getFilteredFinishedSubTasks(element.taskArray).map(v => new FinishedTaskItem(v));
 
         } else if (element instanceof ListItem) {
-            return Promise.resolve(element.children);
+            return element.children;
         }
 
-        return Promise.resolve([]);
+        return [];
     }
 }
 
 export const taskViewDataProvider = TaskViewDataProvider.getInstance();
-export let taskTreeView: vscode.TreeView<InfoItem>;
+export let taskTreeView: vscode.TreeView<AllItem>;
 export let selectedTaskItems: (TaskItem | TaskArrayItem)[] = [];
 
 export function initTasksView(context: vscode.ExtensionContext) {
@@ -171,7 +211,7 @@ export function initTasksView(context: vscode.ExtensionContext) {
             selectedTaskItems = e.selection.filter(v => v instanceof TaskItem || v instanceof TaskArrayItem);
         }
     });
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable, taskTreeView);
 
     initTasksBar(context);
 }

@@ -1,4 +1,6 @@
 {
+    "slurm--.findTask.title": "Find Task...",
+    "slurm--.diagnoseEnvironment.title": "Diagnose Slurm Environment",
     "slurm--.refreshUserTasks.title": "refresh user tasks",
     "slurm--.autoRefreshTask.title": "start auto refresh",
     "slurm--.unautoRefreshTask.title": "stop auto refresh",

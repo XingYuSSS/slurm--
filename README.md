@@ -36,6 +36,9 @@ We add `sbatch completion` at version `0.14.0`!
 
 - sort tasks by id or name
 
+- find retained tasks by Job ID or name, including individual job array subtasks
+> Use `Find Task...` in the TASKS view's `...` menu or `slurm--: Find Task...` in the Command Palette. Selecting a result reveals it in the task tree. Confirmed tasks removed from the extension are not searched. If the finished-task filter hides a result, you can choose to show all finished tasks before navigating to it.
+
 - convenient opening of log files
 > Click on `stdout` or `stderr` to open the file
 
@@ -83,6 +86,10 @@ If your cluster wraps Slurm commands such as `squeue`, configure `slurm--.comman
 ```
 
 Unset commands continue to use their default names.
+
+### environment diagnostics
+
+Run `slurm--: Diagnose Slurm Environment` from the Command Palette when troubleshooting. The report opens in the `slurm--` Output channel and includes the extension version and installation path, extension host, configured and resolved command paths, and recent query status. It checks command availability without running Slurm queries or submitting jobs; it does not verify cluster connectivity.
 
 ## language support
 

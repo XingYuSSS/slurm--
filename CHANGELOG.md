@@ -6,7 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Added
+
+- Added `Find Task...` to the TASKS view's `...` menu and Command Palette to search retained tasks by Job ID or name and reveal individual job array subtasks, with an option to show results hidden by the finished-task filter
+- Added a Command Palette-only Slurm environment diagnostic report with extension/host details, configured and resolved command paths, and recent query status in the `slurm--` Output channel
+
 ### Changed
+
+- Hide context-only actions, duplicate script-addition entries, and grouping-state indicators from the Command Palette; show refresh/display toggles and the current-file submission action only when applicable
 
 - Show stale query data and the last successful refresh time in task/resource views, with repeated background errors reported only once until recovery and details available in the `slurm--` Output channel
 - Show tasks missing from the queue as awaiting completion information until Slurm accounting provides a final state, including individual job array subtasks

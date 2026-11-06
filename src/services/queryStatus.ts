@@ -10,6 +10,18 @@ export function logCommand(message: string) {
     output?.appendLine(`[${new Date().toISOString()}] ${message}`);
 }
 
+export function showCommandLog() {
+    output?.show(true);
+}
+
+export function getQueryDiagnostics() {
+    return (['squeue', 'sinfo', 'sacct'] as const).map(query => ({
+        query,
+        lastSuccess: successes.get(query),
+        error: failures.get(query),
+    }));
+}
+
 export function reportQuery(query: Query, error?: string, background = false, notify = true) {
     const previous = failures.get(query);
     if (error) {

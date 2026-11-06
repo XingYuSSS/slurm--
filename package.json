@@ -32,6 +32,16 @@
   "contributes": {
     "commands": [
       {
+        "command": "slurm--.findTask",
+        "title": "%slurm--.findTask.title%",
+        "category": "slurm--"
+      },
+      {
+        "command": "slurm--.diagnoseEnvironment",
+        "title": "%slurm--.diagnoseEnvironment.title%",
+        "category": "slurm--"
+      },
+      {
         "command": "slurm--.refreshUserTasks",
         "title": "%slurm--.refreshUserTasks.title%",
         "category": "slurm--",
@@ -477,6 +487,11 @@
           "group": "finishedFilter@1"
         },
         {
+          "command": "slurm--.findTask",
+          "when": "view == slurm--_tasks_view",
+          "group": "search@1"
+        },
+        {
           "command": "slurm--.setResourceSortByName",
           "when": "view == slurm--_resource_view && gresSortKey != name",
           "group": "sortby@1"
@@ -675,6 +690,86 @@
         }
       ],
       "commandPalette": [
+        {
+          "command": "slurm--.cancelTaskArray",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.confirmTaskArray",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.enqueueScript",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedResourceGroupByGres",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.settedResourceGroupByPartition",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.addLocalScriptFile",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.addGlobalScriptFile",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.addLocalScriptFolder",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.addGlobalScriptFolder",
+          "when": "false"
+        },
+        {
+          "command": "slurm--.autoRefreshTask",
+          "when": "!autoRefreshingTask"
+        },
+        {
+          "command": "slurm--.unautoRefreshTask",
+          "when": "autoRefreshingTask"
+        },
+        {
+          "command": "slurm--.autoRefreshRes",
+          "when": "!autoRefreshingRes"
+        },
+        {
+          "command": "slurm--.unautoRefreshRes",
+          "when": "autoRefreshingRes"
+        },
+        {
+          "command": "slurm--.enqueueCurrentFile",
+          "when": "slurmFile"
+        },
+        {
+          "command": "slurm--.showTaskShortcutKey",
+          "when": "!taskShowShortcutKey"
+        },
+        {
+          "command": "slurm--.hideTaskShortcutKey",
+          "when": "taskShowShortcutKey"
+        },
+        {
+          "command": "slurm--.setTaskFilenameOnly",
+          "when": "!showFilenameOnly"
+        },
+        {
+          "command": "slurm--.unsetTaskFilenameOnly",
+          "when": "showFilenameOnly"
+        },
+        {
+          "command": "slurm--.setResourceGroupByGres",
+          "when": "gresGroupKey != gres"
+        },
+        {
+          "command": "slurm--.setResourceGroupByPartition",
+          "when": "gresGroupKey != partition"
+        },
         {
           "command": "slurm--.setTaskSortById",
           "when": "false"

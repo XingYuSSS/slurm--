@@ -12,6 +12,7 @@ import { initCompletion } from './editors/completion';
 import { initQueryStatus } from './services/queryStatus';
 import { taskTreeView } from './view/taskView';
 import { resourceTreeView } from './view/resourceView';
+import { initDiagnosticsCommand } from './commands/diagnosticsCommand';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -29,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 	initResourceView(context);
 	initLauncherView(context);
 	initQueryStatus(context, taskTreeView, resourceTreeView);
+	initDiagnosticsCommand(context);
 
 	vscode.commands.executeCommand('slurm--.refreshUserTasks', true);
 	vscode.commands.executeCommand('slurm--.refreshResources', true);

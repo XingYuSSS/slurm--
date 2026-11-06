@@ -4,15 +4,29 @@ import { configService, SlurmCommandName } from './configService';
 
 const warned = new Set<string>();
 
-export async function ensureSlurmCommand(command: SlurmCommandName, background = false): Promise<boolean> {
-    const binary = configService.getSlurmBinary(command);
+export interface CommandAvailability {
+    available: boolean;
+    resolvedPaths: string[];
+    error?: string;
+}
+
+export function probeSlurmCommand(binary: string): Promise<CommandAvailability> {
     // Windows queries use cmd.exe, so do not probe a separate Unix shell's PATH.
-    const available = await new Promise<boolean>(resolve => {
+    return new Promise(resolve => {
         const executable = process.platform === 'win32' ? 'where.exe' : '/bin/sh';
         const args = process.platform === 'win32' ? [binary]
-            : ['-c', 'p=$(command -v "$1") && test -f "$p" && test -x "$p"', 'slurm--', binary];
-        execFile(executable, args, { timeout: 5000, windowsHide: true }, error => resolve(!error));
+            : ['-c', 'p=$(command -v "$1") && test -f "$p" && test -x "$p" && printf "%s\\n" "$p"', 'slurm--', binary];
+        execFile(executable, args, { timeout: 5000, windowsHide: true }, (error, stdout, stderr) => resolve({
+            available: !error,
+            resolvedPaths: error ? [] : stdout.trim().split(/\r?\n/).filter(Boolean),
+            error: error ? stderr.trim() || error.message : undefined,
+        }));
     });
+}
+
+export async function ensureSlurmCommand(command: SlurmCommandName, background = false): Promise<boolean> {
+    const binary = configService.getSlurmBinary(command);
+    const { available } = await probeSlurmCommand(binary);
     const key = `${command}:${binary}`;
     if (available) {
         warned.delete(key);
