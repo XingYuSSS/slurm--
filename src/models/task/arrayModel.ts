@@ -34,6 +34,10 @@ export class TaskArray implements BaseTask {
             return TaskState.R;
         } else if (tasks.some(item => item.state === TaskState.PD)) {
             return TaskState.PD;
+        } else if (tasks.some(item => item.state === TaskState.CG && !item.finished)) {
+            return TaskState.CG;
+        } else if (tasks.some(item => item.state === TaskState.AWAITING_ACCOUNTING)) {
+            return TaskState.AWAITING_ACCOUNTING;
         } else {
             return TaskState.CG;
         }
@@ -54,6 +58,7 @@ export class TaskArray implements BaseTask {
                 this.subTasks[taskId] = value;
             }
         }
+        this.finished = this.getSubTasks().every(v => v.finished);
     }
 
     public finish(endTimes: Record<number, string>, exitCodes: Record<number, string>, states: Record<number, string>) {

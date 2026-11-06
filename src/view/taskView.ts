@@ -16,7 +16,7 @@ function getTaskInfoItems(task: Task): vscode.TreeItem[] {
         ...(configService.taskDisplayInfo.submit ? [new InfoItem(task.submitTime?.replace('T', ' '), 'submited'),] : []),
         ...(task.startTime ? [
             ...(configService.taskDisplayInfo.start ? [new InfoItem(task.startTime.replace('T', ' '), 'started'),] : []),
-            ...(configService.taskDisplayInfo.finish ? [new InfoItem(task.endTime!.replace('T', ' '), task.finished ? 'finished' : 'finish (exp)'),] : []),
+            ...(configService.taskDisplayInfo.finish && task.endTime && task.state !== TaskState.AWAITING_ACCOUNTING ? [new InfoItem(task.endTime.replace('T', ' '), task.finished ? 'finished' : 'finish (exp)'),] : []),
         ] : [])
     ];
 }
@@ -81,7 +81,8 @@ function getVisibleFinishedTaskCount(task: BaseTask): number {
 }
 
 function getGroupedTask(tasks: BaseTask[]): ListItem[] {
-    const running = tasks.filter(v => !v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+    const running = tasks.filter(v => !v.finished && v.state !== TaskState.AWAITING_ACCOUNTING).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
+    const waiting = tasks.filter(v => !v.finished && v.state === TaskState.AWAITING_ACCOUNTING).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
     const finished = tasks.filter(v => v.finished).sort(resignFn(sortFn[configService.taskSortKey], configService.taskSortAscending));
     const filteredFinished = finished.filter(matchesFinishedTaskListFilter);
     const totalFinishedTaskCount = finished.reduce((sum, value) => sum + getFinishedTaskTotalCount(value), 0);
@@ -98,6 +99,11 @@ function getGroupedTask(tasks: BaseTask[]): ListItem[] {
             undefined,
             'taskList'
         ),
+        ...(waiting.length ? [new ListItem(
+            vscode.l10n.t('Awaiting completion information'),
+            waiting.map(value => value instanceof TaskArray ? new TaskArrayItem(value) : new TaskItem(value as Task)),
+            vscode.l10n.t('{length} tasks', { length: waiting.reduce((sum, value) => sum + (value instanceof TaskArray ? value.getSubTasks().filter(task => task.state === TaskState.AWAITING_ACCOUNTING).length : 1), 0) })
+        )] : []),
         new ListItem(
             vscode.l10n.t('finished'),
             finishedItem,
@@ -183,8 +189,13 @@ export function updateTaskBar(): void {
     const tasks = taskService.getTask();
     const pending = tasks.filter(t => t.state === TaskState.PD).length;
     const running = tasks.filter(t => t.state === TaskState.R).length;
-    const done = tasks.length - pending - running;
+    const done = tasks.filter(t => t.finished).length;
+    const waiting = tasks.flatMap(t => t instanceof TaskArray ? t.getSubTasks() : [t]).filter(t => t.state === TaskState.AWAITING_ACCOUNTING).length;
 
     taskBarItem.text = `$(watch) ${pending} $(run-all) ${running} $(pass) ${done}`;
     taskBarItem.tooltip = vscode.l10n.t('Pend {0}, Run {1}, Done {2}', pending, running, done);
+    if (waiting) {
+        taskBarItem.text += ` $(question) ${waiting}`;
+        taskBarItem.tooltip += '\n' + vscode.l10n.t('Awaiting info: {0}', waiting);
+    }
 }

@@ -109,6 +109,8 @@ export class Task implements BaseTask {
     }
 
     public update(task: Task) {
+        this.finished = task.finished;
+        this.exitCode = task.exitCode;
         this.state = task.state;
         this.node = task.node;
         this.runningTime = task.runningTime;

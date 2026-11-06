@@ -1,21 +1,31 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
-import { promisify } from 'util';
+import { logCommand } from '../services/queryStatus';
 import * as fs from 'fs';
 import FastGlob from 'fast-glob';
+
+export interface CommandResult {
+    stdout: string;
+    stderr: string;
+    exitCode: number | null;
+    signal: NodeJS.Signals | null;
+    timedOut: boolean;
+    error?: string;
+}
 
 export async function executeCmd(
     cmd: string,
     cachePath?: string,
-    cacheTimeout?: number
-): Promise<[string, string]> {
+    cacheTimeout?: number,
+    timeoutMs = 30000
+): Promise<CommandResult> {
     if (cacheTimeout !== 0 && cachePath && fs.existsSync(cachePath)) {
         try {
             const jsonData = fs.readFileSync(cachePath, 'utf8');
             const saveObject = JSON.parse(jsonData);
             const now = Date.now();
-            if (now - saveObject.time < (cacheTimeout ?? 1000) && cmd === saveObject.cmd) {
-                return [saveObject.out.trim(), saveObject.err ? saveObject.err.trim() : ''];
+            if (now - saveObject.time < (cacheTimeout ?? 1000) && cmd === saveObject.cmd && saveObject.result?.exitCode === 0 && !saveObject.result.error) {
+                return saveObject.result;
             }
         } catch (err) { }
     }
@@ -23,11 +33,22 @@ export async function executeCmd(
     return new Promise((resolve) => {
         let stdout = '';
         let stderr = '';
+        let timedOut = false;
+        let spawnError: string | undefined;
 
         const child = childProcess.spawn(cmd, [], {
             shell: true,
-            timeout: 30000,
+            detached: process.platform !== 'win32',
         });
+        const timer = setTimeout(() => {
+            timedOut = true;
+            // Kill the shell and its children so inherited pipes cannot keep the query open.
+            if (process.platform !== 'win32' && child.pid) {
+                try { process.kill(-child.pid, 'SIGKILL'); } catch { child.kill('SIGKILL'); }
+            } else {
+                child.kill('SIGKILL');
+            }
+        }, timeoutMs);
 
         child.stdout?.setEncoding('utf8');
         child.stderr?.setEncoding('utf8');
@@ -41,22 +62,28 @@ export async function executeCmd(
         });
 
         child.on('error', (error) => {
-            resolve(['', `${error}`]);
+            spawnError = error.message;
         });
 
         child.on('close', (code, signal) => {
-            if (cacheTimeout !== 0 && cachePath) {
+            clearTimeout(timer);
+            const error = timedOut ? vscode.l10n.t('Command timed out.') : spawnError
+                ?? (code === 0 ? undefined : stderr.trim() || (signal
+                    ? vscode.l10n.t('Command terminated by signal {0}.', signal)
+                    : vscode.l10n.t('Command failed with exit code {0}.', String(code))));
+            const result: CommandResult = { stdout: stdout.trim(), stderr: stderr.trim(), exitCode: code, signal, timedOut, error };
+            if (error || stderr.trim()) { logCommand(`${cmd}\n${error ?? stderr.trim()}`); }
+            if (!error && cacheTimeout !== 0 && cachePath) {
                 const saveObject = {
                     time: Date.now(),
                     cmd,
-                    out: stdout,
-                    err: stderr,
+                    result,
                 };
                 try {
                     fs.writeFileSync(cachePath, JSON.stringify(saveObject), 'utf8');
                 } catch (writeErr) { }
             }
-            resolve([stdout.trim(), stderr.trim()]);
+            resolve(result);
         });
     });
 }

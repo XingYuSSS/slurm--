@@ -10,6 +10,7 @@ import { LogFileItem, TaskArrayItem, TaskItem } from '../view/components';
 import * as path from 'path';
 import * as shellQuote from 'shell-quote';
 import { ensureSlurmCommand } from '../services/commandAvailability';
+import { reportQuery } from '../services/queryStatus';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -88,6 +89,7 @@ function buildTaskArray(taskList: Task[]): BaseTask[] {
 
 async function refreshUserTasks(background = false) {
     if (!await ensureSlurmCommand('squeue', background)) {
+        reportQuery('squeue', vscode.l10n.t('Command unavailable.'), background, false);
         await unautoRefreshTask();
         return;
     }
@@ -107,13 +109,14 @@ async function refreshUserTasks(background = false) {
         }
     }
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`${configService.getSlurmCommand('squeue')} ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('squeue')} ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
     if (err) {
-        vscode.window.showErrorMessage(err);
+        reportQuery('squeue', err, background);
         return;
     }
     const taskList = buildTaskArray(extractTask(out));
     await taskService.updateTask(taskList, background);
+    reportQuery('squeue');
 
     taskView.taskViewDataProvider.refresh();
 }
@@ -126,7 +129,7 @@ async function cancelTask(task: TaskItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.task.jobArrayId}`);
+        const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.task.jobArrayId}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
@@ -143,7 +146,7 @@ async function cancelTaskArray(taskArray: TaskArrayItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${taskArray.taskArray.jobid}`);
+        const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${taskArray.taskArray.jobid}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
@@ -165,7 +168,7 @@ async function cancelSelectedTasks() {
     if (result === vscode.l10n.t('Yes')) {
         for (const task of tasks) {
             const cancelId = task.jobArrayId instanceof Array ? task.jobid : task.jobArrayId;
-            const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${cancelId}`);
+            const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${cancelId}`);
             if (err) {
                 vscode.window.showErrorMessage(err);
                 continue;
@@ -186,7 +189,7 @@ async function cancelAllTasks() {
     );
     if (result === vscode.l10n.t('Yes')) {
         for (const task of tasks) {
-            const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.jobid}`);
+            const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.jobid}`);
             if (err) {
                 vscode.window.showErrorMessage(err);
                 continue;
@@ -264,7 +267,7 @@ async function enterTaskAllocation(task: TaskItem, overlap: boolean) {
     }
 
     // %A is the numeric allocation ID; %i would return array_job_id_index.
-    const [out, err] = await executeCmd(`${configService.getSlurmCommand('squeue')} --noheader --array --jobs=${shellQuote.quote([task.task.jobArrayId])} --format='%A %T'`);
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('squeue')} --noheader --array --jobs=${shellQuote.quote([task.task.jobArrayId])} --format='%A %T'`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;

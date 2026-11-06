@@ -6,7 +6,18 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+### Changed
+
+- Show stale query data and the last successful refresh time in task/resource views, with repeated background errors reported only once until recovery and details available in the `slurm--` Output channel
+- Show tasks missing from the queue as awaiting completion information until Slurm accounting provides a final state, including individual job array subtasks
+
 ### Fixed
+
+- Check Slurm command availability with the native Windows lookup instead of a Unix shell, without opening a console window during startup detection
+
+- Determine command success from exit status instead of stderr, preserve successful output with warnings, and report silent failures and timeouts without caching failed queries
+- Prevent incomplete accounting records from marking tasks as finished and restore active state when waiting tasks reappear in the queue
+- Preserve other job array subtasks when a completed subtask is requeued, and stop script submission if its working directory cannot be entered
 
 - Fixed startup notifications on machines without Slurm by skipping automatic queries when default commands are unavailable; invalid custom binary paths and missing commands on manual refresh still show a warning with a settings shortcut ([#23](https://github.com/XingYuSSS/slurm--/issues/23))
 - Fixed overlapping task/resource refreshes and manual refresh warnings being suppressed by an in-progress background refresh

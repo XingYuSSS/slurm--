@@ -1,4 +1,5 @@
 export enum TaskState {
+    AWAITING_ACCOUNTING = 'AWAITING_ACCOUNTING',
     R = "RUNNING",
     PD = "PENDING",
     CG = "COMPLETING",

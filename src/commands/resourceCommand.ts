@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 import { createRefreshHandler, executeCmd } from '../utils/utils';
 import { ensureSlurmCommand } from '../services/commandAvailability';
+import { reportQuery } from '../services/queryStatus';
 import { Node } from '../models';
 import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
@@ -65,13 +66,14 @@ function extractNodes(nodeString: string): Node[] {
 
 async function refreshResources(background = false) {
     if (!await ensureSlurmCommand('sinfo', background)) {
+        reportQuery('sinfo', vscode.l10n.t('Command unavailable.'), background, false);
         await unautoRefreshRes();
         return;
     }
     const argsObj = configService.sinfoExtraArgs;
     const showAll = configService.sinfoShowAllClusters;
     if ('-M' in argsObj && showAll) {
-        vscode.window.showErrorMessage('Do not add the -M option when "Sinfo Show All Clusters" is enabled.');
+        reportQuery('sinfo', 'Do not add the -M option when "Sinfo Show All Clusters" is enabled.', background);
         return;
     }
 
@@ -80,13 +82,14 @@ async function refreshResources(background = false) {
         .join(' ') + (showAll ? ' -M all' : '');
     
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`${configService.getSlurmCommand('sinfo')} --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('sinfo')} --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
     if (err) {
-        vscode.window.showErrorMessage(err);
+        reportQuery('sinfo', err, background);
         return;
     }
 
     resourceService.updateNode(...extractNodes(out));
+    reportQuery('sinfo');
     resourceViewDataProvider.refresh();
 }
 

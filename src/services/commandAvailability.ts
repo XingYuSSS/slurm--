@@ -6,10 +6,12 @@ const warned = new Set<string>();
 
 export async function ensureSlurmCommand(command: SlurmCommandName, background = false): Promise<boolean> {
     const binary = configService.getSlurmBinary(command);
-    // Probe in the same non-interactive shell environment used for queries.
+    // Windows queries use cmd.exe, so do not probe a separate Unix shell's PATH.
     const available = await new Promise<boolean>(resolve => {
-        execFile('/bin/sh', ['-c', 'p=$(command -v "$1") && test -f "$p" && test -x "$p"', 'slurm--', binary],
-            { timeout: 5000 }, error => resolve(!error));
+        const executable = process.platform === 'win32' ? 'where.exe' : '/bin/sh';
+        const args = process.platform === 'win32' ? [binary]
+            : ['-c', 'p=$(command -v "$1") && test -f "$p" && test -x "$p"', 'slurm--', binary];
+        execFile(executable, args, { timeout: 5000, windowsHide: true }, error => resolve(!error));
     });
     const key = `${command}:${binary}`;
     if (available) {
