@@ -2,12 +2,16 @@ import * as vscode from 'vscode';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import _ from 'lodash';
 
-import { AsyncOnce, executeCmd } from '../utils/utils';
+import { createRefreshHandler, executeCmd } from '../utils/utils';
 import { BaseTask, LogFile, Task, TaskArray, TaskState } from '../models';
 import { taskService, configService } from '../services';
 import * as taskView from '../view/taskView';
 import { LogFileItem, TaskArrayItem, TaskItem } from '../view/components';
 import * as path from 'path';
+import * as shellQuote from 'shell-quote';
+import { ensureSlurmCommand } from '../services/commandAvailability';
+import { reportQuery } from '../services/queryStatus';
+import { findTask } from './searchCommand';
 
 let autoRefreshTimer: NodeJS.Timeout;
 
@@ -84,7 +88,12 @@ function buildTaskArray(taskList: Task[]): BaseTask[] {
     return Object.values(grouped).map((v) => v[0].arrayid !== null ? new TaskArray(v) : v[0]);
 }
 
-async function refreshUserTasks() {
+async function refreshUserTasks(background = false) {
+    if (!await ensureSlurmCommand('squeue', background)) {
+        reportQuery('squeue', vscode.l10n.t('Command unavailable.'), background, false);
+        await unautoRefreshTask();
+        return;
+    }
     const user = configService.optionUser;
     if (user === '') {
         const result = await vscode.window.showWarningMessage(
@@ -101,13 +110,14 @@ async function refreshUserTasks() {
         }
     }
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`${configService.getSlurmCommand('squeue')} ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('squeue')} ${user} -r --noheader -O ${query}`, cachePath, configService.taskCacheTimeout);
     if (err) {
-        vscode.window.showErrorMessage(err);
+        reportQuery('squeue', err, background);
         return;
     }
     const taskList = buildTaskArray(extractTask(out));
-    await taskService.updateTask(...taskList);
+    await taskService.updateTask(taskList, background);
+    reportQuery('squeue');
 
     taskView.taskViewDataProvider.refresh();
 }
@@ -120,7 +130,7 @@ async function cancelTask(task: TaskItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.task.jobArrayId}`);
+        const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.task.jobArrayId}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
@@ -137,7 +147,7 @@ async function cancelTaskArray(taskArray: TaskArrayItem) {
         vscode.l10n.t('No')
     );
     if (result === vscode.l10n.t('Yes')) {
-        const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${taskArray.taskArray.jobid}`);
+        const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${taskArray.taskArray.jobid}`);
         if (err) {
             vscode.window.showErrorMessage(err);
             return;
@@ -159,7 +169,7 @@ async function cancelSelectedTasks() {
     if (result === vscode.l10n.t('Yes')) {
         for (const task of tasks) {
             const cancelId = task.jobArrayId instanceof Array ? task.jobid : task.jobArrayId;
-            const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${cancelId}`);
+            const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${cancelId}`);
             if (err) {
                 vscode.window.showErrorMessage(err);
                 continue;
@@ -180,7 +190,7 @@ async function cancelAllTasks() {
     );
     if (result === vscode.l10n.t('Yes')) {
         for (const task of tasks) {
-            const [out, err] = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.jobid}`);
+            const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('scancel')} ${task.jobid}`);
             if (err) {
                 vscode.window.showErrorMessage(err);
                 continue;
@@ -193,8 +203,12 @@ async function cancelAllTasks() {
 
 async function autoRefreshTask() {
     clearInterval(autoRefreshTimer);
+    if (!await ensureSlurmCommand('squeue')) {
+        await unautoRefreshTask();
+        return;
+    }
     autoRefreshTimer = setInterval(() => {
-        vscode.commands.executeCommand('slurm--.refreshUserTasks');
+        vscode.commands.executeCommand('slurm--.refreshUserTasks', true);
     }, configService.taskRefreshInterval_ms);
     vscode.commands.executeCommand('setContext', 'autoRefreshingTask', true);
 }
@@ -242,6 +256,8 @@ async function enterTaskAllocation(task: TaskItem, overlap: boolean) {
         return;
     }
 
+    if (!await ensureSlurmCommand('srun') || !await ensureSlurmCommand('squeue')) { return; }
+
     let shell = undefined;
     while (!shell) {
         shell = await vscode.window.showQuickPick([...configService.terminalShellList, vscode.l10n.t('Custom...')], { title: vscode.l10n.t('Choose shell') });
@@ -251,8 +267,19 @@ async function enterTaskAllocation(task: TaskItem, overlap: boolean) {
         }
     }
 
+    // %A is the numeric allocation ID; %i would return array_job_id_index.
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('squeue')} --noheader --array --jobs=${shellQuote.quote([task.task.jobArrayId])} --format='%A %T'`);
+    if (err) {
+        vscode.window.showErrorMessage(err);
+        return;
+    }
+    const allocation = /^(\d+)\s+RUNNING$/.exec(out.trim());
+    if (!allocation) {
+        vscode.window.showWarningMessage(vscode.l10n.t('Task is not running.'));
+        return;
+    }
     const overlapArg = overlap ? '--overlap ' : '';
-    const command = `${configService.getSlurmCommand('srun')} ${overlapArg}--jobid=${task.task.jobArrayId} --pty ${shell} -i`;
+    const command = `${configService.getSlurmCommand('srun')} ${overlapArg}--jobid=${allocation[1]} --nodes=1 --ntasks=1 --pty ${shellQuote.quote([shell])} -i`;
     const terminal = vscode.window.createTerminal(vscode.l10n.t('Slurm Allocation {0}', task.task.jobArrayId));
     terminal.show();
 
@@ -269,7 +296,9 @@ async function enterTaskAllocationWithOverlap(task: TaskItem) {
 
 
 export function initTaskCmd(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', AsyncOnce(refreshUserTasks)));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.findTask', findTask));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshUserTasks', createRefreshHandler(refreshUserTasks)));
+    context.subscriptions.push({ dispose: () => clearInterval(autoRefreshTimer) });
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelTask', cancelTask));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelSelectedTasks', cancelSelectedTasks));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.cancelAllTasks', cancelAllTasks));

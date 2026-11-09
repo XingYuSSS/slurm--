@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 
-import { executeCmd } from '../utils/utils';
+import { createRefreshHandler, executeCmd } from '../utils/utils';
+import { ensureSlurmCommand } from '../services/commandAvailability';
+import { reportQuery } from '../services/queryStatus';
 import { Node } from '../models';
 import { resourceTreeView, resourceViewDataProvider } from '../view/resourceView';
 import { resourceService, configService } from '../services';
@@ -62,11 +64,16 @@ function extractNodes(nodeString: string): Node[] {
     return nodeList;
 }
 
-async function refreshResources() {
+async function refreshResources(background = false) {
+    if (!await ensureSlurmCommand('sinfo', background)) {
+        reportQuery('sinfo', vscode.l10n.t('Command unavailable.'), background, false);
+        await unautoRefreshRes();
+        return;
+    }
     const argsObj = configService.sinfoExtraArgs;
     const showAll = configService.sinfoShowAllClusters;
     if ('-M' in argsObj && showAll) {
-        vscode.window.showErrorMessage('Do not add the -M option when "Sinfo Show All Clusters" is enabled.');
+        reportQuery('sinfo', 'Do not add the -M option when "Sinfo Show All Clusters" is enabled.', background);
         return;
     }
 
@@ -75,20 +82,25 @@ async function refreshResources() {
         .join(' ') + (showAll ? ' -M all' : '');
     
     const query = Array.from(fieldMap.entries()).map(([key, value]) => `${key}:${value}`).join(',');
-    const [out, err] = await executeCmd(`${configService.getSlurmCommand('sinfo')} --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('sinfo')} --noheader --Node ${args.trim()} -O ${query}`, cachePath, configService.resourceCacheTimeout);
     if (err) {
-        vscode.window.showErrorMessage(err);
+        reportQuery('sinfo', err, background);
         return;
     }
 
     resourceService.updateNode(...extractNodes(out));
+    reportQuery('sinfo');
     resourceViewDataProvider.refresh();
 }
 
 async function autoRefreshRes() {
     clearInterval(autoRefreshTimer);
+    if (!await ensureSlurmCommand('sinfo')) {
+        await unautoRefreshRes();
+        return;
+    }
     autoRefreshTimer = setInterval(() => {
-        vscode.commands.executeCommand('slurm--.refreshResources');
+        vscode.commands.executeCommand('slurm--.refreshResources', true);
     }, configService.resourceRefreshInterval_ms);
     vscode.commands.executeCommand('setContext', 'autoRefreshingRes', true);
 }
@@ -115,7 +127,8 @@ async function copyGres(item?: GresItem | NodeItem) {
 }
 
 export function initResourceCmd(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', refreshResources));
+    context.subscriptions.push(vscode.commands.registerCommand('slurm--.refreshResources', createRefreshHandler(refreshResources)));
+    context.subscriptions.push({ dispose: () => clearInterval(autoRefreshTimer) });
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.autoRefreshRes', autoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.unautoRefreshRes', unautoRefreshRes));
     context.subscriptions.push(vscode.commands.registerCommand('slurm--.copyGres', copyGres));

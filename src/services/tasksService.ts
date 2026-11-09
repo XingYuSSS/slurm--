@@ -2,9 +2,11 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { BaseTask, loadObj, TaskArray, TaskObjTypes } from '../models';
+import { BaseTask, loadObj, TaskArray, TaskObjTypes, TaskState } from '../models';
 import { executeCmd } from '../utils/utils';
 import { configService } from './configService';
+import { ensureSlurmCommand } from './commandAvailability';
+import { clearQueryFailure, reportQuery } from './queryStatus';
 
 
 function parseJobarrayId(jobIdStr: string): string[] {
@@ -62,26 +64,32 @@ interface TaskFinishInfo {
     state: string;
 }
 
-async function getTaskFinishInfo(taskId: string[]): Promise<Map<string, TaskFinishInfo>> {
-    if (taskId.length === 0) { return new Map(); }
+async function getTaskFinishInfo(taskId: string[], background: boolean): Promise<Map<string, TaskFinishInfo>> {
+    if (taskId.length === 0) { clearQueryFailure('sacct'); return new Map(); }
+    if (!await ensureSlurmCommand('sacct', background)) {
+        reportQuery('sacct', vscode.l10n.t('Command unavailable.'), background, false);
+        return new Map();
+    }
 
-    const [out, err] = await executeCmd(`${configService.getSlurmCommand('sacct')} -n -X -P -j ${taskId.join(',')} --format=JobID,End,ExitCode,State`);
+    const { stdout: out, error: err } = await executeCmd(`${configService.getSlurmCommand('sacct')} -n -X -P -j ${taskId.join(',')} --format=JobID,End,ExitCode,State%30`);
     if (err) {
-        vscode.window.showErrorMessage(err);
+        reportQuery('sacct', err, background);
         return new Map();
     }
     const lines = out.split('\n');
 
     const finishInfoMap: Map<string, TaskFinishInfo> = new Map();
+    const terminalStates = new Set(['COMPLETED', 'FAILED', 'CANCELLED', 'TIMEOUT', 'NODE_FAIL', 'OUT_OF_MEMORY', 'BOOT_FAIL', 'DEADLINE', 'PREEMPTED', 'REVOKED']);
     lines.forEach(line => {
         const [jobid, time, exitCode, state] = line.split('|');
+        const finalState = state?.trim().split(' ')[0];
+        if (!time || time === 'Unknown' || !exitCode || !terminalStates.has(finalState)) { return; }
         const jobidList = parseJobarrayId(jobid);
         jobidList.forEach(jobid => {
-            if (time !== 'Unknown') {
-                finishInfoMap.set(jobid, { endTime: time, exitCode: exitCode, state: state.split(' ')[0] });
-            }
+            finishInfoMap.set(jobid, { endTime: time, exitCode, state: finalState });
         });
     });
+    reportQuery('sacct');
     return finishInfoMap;
 }
 
@@ -161,9 +169,8 @@ export class TaskService {
         }
     }
 
-    private async finishTask(taskId: string[]) {
-        if (taskId.length === 0) { return; }
-        const finishInfoMap = await getTaskFinishInfo(taskId);
+    private async finishTask(taskId: string[], background: boolean) {
+        const finishInfoMap = await getTaskFinishInfo(taskId, background);
         finishInfoMap.forEach((info, jobArrayId) => {
             const [jobid, arrid] = jobArrayId.split('_');
             if (arrid !== undefined) {
@@ -183,10 +190,10 @@ export class TaskService {
         this.saveTask();
     }
 
-    public async updateTask(...tasks: BaseTask[]) {
+    public async updateTask(tasks: BaseTask[], background = false) {
         this.loadTask();
         const newId = tasks.map(value => value.jobid);
-        const oldId = [...this.taskMap.values()].filter(v => !v.finished).map(v => v.jobid);
+        const oldId = [...this.taskMap.keys()];
 
         const updateId = newId.filter(value => oldId.includes(value));
         const addId = newId.filter(value => !updateId.includes(value));
@@ -202,7 +209,16 @@ export class TaskService {
         const updateArrId = newArrId.filter(value => oldArrId.includes(value));
         const dropArrId = oldArrId.filter(value => !updateArrId.includes(value));
 
-        await this.finishTask(dropArrId);
+        const missing = new Set(dropArrId);
+        for (const task of this.taskMap.values()) {
+            for (const subtask of task instanceof TaskArray ? task.getSubTasks() : [task]) {
+                if (missing.has(subtask.jobArrayId as string)) {
+                    subtask.state = TaskState.AWAITING_ACCOUNTING;
+                }
+            }
+        }
+
+        await this.finishTask(dropArrId, background);
 
         this.saveTask();
     }

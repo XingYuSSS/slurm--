@@ -37,7 +37,7 @@ async function extractScripts(uriList: vscode.Uri[]): Promise<vscode.Uri[]> {
 async function launchScript(script: ScriptItem) {
     const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.fsPath ?? process.env.HOME ?? '~';
     const scriptArgs = shellQuote.quote([script.script.uri.fsPath, ...script.script.args]);
-    const [out, err] = await executeCmd(`cd ${shellQuote.quote([workspacePath])}\n${configService.getSlurmCommand('sbatch')} ${scriptArgs}`);
+    const { stdout: out, error: err } = await executeCmd(`cd ${shellQuote.quote([workspacePath])} && ${configService.getSlurmCommand('sbatch')} ${scriptArgs}`);
     if (err) {
         vscode.window.showErrorMessage(err);
         return;

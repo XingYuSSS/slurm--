@@ -3,6 +3,7 @@ import { Task, TaskArray, TaskState } from '../../models';
 import { taskStateIconMap, unknownStateIcon } from './taskIcons';
 
 function taskDescription(task: Task): string {
+    if (task.state === TaskState.AWAITING_ACCOUNTING) { return vscode.l10n.t('Awaiting completion information'); }
     return task.state === TaskState.R ? task.runningTime + '/' + task.limitTime : task.reason;
 }
 
@@ -33,17 +34,19 @@ const iconArrMap: Partial<Record<TaskState, vscode.ThemeIcon>> = {
 };
 
 function taskArrDescription(taskArray: TaskArray): string {
+    const waiting = taskArray.getSubTasks().filter(task => task.state === TaskState.AWAITING_ACCOUNTING).length;
     const counts = taskArray.getSubTasks().reduce((acc, item) => {
         if (item.state === TaskState.PD) {
             acc.pd++;
         } else if (item.state === TaskState.R) {
             acc.r++;
         } else {
-            acc.done++;
+            if (item.state !== TaskState.AWAITING_ACCOUNTING) { acc.done++; }
         }
         return acc;
     }, { pd: 0, r: 0, done: 0 });
-    return vscode.l10n.t(`Pend {0}, Run {1}, Done {2}`, counts.pd, counts.r, counts.done);
+    const summary = vscode.l10n.t(`Pend {0}, Run {1}, Done {2}`, counts.pd, counts.r, counts.done);
+    return waiting ? summary + ', ' + vscode.l10n.t('Awaiting info: {0}', waiting) : summary;
 }
 
 function taskArrTooltip(taskArray: TaskArray): vscode.MarkdownString {

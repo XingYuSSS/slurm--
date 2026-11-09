@@ -6,6 +6,30 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased][Unreleased]
 
+## [0.17.0][0.17.0] - 2026-11-09
+
+### Added
+
+- Added `Find Task...` to the TASKS view's `...` menu and Command Palette to search retained tasks by Job ID or name and reveal individual job array subtasks, with an option to show results hidden by the finished-task filter
+- Added a Command Palette-only Slurm environment diagnostic report with extension/host details, configured and resolved command paths, and recent query status in the `slurm--` Output channel
+
+### Changed
+
+- Hid context-only actions, duplicate script-addition entries, and grouping-state indicators from the Command Palette; refresh/display toggles and the current-file submission action are shown only when applicable
+- Added task/resource view messages for failed queries and the last successful refresh time, with repeated background errors reported only once until recovery and details available in the `slurm--` Output channel
+- Tasks missing from the queue now await completion information until Slurm accounting provides a final state, including individual job array subtasks
+
+### Fixed
+
+- Fixed startup notifications on machines without Slurm by skipping automatic queries when default commands are unavailable; invalid custom binary paths and missing commands on manual refresh still show a warning with a settings shortcut ([#23](https://github.com/XingYuSSS/slurm--/issues/23))
+- Fixed Windows command detection to use the native lookup instead of a Unix shell, without opening a console window
+- Fixed command result handling to use exit status instead of stderr, preserving successful output with warnings and reporting silent failures and timeouts without caching failed queries
+- Fixed incomplete accounting records marking tasks as finished and restored active state when waiting tasks reappear in the queue
+- Fixed completed job array subtasks being lost when another subtask is requeued
+- Fixed script submission continuing after failure to enter its working directory
+- Fixed overlapping task/resource refreshes and manual refresh warnings being suppressed by an in-progress background refresh
+- Fixed entering running job array subtasks by resolving their numeric allocation IDs before launching `srun`; both regular and overlap actions verify the task is still running and start a single shell task
+
 ## [0.16.0][0.16.0] - 2026-07-14
 
 ### Added
@@ -434,7 +458,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add auto refresh
 - Add runBash in `utils`
 
-[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.16.0...HEAD
+[unreleased]: https://github.com/XingYuSSS/slurm--/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/XingYuSSS/slurm--/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/XingYuSSS/slurm--/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/XingYuSSS/slurm--/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/XingYuSSS/slurm--/compare/v0.13.0...v0.14.0

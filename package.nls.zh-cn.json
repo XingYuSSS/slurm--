@@ -1,4 +1,6 @@
 {
+    "slurm--.findTask.title": "查找任务...",
+    "slurm--.diagnoseEnvironment.title": "诊断 Slurm 环境",
     "slurm--.refreshUserTasks.title": "刷新任务",
     "slurm--.autoRefreshTask.title": "启动自动刷新",
     "slurm--.unautoRefreshTask.title": "停止自动刷新",

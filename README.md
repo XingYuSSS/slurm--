@@ -1,6 +1,6 @@
 # slurm-- Extension
 
-[![version](https://img.shields.io/badge/version-0.16.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.16.0/CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-0.17.0-blue.svg?logo=github)](https://github.com/XingYuSSS/slurm--/blob/v0.17.0/CHANGELOG.md)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/xy-sss.slurm--extension?color=red)](https://marketplace.visualstudio.com/items?itemName=xy-sss.slurm--extension)
 [![MIT License](https://img.shields.io/badge/License-MIT-gree.svg)](https://opensource.org/licenses/MIT)
 
@@ -35,6 +35,9 @@ We add `sbatch completion` at version `0.14.0`!
 - record running tasks, and confirm them when finished
 
 - sort tasks by id or name
+
+- find retained tasks by Job ID or name, including individual job array subtasks
+> Use `Find Task...` in the TASKS view's `...` menu or `slurm--: Find Task...` in the Command Palette. Selecting a result reveals it in the task tree. Confirmed tasks removed from the extension are not searched. If the finished-task filter hides a result, you can choose to show all finished tasks before navigating to it.
 
 - convenient opening of log files
 > Click on `stdout` or `stderr` to open the file
@@ -83,6 +86,10 @@ If your cluster wraps Slurm commands such as `squeue`, configure `slurm--.comman
 ```
 
 Unset commands continue to use their default names.
+
+### environment diagnostics
+
+Run `slurm--: Diagnose Slurm Environment` from the Command Palette when troubleshooting. The report opens in the `slurm--` Output channel and includes the extension version and installation path, extension host, configured and resolved command paths, and recent query status. It checks command availability without running Slurm queries or submitting jobs; it does not verify cluster connectivity.
 
 ## language support
 

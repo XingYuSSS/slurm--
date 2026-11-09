@@ -58,9 +58,14 @@ class ConfigService {
         return vscode.workspace.getConfiguration('slurm--.commands').get('user') ?? '--me';
     }
     public getSlurmCommand(command: SlurmCommandName): string {
+        return shellQuote.quote([this.getSlurmBinary(command)]);
+    }
+    public getSlurmBinary(command: SlurmCommandName): string {
         const binaries = vscode.workspace.getConfiguration('slurm--.commands').get<Partial<Record<SlurmCommandName, string>>>('binaries') ?? {};
-        const binary = binaries[command]?.trim() || DEFAULT_SLURM_COMMAND_BINARIES[command];
-        return shellQuote.quote([binary]);
+        return binaries[command]?.trim() || DEFAULT_SLURM_COMMAND_BINARIES[command];
+    }
+    public hasCustomSlurmBinary(command: SlurmCommandName): boolean {
+        return this.getSlurmBinary(command) !== DEFAULT_SLURM_COMMAND_BINARIES[command];
     }
     public get sinfoExtraArgs(): object {
         return vscode.workspace.getConfiguration('slurm--.commands').get('sinfoExtraArgs') ?? {};
