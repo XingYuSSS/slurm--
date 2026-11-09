@@ -11,6 +11,7 @@ vsc-extension-quickstart.md
 **/.vscode-test.*
 
 out/**
+tmp/**
 **/webpack.config.js
 **/esbuild.js
 node_modules/**

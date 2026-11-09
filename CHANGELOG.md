@@ -21,6 +21,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+- Excluded development scripts, test settings, and Slurm output logs in `tmp/` from packaged extensions
+
 - Fixed startup notifications on machines without Slurm by skipping automatic queries when default commands are unavailable; invalid custom binary paths and missing commands on manual refresh still show a warning with a settings shortcut ([#23](https://github.com/XingYuSSS/slurm--/issues/23))
 - Fixed Windows command detection to use the native lookup instead of a Unix shell, without opening a console window
 - Fixed command result handling to use exit status instead of stderr, preserving successful output with warnings and reporting silent failures and timeouts without caching failed queries
